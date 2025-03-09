@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# Ignoriere die Timeline.json-Datei in data/
+data/Timeline.json
+data/Timeline.json
