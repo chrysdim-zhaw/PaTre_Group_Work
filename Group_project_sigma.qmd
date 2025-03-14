@@ -1,0 +1,77 @@
+---
+title: "Project Work"
+author: "Ramon und Dimitri"
+format:  
+  html:
+    toc: true  # Enable Table of Contents
+    toc-depth: 2  # Optional: Set the depth of ToC (default is 3)
+    number-sections: true  # Number headings in the document
+execute:
+  echo: true  # Prevent code output in the final document
+bibliography: bibligraphy.bib  # Ensure the file name is correct
+---
+
+
+## Abstract {.unnumbered .unlisted}
+
+Blablabla
+
+```{r, warning=FALSE, message=FALSE}
+library(jsonlite)
+library(dplyr)
+library(tidyr)
+library(sf)
+library(ggplot2)
+library(tmap)
+library(tidyverse)
+```
+
+# Introduction {#introduction}  
+
+In this work the google mapd data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map.
+Further, the data will be analyzed and the distance between the two persons will be calculated.
+
+## Import of Ramon's data {#import}
+
+```{r}
+# Daten importieren und in DataFrame umwandeln
+data3 <- fromJSON("data/Timeline.json", flatten = TRUE, simplifyDataFrame = TRUE)
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+rawSignals <- data3$rawSignals |> 
+  filter(!is.na(position.LatLng)) |>  # Fehlende GPS-Werte entfernen
+  separate(position.LatLng, into = c("Latitude", "Longitude"), sep = ", ", convert = TRUE) |> 
+  mutate(
+    Latitude = as.numeric(str_replace_all(Latitude, "[^0-9.-]", "")),  # Gradzeichen entfernen
+    Longitude = as.numeric(str_replace_all(Longitude, "[^0-9.-]", "")),
+    position.timestamp = ymd_hms(position.timestamp)  # Timestamp umwandeln
+  ) |> 
+  filter(!is.na(Longitude) & !is.na(Latitude))  # Fehlende GPS-Werte entfernen
+```
+
+```{r, warning=FALSE, message=FALSE}
+# In sf-Objekt mit WGS84 (EPSG:4326) umwandeln
+rawSignals_sf <- rawSignals |> 
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) |> 
+  st_transform(crs = 2056)  # In CH1903+ LV95 (EPSG:2056) umwandeln
+
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+
+# Interaktive Karte mit tmap
+tmap_mode("plot")
+tm_shape(rawSignals_sf) + 
+  tm_dots(col = "blue", alpha = 0.5, size = 0.3) +
+  tm_layout(title = "GPS Tracks (CH1903+ LV95)")
+
+
+
+tm_shape(rawSignals_sf) +
+  tm_basemap(server = "OpenStreetMap") +  # Background map
+  tm_dots(col = "blue", alpha = 0.5, size = 0.3) +
+  tm_layout(title = "GPS Tracks (CH1903+ LV95)")
+```
