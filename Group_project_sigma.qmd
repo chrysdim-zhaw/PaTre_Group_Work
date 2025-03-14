@@ -8,13 +8,13 @@ format:
     number-sections: true  # Number headings in the document
 execute:
   echo: true  # Prevent code output in the final document
-bibliography: bibligraphy.bib  # Ensure the file name is correct
+bibliography: bibliography.bib  # Ensure the file name is correct
 ---
 
 
 ## Abstract {.unnumbered .unlisted}
 
-Blablabla
+Blablabla blablallaaada
 
 ```{r, warning=FALSE, message=FALSE}
 library(jsonlite)
