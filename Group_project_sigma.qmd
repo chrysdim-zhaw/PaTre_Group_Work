@@ -4,7 +4,7 @@ author: "Ramon und Dimitri"
 format:  
   html:
     toc: true  # Enable Table of Contents
-    toc-depth: 2  # Optional: Set the depth of ToC (default is 3)
+    toc-depth: 3  # Optional: Set the depth of ToC (default is 3)
     number-sections: true  # Number headings in the document
 execute:
   echo: true  # Prevent code output in the final document
