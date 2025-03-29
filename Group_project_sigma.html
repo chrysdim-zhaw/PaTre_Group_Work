@@ -68,6 +68,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Group_project_sigma_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Group_project_sigma_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Group_project_sigma_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="Group_project_sigma_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="Group_project_sigma_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="Group_project_sigma_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="Group_project_sigma_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+
+<script src="Group_project_sigma_files/libs/leaflet-1.3.1/leaflet.js"></script>
+
+<link href="Group_project_sigma_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+
+<script src="Group_project_sigma_files/libs/proj4-2.6.2/proj4.min.js"></script>
+
+<script src="Group_project_sigma_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+
+<link href="Group_project_sigma_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+
+<script src="Group_project_sigma_files/libs/leaflet-binding-2.2.2/leaflet.js"></script>
+
 
 
 </head>
@@ -79,10 +99,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
-  <ul class="collapse">
+  <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
-  <li><a href="#import" id="toc-import" class="nav-link" data-scroll-target="#import"><span class="header-section-number">1.1</span> Import of Ramon’s data</a></li>
+  <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions"><span class="header-section-number">1.1</span> Research Questions</a></li>
+  <li><a href="#data-collection" id="toc-data-collection" class="nav-link" data-scroll-target="#data-collection"><span class="header-section-number">1.2</span> Data Collection</a></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology"><span class="header-section-number">1.3</span> Methodology</a>
+  <ul class="collapse">
+  <li><a href="#data-analysis-packages-and-tools" id="toc-data-analysis-packages-and-tools" class="nav-link" data-scroll-target="#data-analysis-packages-and-tools"><span class="header-section-number">1.3.1</span> Data Analysis, packages, and tools</a></li>
+  </ul></li>
+  <li><a href="#potential-challenges" id="toc-potential-challenges" class="nav-link" data-scroll-target="#potential-challenges"><span class="header-section-number">1.4</span> Potential Challenges</a></li>
+  </ul></li>
+  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import"><span class="header-section-number">2</span> Data Import</a>
+  <ul class="collapse">
+  <li><a href="#import-of-ramons-data" id="toc-import-of-ramons-data" class="nav-link" data-scroll-target="#import-of-ramons-data"><span class="header-section-number">2.1</span> Import of Ramon’s data</a></li>
+  <li><a href="#import-of-dimitris-data" id="toc-import-of-dimitris-data" class="nav-link" data-scroll-target="#import-of-dimitris-data"><span class="header-section-number">2.2</span> Import of Dimitri’s data</a></li>
+  </ul></li>
+  <li><a href="#data-analysis" id="toc-data-analysis" class="nav-link" data-scroll-target="#data-analysis"><span class="header-section-number">3</span> Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#localtions-of-ramon" id="toc-localtions-of-ramon" class="nav-link" data-scroll-target="#localtions-of-ramon"><span class="header-section-number">3.1</span> Localtions of Ramon</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -114,9 +149,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="abstract" class="level2 unnumbered unlisted">
-<h2 class="unnumbered unlisted anchored" data-anchor-id="abstract">Abstract</h2>
-<p>Blablabla</p>
+<section id="abstract" class="level1 unnumbered unlisted">
+<h1 class="unnumbered unlisted">Abstract</h1>
+<p>This study analyzes the movement patterns of two students using Google Timeline tracking and SimaPro for GHG emissions assessment. By segmenting rest and movement phases, identifying key locations, and comparing transportation modes, the project quantifies mobility behaviors and environmental impact. The findings will be visualized through maps and statistical comparisons, ensuring an insightful sustainability analysis.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -124,20 +159,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>In this work the google mapd data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map. Further, the data will be analyzed and the distance between the two persons will be calculated.</p>
-<section id="import" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="import"><span class="header-section-number">1.1</span> Import of Ramon’s data</h2>
+<section id="research-questions" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="research-questions"><span class="header-section-number">1.1</span> Research Questions</h2>
+<ol type="1">
+<li>How do the movement patterns of the two students differ?
+<ol type="a">
+<li>What is the ratio between rest and movement? (Segmentation)</li>
+<li>Which is the most frequently visited location?</li>
+<li>How does the use of transportation modes differ between the samples over a specific period?</li>
+<li>What impact do the movement patterns have on each student’s CO₂ footprint?</li>
+</ol></li>
+</ol>
+</section>
+<section id="data-collection" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="data-collection"><span class="header-section-number">1.2</span> Data Collection</h2>
+<p>The primary data source will be Google Timeline tracking, which will provide detailed movement patterns, including transportation modes, travel distances, and time spent at different locations. The data collection window will be one month, ensuring both students’ mobility data is aligned for accurate comparison. Additionally, GHG emissions data will be obtained from SimaPro, which will help quantify the environmental impact of different transportation choices. This will require contextual data on transport emission factors (e.g., CO2 emissions per km for cars, public transport, cycling, etc.). Further contextual data, such as university schedules, or personal habits, may be useful for interpreting movement patterns. At this stage, not all data has been collected, but Google Timeline tracking and SimaPro will serve as key sources for analysis.</p>
+</section>
+<section id="methodology" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="methodology"><span class="header-section-number">1.3</span> Methodology</h2>
+<p>Define movement patterns in terms of distance traveled, frequency of trips, and time spent in motion vs.&nbsp;at rest as well as transportation modes and their emission caused. Define “rest” as periods of inactivity (e.g., staying at home, being in one location for extended periods) and “movement” as active transportation or mobility events. Categorize transportation modes (e.g., walking, biking, public transport, car). Collect data on usage frequency, duration, and distance for each mode over a set period (e.g., one week or one month). Compare patterns between the two students. Measure GHG emissions based on transportation modes used (e.g., car, bike, public transport) and distances traveled. Use an established GHG emission calculator (i.e., SimaPro or publicly available emission factors) to quantify the footprint.</p>
+<section id="data-analysis-packages-and-tools" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="data-analysis-packages-and-tools"><span class="header-section-number">1.3.1</span> Data Analysis, packages, and tools</h3>
+<p>For this analysis, R will be used for data cleaning, spatial analysis, visualization, and statistical modeling. Key concepts and packages include:</p>
+<ol type="a">
+<li>Data manipulation: dplyr, tidyverse for cleaning and structuring Google Timeline data.</li>
+<li>Spatial analysis: sf, and raster to analyze GPS locations, travel distances, and movement patterns.</li>
+<li>Visualization: ggplot2, tmap, and leaflet for creating maps, route heatmaps, and movement patterns.</li>
+<li>GHG emission calculations: EcoInvent datai for CO₂ footprint calculations.</li>
+<li>Time series analysis: lubridate for analyzing movement trends over the one-month period.</li>
+</ol>
+<p>Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons.</p>
+</section>
+</section>
+<section id="potential-challenges" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="potential-challenges"><span class="header-section-number">1.4</span> Potential Challenges</h2>
+<p>A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends.</p>
+<p>Another issue is the misclassification of transportation modes, where Google Timeline may inaccurately categorize movement (e.g., mistaking walking for biking). To improve data reliability, transportation modes will be cross-verified using movement speed, timestamps, and contextual information, allowing for necessary corrections and more accurate mobility analysis.</p>
+</section>
+</section>
+<section id="data-import" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Data Import</h1>
+<p>In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.</p>
+<section id="import-of-ramons-data" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="import-of-ramons-data"><span class="header-section-number">2.1</span> Import of Ramon’s data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Daten importieren und in DataFrame umwandeln</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/Timeline.json"</span>, <span class="at">flatten =</span> <span class="cn">TRUE</span>, <span class="at">simplifyDataFrame =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_Ramon <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/Timeline.json"</span>, <span class="at">flatten =</span> <span class="cn">TRUE</span>, <span class="at">simplifyDataFrame =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rawSignals <span class="ot">&lt;-</span> data3<span class="sc">$</span>rawSignals <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rawSignals <span class="ot">&lt;-</span> data_Ramon<span class="sc">$</span>rawSignals <span class="sc">|&gt;</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(position.LatLng)) <span class="sc">|&gt;</span>  <span class="co"># Fehlende GPS-Werte entfernen</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(position.LatLng, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Latitude"</span>, <span class="st">"Longitude"</span>), <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -176,6 +253,674 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="Group_project_sigma_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+</section>
+<section id="import-of-dimitris-data" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="import-of-dimitris-data"><span class="header-section-number">2.2</span> Import of Dimitri’s data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Daten importieren und in DataFrame umwandeln</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="data-analysis" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Data Analysis</h1>
+<p>In this Chapter the data from Ramon and Dimitri will be analyzed. It will be analised where Ramon and Dimitri have been. Additionally, the it will be analised if they were at the same place at the same time.</p>
+<section id="localtions-of-ramon" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="localtions-of-ramon"><span class="header-section-number">3.1</span> Localtions of Ramon</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="st">"data/Timeline.json"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Struktur ansehen</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ semanticSegments   :'data.frame':    432 obs. of  7 variables:
+  ..$ startTime                        : chr [1:432] "2025-02-04T11:00:00.000+01:00" "2025-02-04T11:00:49.000+01:00" "2025-02-04T12:22:44.000+01:00" "2025-02-04T13:00:00.000+01:00" ...
+  ..$ endTime                          : chr [1:432] "2025-02-04T13:00:00.000+01:00" "2025-02-04T12:22:44.000+01:00" "2025-02-04T17:41:49.000+01:00" "2025-02-04T15:00:00.000+01:00" ...
+  ..$ timelinePath                     :List of 432
+  .. ..$ :'data.frame': 2 obs. of  2 variables:
+  .. .. ..$ point: chr [1:2] "47.2976026°, 8.6003228°" "47.2976479°, 8.6003688°"
+  .. .. ..$ time : chr [1:2] "2025-02-04T11:01:00.000+01:00" "2025-02-04T12:23:00.000+01:00"
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975138°, 8.6005091°"
+  .. .. ..$ time : chr "2025-02-04T13:00:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975138°, 8.6005091°"
+  .. .. ..$ time : chr "2025-02-04T15:03:00.000+01:00"
+  .. ..$ :'data.frame': 7 obs. of  2 variables:
+  .. .. ..$ point: chr [1:7] "47.3011814°, 8.5948985°" "47.2975336°, 8.6001764°" "47.2971885°, 8.5989853°" "47.3147533°, 8.5827928°" ...
+  .. .. ..$ time : chr [1:7] "2025-02-04T17:15:00.000+01:00" "2025-02-04T17:28:00.000+01:00" "2025-02-04T17:42:00.000+01:00" "2025-02-04T17:46:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 5 obs. of  2 variables:
+  .. .. ..$ point: chr [1:5] "47.3272662°, 8.6057292°" "47.3274116°, 8.6057387°" "47.3269361°, 8.6001821°" "47.3269979°, 8.5943892°" ...
+  .. .. ..$ time : chr [1:5] "2025-02-04T22:55:00.000+01:00" "2025-02-04T22:57:00.000+01:00" "2025-02-04T22:58:00.000+01:00" "2025-02-04T22:59:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 7 obs. of  2 variables:
+  .. .. ..$ point: chr [1:7] "47.3215878°, 8.5864794°" "47.3176235°, 8.5821018°" "47.2977199°, 8.6005073°" "47.2975132°, 8.6005171°" ...
+  .. .. ..$ time : chr [1:7] "2025-02-04T23:01:00.000+01:00" "2025-02-04T23:04:00.000+01:00" "2025-02-04T23:16:00.000+01:00" "2025-02-04T23:19:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975114°, 8.6005218°"
+  .. .. ..$ time : chr "2025-02-05T02:59:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975114°, 8.6005218°"
+  .. .. ..$ time : chr "2025-02-05T06:52:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975114°, 8.6005218°"
+  .. .. ..$ time : chr "2025-02-05T07:29:00.000+01:00"
+  .. ..$ :'data.frame': 3 obs. of  2 variables:
+  .. .. ..$ point: chr [1:3] "47.2975135°, 8.6005123°" "47.2975135°, 8.6005123°" "47.2975135°, 8.6005123°"
+  .. .. ..$ time : chr [1:3] "2025-02-05T09:42:00.000+01:00" "2025-02-05T10:22:00.000+01:00" "2025-02-05T10:46:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975135°, 8.6005123°"
+  .. .. ..$ time : chr "2025-02-05T11:48:00.000+01:00"
+  .. ..$ :'data.frame': 3 obs. of  2 variables:
+  .. .. ..$ point: chr [1:3] "47.2946609°, 8.5997561°" "47.2975185°, 8.6004984°" "47.2975196°, 8.6005123°"
+  .. .. ..$ time : chr [1:3] "2025-02-05T13:25:00.000+01:00" "2025-02-05T13:42:00.000+01:00" "2025-02-05T13:53:00.000+01:00"
+  .. ..$ :'data.frame': 10 obs. of  2 variables:
+  .. .. ..$ point: chr [1:10] "47.2975125°, 8.6005152°" "47.3121832°, 8.5829539°" "47.3367766°, 8.5694717°" "47.3453007°, 8.566579°" ...
+  .. .. ..$ time : chr [1:10] "2025-02-05T17:06:00.000+01:00" "2025-02-05T17:14:00.000+01:00" "2025-02-05T17:20:00.000+01:00" "2025-02-05T17:22:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.3178409°, 8.5816461°"
+  .. .. ..$ time : chr "2025-02-05T19:21:00.000+01:00"
+  .. ..$ :'data.frame': 5 obs. of  2 variables:
+  .. .. ..$ point: chr [1:5] "47.3276797°, 8.6065226°" "47.3278011°, 8.606605°" "47.3097419°, 8.5899893°" "47.2976856°, 8.6004295°" ...
+  .. .. ..$ time : chr [1:5] "2025-02-05T21:39:00.000+01:00" "2025-02-05T22:08:00.000+01:00" "2025-02-05T22:18:00.000+01:00" "2025-02-05T22:24:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975289°, 8.600501°"
+  .. .. ..$ time : chr "2025-02-05T23:45:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975289°, 8.600501°"
+  .. .. ..$ time : chr "2025-02-06T01:45:00.000+01:00"
+  .. ..$ :'data.frame': 2 obs. of  2 variables:
+  .. .. ..$ point: chr [1:2] "47.2975289°, 8.600501°" "47.2975289°, 8.600501°"
+  .. .. ..$ time : chr [1:2] "2025-02-06T05:46:00.000+01:00" "2025-02-06T06:42:00.000+01:00"
+  .. ..$ :'data.frame': 5 obs. of  2 variables:
+  .. .. ..$ point: chr [1:5] "47.2975277°, 8.6005078°" "47.3069173°, 8.5903521°" "47.3024571°, 8.5938404°" "47.3020484°, 8.5976657°" ...
+  .. .. ..$ time : chr [1:5] "2025-02-06T12:32:00.000+01:00" "2025-02-06T12:36:00.000+01:00" "2025-02-06T12:40:00.000+01:00" "2025-02-06T12:42:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 7 obs. of  2 variables:
+  .. .. ..$ point: chr [1:7] "47.2975178°, 8.6004956°" "47.3033057°, 8.5928992°" "47.3107807°, 8.5866148°" "47.3107276°, 8.586566°" ...
+  .. .. ..$ time : chr [1:7] "2025-02-06T14:19:00.000+01:00" "2025-02-06T14:28:00.000+01:00" "2025-02-06T14:30:00.000+01:00" "2025-02-06T14:37:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 12 obs. of  2 variables:
+  .. .. ..$ point: chr [1:12] "47.3318852°, 8.6144303°" "47.244216°, 8.8569691°" "47.227745°, 8.8707729°" "47.2349956°, 8.9391766°" ...
+  .. .. ..$ time : chr [1:12] "2025-02-06T15:06:00.000+01:00" "2025-02-06T15:23:00.000+01:00" "2025-02-06T15:25:00.000+01:00" "2025-02-06T15:29:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 13 obs. of  2 variables:
+  .. .. ..$ point: chr [1:13] "46.7124218°, 9.4460472°" "46.6624657°, 9.5776655°" "46.6107838°, 9.5922159°" "46.598392°, 9.596026°" ...
+  .. .. ..$ time : chr [1:13] "2025-02-06T17:06:00.000+01:00" "2025-02-06T17:25:00.000+01:00" "2025-02-06T17:33:00.000+01:00" "2025-02-06T17:35:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 15 obs. of  2 variables:
+  .. .. ..$ point: chr [1:15] "46.4897903°, 9.8362631°" "46.4895835°, 9.8370248°" "46.4895586°, 9.8370334°" "46.4619781°, 9.6739483°" ...
+  .. .. ..$ time : chr [1:15] "2025-02-06T23:08:00.000+01:00" "2025-02-06T23:10:00.000+01:00" "2025-02-06T23:12:00.000+01:00" "2025-02-06T23:36:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 7 obs. of  2 variables:
+  .. .. ..$ point: chr [1:7] "47.1348289°, 9.0403321°" "47.2061229°, 8.9627957°" "47.2296695°, 8.877948°" "47.2935465°, 8.8159372°" ...
+  .. .. ..$ time : chr [1:7] "2025-02-07T01:20:00.000+01:00" "2025-02-07T01:27:00.000+01:00" "2025-02-07T01:33:00.000+01:00" "2025-02-07T01:40:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.3028815°, 8.5927555°"
+  .. .. ..$ time : chr "2025-02-07T03:39:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.3028815°, 8.5927555°"
+  .. .. ..$ time : chr "2025-02-07T05:39:00.000+01:00"
+  .. ..$ :'data.frame': 3 obs. of  2 variables:
+  .. .. ..$ point: chr [1:3] "47.3028815°, 8.5927555°" "47.2976113°, 8.6004896°" "47.2975739°, 8.6005008°"
+  .. .. ..$ time : chr [1:3] "2025-02-07T09:27:00.000+01:00" "2025-02-07T09:28:00.000+01:00" "2025-02-07T09:49:00.000+01:00"
+  .. ..$ :'data.frame': 6 obs. of  2 variables:
+  .. .. ..$ point: chr [1:6] "47.2975199°, 8.600507°" "47.2973747°, 8.598802°" "47.3501339°, 8.561366°" "47.3669435°, 8.5482433°" ...
+  .. .. ..$ time : chr [1:6] "2025-02-07T17:37:00.000+01:00" "2025-02-07T17:47:00.000+01:00" "2025-02-07T17:52:00.000+01:00" "2025-02-07T17:56:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 11 obs. of  2 variables:
+  .. .. ..$ point: chr [1:11] "47.3767816°, 8.540354°" "47.3771539°, 8.5400056°" "47.3786762°, 8.5398819°" "47.3520425°, 8.5601001°" ...
+  .. .. ..$ time : chr [1:11] "2025-02-07T21:15:00.000+01:00" "2025-02-07T21:16:00.000+01:00" "2025-02-07T21:30:00.000+01:00" "2025-02-07T21:36:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2976132°, 8.6003518°"
+  .. .. ..$ time : chr "2025-02-08T00:06:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2976132°, 8.6003518°"
+  .. .. ..$ time : chr "2025-02-08T02:07:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2976132°, 8.6003518°"
+  .. .. ..$ time : chr "2025-02-08T06:08:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2976132°, 8.6003518°"
+  .. .. ..$ time : chr "2025-02-08T10:26:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2976132°, 8.6003518°"
+  .. .. ..$ time : chr "2025-02-08T11:46:00.000+01:00"
+  .. ..$ :'data.frame': 4 obs. of  2 variables:
+  .. .. ..$ point: chr [1:4] "47.2975492°, 8.6004582°" "47.3195679°, 8.5820212°" "47.3174627°, 8.5814764°" "47.3165207°, 8.5809651°"
+  .. .. ..$ time : chr [1:4] "2025-02-08T15:47:00.000+01:00" "2025-02-08T15:56:00.000+01:00" "2025-02-08T16:04:00.000+01:00" "2025-02-08T16:06:00.000+01:00"
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 6 obs. of  2 variables:
+  .. .. ..$ point: chr [1:6] "47.3162708°, 8.5812773°" "47.3130926°, 8.5833257°" "47.3093632°, 8.5889807°" "47.3068297°, 8.5889463°" ...
+  .. .. ..$ time : chr [1:6] "2025-02-08T17:00:00.000+01:00" "2025-02-08T17:02:00.000+01:00" "2025-02-08T17:04:00.000+01:00" "2025-02-08T17:06:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 4 obs. of  2 variables:
+  .. .. ..$ point: chr [1:4] "47.2975108°, 8.6005142°" "47.2975289°, 8.6005153°" "47.2975376°, 8.6005084°" "47.2976452°, 8.6005302°"
+  .. .. ..$ time : chr [1:4] "2025-02-08T23:24:00.000+01:00" "2025-02-08T23:34:00.000+01:00" "2025-02-08T23:36:00.000+01:00" "2025-02-08T23:38:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2975077°, 8.6004868°"
+  .. .. ..$ time : chr "2025-02-09T14:48:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2943881°, 8.5992936°"
+  .. .. ..$ time : chr "2025-02-09T16:54:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.2976446°, 8.6005479°"
+  .. .. ..$ time : chr "2025-02-09T18:30:00.000+01:00"
+  .. ..$ :'data.frame': 4 obs. of  2 variables:
+  .. .. ..$ point: chr [1:4] "47.2976446°, 8.6005479°" "47.2976116°, 8.6004262°" "47.2976116°, 8.6004262°" "47.2976116°, 8.6004262°"
+  .. .. ..$ time : chr [1:4] "2025-02-09T19:55:00.000+01:00" "2025-02-09T20:24:00.000+01:00" "2025-02-09T20:50:00.000+01:00" "2025-02-09T20:57:00.000+01:00"
+  .. ..$ :'data.frame': 4 obs. of  2 variables:
+  .. .. ..$ point: chr [1:4] "47.2975176°, 8.6005085°" "47.2975176°, 8.6005085°" "47.2975176°, 8.6005085°" "47.2976188°, 8.6005001°"
+  .. .. ..$ time : chr [1:4] "2025-02-09T21:13:00.000+01:00" "2025-02-09T21:33:00.000+01:00" "2025-02-09T21:43:00.000+01:00" "2025-02-09T22:50:00.000+01:00"
+  .. ..$ :'data.frame': 5 obs. of  2 variables:
+  .. .. ..$ point: chr [1:5] "47.2975211°, 8.6004906°" "47.297569°, 8.6004053°" "47.2975166°, 8.6005483°" "47.2975166°, 8.6005483°" ...
+  .. .. ..$ time : chr [1:5] "2025-02-10T07:04:00.000+01:00" "2025-02-10T07:19:00.000+01:00" "2025-02-10T07:21:00.000+01:00" "2025-02-10T07:35:00.000+01:00" ...
+  .. ..$ :'data.frame': 3 obs. of  2 variables:
+  .. .. ..$ point: chr [1:3] "47.2976664°, 8.6002875°" "47.2976251°, 8.600344°" "47.2943881°, 8.5992936°"
+  .. .. ..$ time : chr [1:3] "2025-02-10T09:24:00.000+01:00" "2025-02-10T09:51:00.000+01:00" "2025-02-10T10:54:00.000+01:00"
+  .. ..$ :'data.frame': 1 obs. of  2 variables:
+  .. .. ..$ point: chr "47.29751°, 8.6004934°"
+  .. .. ..$ time : chr "2025-02-10T12:46:00.000+01:00"
+  .. ..$ :'data.frame': 4 obs. of  2 variables:
+  .. .. ..$ point: chr [1:4] "47.2976536°, 8.6003954°" "47.3070103°, 8.5894662°" "47.3071653°, 8.5902682°" "47.297512°, 8.6004092°"
+  .. .. ..$ time : chr [1:4] "2025-02-10T17:38:00.000+01:00" "2025-02-10T17:49:00.000+01:00" "2025-02-10T18:06:00.000+01:00" "2025-02-10T18:15:00.000+01:00"
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ :'data.frame': 12 obs. of  2 variables:
+  .. .. ..$ point: chr [1:12] "47.2974655°, 8.6005798°" "47.2986322°, 8.5980379°" "47.3177102°, 8.581653°" "47.3193443°, 8.5813474°" ...
+  .. .. ..$ time : chr [1:12] "2025-02-10T19:11:00.000+01:00" "2025-02-10T19:13:00.000+01:00" "2025-02-10T19:16:00.000+01:00" "2025-02-10T19:17:00.000+01:00" ...
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. ..$ : NULL
+  .. .. [list output truncated]
+  ..$ startTimeTimezoneUtcOffsetMinutes: int [1:432] NA 60 60 NA NA NA 60 60 60 60 ...
+  ..$ endTimeTimezoneUtcOffsetMinutes  : int [1:432] NA 60 60 NA NA NA 60 60 60 60 ...
+  ..$ activity                         :'data.frame':   432 obs. of  6 variables:
+  .. ..$ start         :'data.frame':   432 obs. of  1 variable:
+  .. .. ..$ latLng: chr [1:432] NA "47.2975115°, 8.6005272°" NA NA ...
+  .. ..$ end           :'data.frame':   432 obs. of  1 variable:
+  .. .. ..$ latLng: chr [1:432] NA "47.2976479°, 8.6003688°" NA NA ...
+  .. ..$ distanceMeters: num [1:432] NA 63.8 NA NA NA ...
+  .. ..$ probability   : num [1:432] NA 0.711 NA NA NA ...
+  .. ..$ topCandidate  :'data.frame':   432 obs. of  2 variables:
+  .. .. ..$ type       : chr [1:432] NA "WALKING" NA NA ...
+  .. .. ..$ probability: num [1:432] NA 0.365 NA NA NA ...
+  .. ..$ parking       :'data.frame':   432 obs. of  2 variables:
+  .. .. ..$ location :'data.frame': 432 obs. of  1 variable:
+  .. .. .. ..$ latLng: chr [1:432] NA NA NA NA ...
+  .. .. ..$ startTime: chr [1:432] NA NA NA NA ...
+  ..$ visit                            :'data.frame':   432 obs. of  3 variables:
+  .. ..$ hierarchyLevel: int [1:432] NA NA 0 NA NA NA NA 0 NA 0 ...
+  .. ..$ probability   : num [1:432] NA NA 0.491 NA NA ...
+  .. ..$ topCandidate  :'data.frame':   432 obs. of  4 variables:
+  .. .. ..$ placeId      : chr [1:432] NA NA "ChIJBSdHZhGmmkcRYsMgTDtwz34" NA ...
+  .. .. ..$ semanticType : chr [1:432] NA NA "UNKNOWN" NA ...
+  .. .. ..$ probability  : num [1:432] NA NA 0.252 NA NA ...
+  .. .. ..$ placeLocation:'data.frame': 432 obs. of  1 variable:
+  .. .. .. ..$ latLng: chr [1:432] NA NA "47.2976345°, 8.600366°" NA ...
+ $ rawSignals         :'data.frame':    14583 obs. of  3 variables:
+  ..$ position      :'data.frame':  14583 obs. of  6 variables:
+  .. ..$ LatLng              : chr [1:14583] "47.2976026°, 8.6003228°" NA "47.2975115°, 8.6005272°" NA ...
+  .. ..$ accuracyMeters      : int [1:14583] 4 NA 20 NA 3 14 9 NA 100 100 ...
+  .. ..$ altitudeMeters      : num [1:14583] 491 NA 491 NA 491 ...
+  .. ..$ source              : chr [1:14583] "GPS" NA "WIFI" NA ...
+  .. ..$ timestamp           : chr [1:14583] "2025-02-04T11:00:49.000+01:00" NA "2025-02-04T11:01:35.000+01:00" NA ...
+  .. ..$ speedMetersPerSecond: num [1:14583] 0.00692 NA 0 NA 0.0603 ...
+  ..$ activityRecord:'data.frame':  14583 obs. of  2 variables:
+  .. ..$ probableActivities:List of 14583
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  2 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:2] "STILL" "UNKNOWN"
+  .. .. .. ..$ confidence: num [1:2] 0.98 0.02
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  2 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:2] "STILL" "UNKNOWN"
+  .. .. .. ..$ confidence: num [1:2] 0.98 0.02
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:11] "UNKNOWN" "IN_VEHICLE" "ON_BICYCLE" "ON_FOOT" ...
+  .. .. .. ..$ confidence: num [1:11] 0.4 0.1 0.1 0.1 0.1 ...
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "STILL" "IN_VEHICLE" "ON_FOOT" "WALKING" ...
+  .. .. .. ..$ confidence: num [1:10] 0.53 0.15 0.15 0.15 0.15 ...
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "STILL" "ON_FOOT" "WALKING" "IN_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:10] 0.52 0.24 0.24 0.08 0.08 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  6 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:6] "STILL" "UNKNOWN" "IN_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:6] 0.97 0.02 0.01 0.01 0.01 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:11] "STILL" "ON_FOOT" "WALKING" "ON_BICYCLE" ...
+  .. .. .. ..$ confidence: num [1:11] 0.51 0.28 0.28 0.08 0.06 ...
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:11] "UNKNOWN" "IN_VEHICLE" "ON_BICYCLE" "ON_FOOT" ...
+  .. .. .. ..$ confidence: num [1:11] 0.4 0.1 0.1 0.1 0.1 ...
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:11] "UNKNOWN" "IN_VEHICLE" "ON_BICYCLE" "ON_FOOT" ...
+  .. .. .. ..$ confidence: num [1:11] 0.4 0.1 0.1 0.1 0.1 ...
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:11] "UNKNOWN" "IN_VEHICLE" "ON_BICYCLE" "ON_FOOT" ...
+  .. .. .. ..$ confidence: num [1:11] 0.4 0.1 0.1 0.1 0.1 ...
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "STILL" "ON_FOOT" "WALKING" "IN_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:10] 0.75 0.1 0.1 0.08 0.08 ...
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "STILL" "IN_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:10] 0.7 0.11 0.11 0.11 0.11 ...
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "STILL" "IN_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:10] 0.78 0.11 0.11 0.11 0.11 ...
+  .. .. ..$ :'data.frame':  8 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:8] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:8] 0.88 0.88 0.07 0.07 0.07 ...
+  .. .. ..$ :'data.frame':  7 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:7] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:7] 0.91 0.91 0.06 0.06 0.06 ...
+  .. .. ..$ :'data.frame':  9 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:9] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:9] 0.84 0.84 0.1 0.1 0.1 ...
+  .. .. ..$ :'data.frame':  7 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:7] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:7] 0.9 0.9 0.07 0.07 0.07 ...
+  .. .. ..$ :'data.frame':  7 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:7] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:7] 0.88 0.88 0.08 0.08 0.08 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  9 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:9] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:9] 0.83 0.83 0.09 0.09 0.09 ...
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "STILL"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  9 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:9] "IN_VEHICLE" "IN_RAIL_VEHICLE" "IN_ROAD_VEHICLE" "IN_ROAD_VEHICLE" ...
+  .. .. .. ..$ confidence: num [1:9] 0.92 0.92 0.04 0.04 0.04 ...
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "ON_FOOT" "WALKING" "ON_BICYCLE" "RUNNING" ...
+  .. .. .. ..$ confidence: num [1:10] 0.88 0.88 0.04 0.03 0.02 ...
+  .. .. ..$ :'data.frame':  1 obs. of  2 variables:
+  .. .. .. ..$ type      : chr "TILTING"
+  .. .. .. ..$ confidence: num 1
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:10] "ON_FOOT" "WALKING" "RUNNING" "UNKNOWN" ...
+  .. .. .. ..$ confidence: num [1:10] 0.89 0.89 0.05 0.03 0.01 ...
+  .. .. ..$ :'data.frame':  5 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:5] "ON_FOOT" "WALKING" "RUNNING" "UNKNOWN" ...
+  .. .. .. ..$ confidence: num [1:5] 0.89 0.89 0.06 0.03 0.02
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  5 obs. of  2 variables:
+  .. .. .. ..$ type      : chr [1:5] "ON_FOOT" "WALKING" "RUNNING" "UNKNOWN" ...
+  .. .. .. ..$ confidence: num [1:5] 0.94 0.94 0.03 0.02 0.01
+  .. .. .. [list output truncated]
+  .. ..$ timestamp         : chr [1:14583] NA "2025-02-04T11:01:16.000+01:00" NA NA ...
+  ..$ wifiScan      :'data.frame':  14583 obs. of  2 variables:
+  .. ..$ deliveryTime  : chr [1:14583] NA NA NA "2025-02-04T11:02:16.000+01:00" ...
+  .. ..$ devicesRecords:List of 14583
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  8 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:8] 1.77e+14 1.83e+14 2.03e+14 1.28e+14 2.03e+14 ...
+  .. .. .. ..$ rawRssi: int [1:8] -62 -63 -68 -87 -63 -87 -63 -63
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  12 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:12] 1.77e+14 1.83e+14 2.03e+14 1.28e+14 2.03e+14 ...
+  .. .. .. ..$ rawRssi: int [1:12] -62 -61 -69 -89 -61 -88 -88 -62 -62 -91 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  9 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:9] 1.77e+14 1.83e+14 1.99e+14 1.28e+14 2.03e+14 ...
+  .. .. .. ..$ rawRssi: int [1:9] -38 -75 -88 -88 -75 -90 -88 -39 -39
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  17 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:17] 1.28e+14 2.03e+14 9.28e+13 1.77e+14 1.77e+14 ...
+  .. .. .. ..$ rawRssi: int [1:17] -90 -77 -89 -44 -44 -73 -83 -51 -76 -94 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  32 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:32] 1.64e+13 1.08e+14 2.07e+14 1.77e+14 1.89e+14 ...
+  .. .. .. ..$ rawRssi: int [1:32] -95 -84 -84 -94 -94 -91 -89 -92 -87 -89 ...
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:11] 1.81e+13 2.68e+14 2.68e+14 1.55e+14 2.68e+14 ...
+  .. .. .. ..$ rawRssi: int [1:11] -89 -90 -81 -93 -89 -72 -89 -91 -88 -95 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  5 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:5] 1.89e+14 7.39e+10 1.90e+14 2.23e+14 2.80e+14
+  .. .. .. ..$ rawRssi: int [1:5] -89 -83 -94 -77 -90
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  10 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:10] 1.96e+14 1.94e+14 2.67e+14 1.54e+14 1.54e+14 ...
+  .. .. .. ..$ rawRssi: int [1:10] -83 -88 -88 -74 -88 -82 -83 -77 -89 -92
+  .. .. ..$ :'data.frame':  11 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:11] 2.25e+14 1.96e+14 1.39e+14 1.54e+14 1.54e+14 ...
+  .. .. .. ..$ rawRssi: int [1:11] -86 -82 -91 -75 -90 -79 -83 -85 -74 -89 ...
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  19 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:19] 2.69e+14 6.62e+13 6.62e+13 1.81e+14 2.17e+14 ...
+  .. .. .. ..$ rawRssi: int [1:19] -87 -88 -93 -79 -90 -79 -81 -82 -82 -85 ...
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  8 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:8] 3.12e+13 2.34e+14 2.38e+14 2.34e+14 2.60e+14 ...
+  .. .. .. ..$ rawRssi: int [1:8] -85 -64 -88 -95 -84 -71 -87 -88
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  9 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:9] 1.77e+14 3.59e+13 1.90e+14 3.59e+13 1.90e+14 ...
+  .. .. .. ..$ rawRssi: int [1:9] -86 -87 -88 -88 -77 -84 -77 -81 -84
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ : NULL
+  .. .. ..$ :'data.frame':  47 obs. of  2 variables:
+  .. .. .. ..$ mac    : num [1:47] 7.09e+13 1.72e+14 2.25e+14 1.72e+14 2.51e+13 ...
+  .. .. .. ..$ rawRssi: int [1:47] -68 -86 -94 -74 -85 -75 -71 -81 -83 -78 ...
+  .. .. ..$ : NULL
+  .. .. .. [list output truncated]
+ $ userLocationProfile:List of 2
+  ..$ frequentPlaces:'data.frame':  9 obs. of  3 variables:
+  .. ..$ placeId      : chr [1:9] "ChIJAAAAAAAAAAARYsMgTDtwz34" "ChIJAAAAAAAAAAARa8CPOFj2fz4" "ChIJAAAAAAAAAAARxLgBC09PZjc" "ChIJAAAAAAAAAAARbxPdJyuCTRc" ...
+  .. ..$ placeLocation: chr [1:9] "47.2976345°, 8.600366°" "47.3275167°, 8.6065361°" "47.3191485°, 8.5805623°" "47.30578°, 8.591499°" ...
+  .. ..$ label        : chr [1:9] "HOME" "WORK" NA NA ...
+  ..$ persona       :List of 3
+  .. ..$ chainAffinities     :'data.frame': 4 obs. of  4 variables:
+  .. .. ..$ chainId                : chr [1:4] "ChIJAAAAAAAAAAARhCAS3dpI4KQ" "ChIJAAAAAAAAAAAReXrJOB_kMgk" "ChIJAAAAAAAAAAAR0mTOF45WPqI" "ChIJAAAAAAAAAAARTo0EgpM_MO0"
+  .. .. ..$ numUniqueFprintsVisited: int [1:4] 3 2 1 1
+  .. .. ..$ numWeeksWithVisits     : int [1:4] 2 4 1 1
+  .. .. ..$ fractionOfChainVisits  : num [1:4] 0.3077 0.5385 0.0769 0.0769
+  .. ..$ travelModeAffinities:'data.frame': 7 obs. of  2 variables:
+  .. .. ..$ mode    : chr [1:7] "WALKING" "IN_BUS" "IN_TRAIN" "IN_PASSENGER_VEHICLE" ...
+  .. .. ..$ affinity: num [1:7] 0.321 0.3086 0.2469 0.1975 0.0741 ...
+  .. ..$ placeAffinity       :'data.frame': 15 obs. of  6 variables:
+  .. .. ..$ placeId                     : chr [1:15] "ChIJAAAAAAAAAAARtH3vSMK4V4o" "ChIJAAAAAAAAAAARxLgBC09PZjc" "ChIJAAAAAAAAAAARbxPdJyuCTRc" "ChIJAAAAAAAAAAARXxYgtuAR-jE" ...
+  .. .. ..$ averageNumVisitsPerMonth    : num [1:15] 2 12 6 4 4 1 1 3 4 1 ...
+  .. .. ..$ latestVisitTime             : chr [1:15] "2025-02-26T07:42:54.000+01:00" "2025-02-25T17:46:02.000+01:00" "2025-02-25T17:40:23.000+01:00" "2025-02-25T17:05:10.000+01:00" ...
+  .. .. ..$ distanceToInferredHomeMeters: num [1:15] 10600 2820 1126 2685 9467 ...
+  .. .. ..$ distanceToInferredWorkMeters: num [1:15] 13275 2168 2670 4705 12087 ...
+  .. .. ..$ fractionOfPoiVisits         : num [1:15] 0.0303 0.1818 0.0909 0.0606 0.0606 ...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Places extrahieren</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>visit <span class="ot">&lt;-</span> data_raw<span class="sc">$</span>semanticSegments<span class="sc">$</span>visit</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#visits → Liste aller Aufenthaltsorte mit Zeitstempeln</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>visits <span class="ot">&lt;-</span> data_raw<span class="sc">$</span>semanticSegments <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(visit<span class="sc">$</span>topCandidate<span class="sc">$</span>placeLocation<span class="sc">$</span>latLng)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">place_id =</span> visit<span class="sc">$</span>topCandidate<span class="sc">$</span>placeId,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat_lng =</span> visit<span class="sc">$</span>topCandidate<span class="sc">$</span>placeLocation<span class="sc">$</span>latLng,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">probability =</span> visit<span class="sc">$</span>probability,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">start =</span> <span class="fu">ymd_hms</span>(startTime),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">end =</span> <span class="fu">ymd_hms</span>(endTime)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(start, end, place_id, lat_lng, probability)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Aufenthaltsorte extrahieren</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>visits_2 <span class="ot">&lt;-</span> data_raw<span class="sc">$</span>semanticSegments <span class="sc">%&gt;%</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(visit<span class="sc">$</span>topCandidate<span class="sc">$</span>placeLocation<span class="sc">$</span>latLng)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">place_id =</span> visit<span class="sc">$</span>topCandidate<span class="sc">$</span>placeId,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat_lng =</span> visit<span class="sc">$</span>topCandidate<span class="sc">$</span>placeLocation<span class="sc">$</span>latLng,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">start =</span> <span class="fu">ymd_hms</span>(startTime),</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">end =</span> <span class="fu">ymd_hms</span>(endTime),</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">duration_mins =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(end, start, <span class="at">units =</span> <span class="st">"mins"</span>))</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lat_lng, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"lat"</span>, <span class="st">"lng"</span>), <span class="at">sep =</span> <span class="st">", "</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> <span class="fu">str_remove</span>(lat, <span class="st">"°"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">lng =</span> <span class="fu">str_remove</span>(lng, <span class="st">"°"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(duration_mins <span class="sc">&gt;=</span> <span class="dv">60</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(start, end, duration_mins, lat, lng, place_id)</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(visits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                start                 end                    place_id
+1 2025-02-04 11:22:44 2025-02-04 16:41:49 ChIJBSdHZhGmmkcRYsMgTDtwz34
+2 2025-02-04 16:46:22 2025-02-04 16:58:42 ChIJGW9kalGmmkcReoLIH7EjUlk
+3 2025-02-04 16:59:44 2025-02-04 21:57:19 ChIJY0kiCYymmkcRa8CPOFj2fz4
+4 2025-02-04 22:16:17 2025-02-05 16:05:48 ChIJBSdHZhGmmkcRYsMgTDtwz34
+5 2025-02-05 16:40:15 2025-02-05 17:33:37 ChIJ5byB0eALkEcROBA9nkrmBvs
+6 2025-02-05 20:39:20 2025-02-05 21:08:04 ChIJY0kiCYymmkcRa8CPOFj2fz4
+                  lat_lng probability
+1  47.2976345°, 8.600366°   0.4912861
+2 47.3179866°, 8.5817121°   0.7419417
+3 47.3275167°, 8.6065361°   0.4281603
+4  47.2976345°, 8.600366°   0.7943661
+5 47.3823112°, 8.5340513°   0.9134061
+6 47.3275167°, 8.6065361°   0.9184404</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">leaflet</span>(visits_2) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCircleMarkers</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>lng, <span class="sc">~</span>lat,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">radius =</span> <span class="dv">6</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"blue"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">stroke =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">fillOpacity =</span> <span class="fl">0.7</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="sc">~</span><span class="fu">paste0</span>(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt;b&gt;Start:&lt;/b&gt; "</span>, start, <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt;b&gt;Ende:&lt;/b&gt; "</span>, end, <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt;b&gt;Dauer:&lt;/b&gt; "</span>, <span class="fu">round</span>(duration_mins), <span class="st">" Minuten"</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addLegend</span>(</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"bottomright"</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">colors =</span> <span class="st">"blue"</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="st">"Aufenthalte &gt; 1 Stunde"</span>,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Google Timeline"</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-c55d2de4f9ba28315015" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-c55d2de4f9ba28315015">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[47.2976345,47.3275167,47.2976345,47.2976345,47.2976345,46.4898941,47.2976345,47.3757549,47.3757363,47.2976345,47.2976345,47.3275167,47.30578,47.2976345,47.3290636,47.2976345,47.2976345,47.2976345,46.7344794,47.2976345,47.3985829,47.2976345,47.3275167,47.2976345,46.9016609,46.9016609,47.3275167,47.2976345,47.2252267,46.7314251,47.2976345,47.2188986,47.2976345,47.3275167,47.2976345,47.3275167,47.2976345,47.2976345,47.3275167,47.2976345,47.3275167,47.2974687,47.2250493,47.3275167,47.2976345,47.2188986,47.2976345,47.2976345,47.3275167,47.2974687,47.2976345,47.2976345],[8.600365999999999,8.6065361,8.600365999999999,8.600365999999999,8.600365999999999,9.836219699999999,8.600365999999999,8.5400841,8.5400013,8.600365999999999,8.600365999999999,8.6065361,8.591499000000001,8.600365999999999,8.6062557,8.600365999999999,8.600365999999999,8.600365999999999,9.556884699999999,8.600365999999999,8.5923663,8.600365999999999,8.6065361,8.600365999999999,8.2526533,8.2526533,8.6065361,8.600365999999999,8.679029999999999,9.556315400000001,8.600365999999999,8.679543600000001,8.600365999999999,8.6065361,8.600365999999999,8.6065361,8.600365999999999,8.600365999999999,8.6065361,8.600365999999999,8.6065361,8.598975899999999,8.679354,8.6065361,8.600365999999999,8.679543600000001,8.600365999999999,8.600365999999999,8.6065361,8.598975899999999,8.600365999999999,8.600365999999999],6,null,null,{"interactive":true,"className":"","stroke":false,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.7},null,null,["<b>Start:<\/b> 2025-02-04 11:22:44<br><b>Ende:<\/b> 2025-02-04 16:41:49<br><b>Dauer:<\/b> 319 Minuten","<b>Start:<\/b> 2025-02-04 16:59:44<br><b>Ende:<\/b> 2025-02-04 21:57:19<br><b>Dauer:<\/b> 298 Minuten","<b>Start:<\/b> 2025-02-04 22:16:17<br><b>Ende:<\/b> 2025-02-05 16:05:48<br><b>Dauer:<\/b> 1070 Minuten","<b>Start:<\/b> 2025-02-05 21:24:05<br><b>Ende:<\/b> 2025-02-06 11:31:43<br><b>Dauer:<\/b> 848 Minuten","<b>Start:<\/b> 2025-02-06 11:43:48<br><b>Ende:<\/b> 2025-02-06 13:18:35<br><b>Dauer:<\/b> 95 Minuten","<b>Start:<\/b> 2025-02-06 17:26:10<br><b>Ende:<\/b> 2025-02-06 22:12:08<br><b>Dauer:<\/b> 286 Minuten","<b>Start:<\/b> 2025-02-07 01:35:51<br><b>Ende:<\/b> 2025-02-07 16:36:50<br><b>Dauer:<\/b> 901 Minuten","<b>Start:<\/b> 2025-02-07 17:50:47<br><b>Ende:<\/b> 2025-02-07 20:15:20<br><b>Dauer:<\/b> 145 Minuten","<b>Start:<\/b> 2025-02-07 17:50:47<br><b>Ende:<\/b> 2025-02-07 20:14:39<br><b>Dauer:<\/b> 144 Minuten","<b>Start:<\/b> 2025-02-07 20:47:22<br><b>Ende:<\/b> 2025-02-08 14:47:19<br><b>Dauer:<\/b> 1080 Minuten","<b>Start:<\/b> 2025-02-08 16:33:05<br><b>Ende:<\/b> 2025-02-10 16:38:12<br><b>Dauer:<\/b> 2885 Minuten","<b>Start:<\/b> 2025-02-10 18:40:38<br><b>Ende:<\/b> 2025-02-10 21:06:08<br><b>Dauer:<\/b> 146 Minuten","<b>Start:<\/b> 2025-02-10 21:29:45<br><b>Ende:<\/b> 2025-02-11 10:19:09<br><b>Dauer:<\/b> 769 Minuten","<b>Start:<\/b> 2025-02-11 10:19:09<br><b>Ende:<\/b> 2025-02-11 16:46:28<br><b>Dauer:<\/b> 387 Minuten","<b>Start:<\/b> 2025-02-11 17:16:15<br><b>Ende:<\/b> 2025-02-11 21:45:10<br><b>Dauer:<\/b> 269 Minuten","<b>Start:<\/b> 2025-02-11 22:04:05<br><b>Ende:<\/b> 2025-02-12 15:43:24<br><b>Dauer:<\/b> 1059 Minuten","<b>Start:<\/b> 2025-02-12 16:42:19<br><b>Ende:<\/b> 2025-02-12 18:51:29<br><b>Dauer:<\/b> 129 Minuten","<b>Start:<\/b> 2025-02-12 19:19:03<br><b>Ende:<\/b> 2025-02-13 14:40:20<br><b>Dauer:<\/b> 1161 Minuten","<b>Start:<\/b> 2025-02-13 17:49:00<br><b>Ende:<\/b> 2025-02-13 22:31:15<br><b>Dauer:<\/b> 282 Minuten","<b>Start:<\/b> 2025-02-14 00:20:09<br><b>Ende:<\/b> 2025-02-14 16:07:13<br><b>Dauer:<\/b> 947 Minuten","<b>Start:<\/b> 2025-02-14 16:55:01<br><b>Ende:<\/b> 2025-02-14 18:50:05<br><b>Dauer:<\/b> 115 Minuten","<b>Start:<\/b> 2025-02-14 22:20:47<br><b>Ende:<\/b> 2025-02-15 13:54:02<br><b>Dauer:<\/b> 933 Minuten","<b>Start:<\/b> 2025-02-15 14:35:11<br><b>Ende:<\/b> 2025-02-15 18:52:11<br><b>Dauer:<\/b> 257 Minuten","<b>Start:<\/b> 2025-02-15 23:02:31<br><b>Ende:<\/b> 2025-02-17 05:41:57<br><b>Dauer:<\/b> 1839 Minuten","<b>Start:<\/b> 2025-02-17 07:38:58<br><b>Ende:<\/b> 2025-02-17 10:51:50<br><b>Dauer:<\/b> 193 Minuten","<b>Start:<\/b> 2025-02-17 11:41:55<br><b>Ende:<\/b> 2025-02-17 14:43:06<br><b>Dauer:<\/b> 181 Minuten","<b>Start:<\/b> 2025-02-17 17:04:01<br><b>Ende:<\/b> 2025-02-17 19:29:19<br><b>Dauer:<\/b> 145 Minuten","<b>Start:<\/b> 2025-02-17 19:54:09<br><b>Ende:<\/b> 2025-02-18 05:53:51<br><b>Dauer:<\/b> 600 Minuten","<b>Start:<\/b> 2025-02-18 06:38:01<br><b>Ende:<\/b> 2025-02-18 14:07:17<br><b>Dauer:<\/b> 449 Minuten","<b>Start:<\/b> 2025-02-18 17:42:08<br><b>Ende:<\/b> 2025-02-18 22:11:55<br><b>Dauer:<\/b> 270 Minuten","<b>Start:<\/b> 2025-02-19 00:08:02<br><b>Ende:<\/b> 2025-02-19 05:43:23<br><b>Dauer:<\/b> 335 Minuten","<b>Start:<\/b> 2025-02-19 06:45:50<br><b>Ende:<\/b> 2025-02-19 10:38:28<br><b>Dauer:<\/b> 233 Minuten","<b>Start:<\/b> 2025-02-19 12:02:30<br><b>Ende:<\/b> 2025-02-20 16:50:36<br><b>Dauer:<\/b> 1728 Minuten","<b>Start:<\/b> 2025-02-20 17:16:04<br><b>Ende:<\/b> 2025-02-20 21:40:56<br><b>Dauer:<\/b> 265 Minuten","<b>Start:<\/b> 2025-02-20 22:02:16<br><b>Ende:<\/b> 2025-02-21 17:18:40<br><b>Dauer:<\/b> 1156 Minuten","<b>Start:<\/b> 2025-02-21 17:46:07<br><b>Ende:<\/b> 2025-02-21 20:46:53<br><b>Dauer:<\/b> 181 Minuten","<b>Start:<\/b> 2025-02-21 21:02:36<br><b>Ende:<\/b> 2025-02-22 10:11:43<br><b>Dauer:<\/b> 789 Minuten","<b>Start:<\/b> 2025-02-22 11:00:57<br><b>Ende:<\/b> 2025-02-22 12:27:24<br><b>Dauer:<\/b> 86 Minuten","<b>Start:<\/b> 2025-02-22 12:47:44<br><b>Ende:<\/b> 2025-02-22 19:45:07<br><b>Dauer:<\/b> 417 Minuten","<b>Start:<\/b> 2025-02-22 21:02:47<br><b>Ende:<\/b> 2025-02-24 18:41:41<br><b>Dauer:<\/b> 2739 Minuten","<b>Start:<\/b> 2025-02-24 19:16:51<br><b>Ende:<\/b> 2025-02-24 22:05:05<br><b>Dauer:<\/b> 168 Minuten","<b>Start:<\/b> 2025-02-24 22:05:05<br><b>Ende:<\/b> 2025-02-25 05:55:32<br><b>Dauer:<\/b> 470 Minuten","<b>Start:<\/b> 2025-02-25 06:37:21<br><b>Ende:<\/b> 2025-02-25 15:27:01<br><b>Dauer:<\/b> 530 Minuten","<b>Start:<\/b> 2025-02-25 17:01:26<br><b>Ende:<\/b> 2025-02-25 21:51:59<br><b>Dauer:<\/b> 291 Minuten","<b>Start:<\/b> 2025-02-25 22:06:39<br><b>Ende:<\/b> 2025-02-26 06:07:15<br><b>Dauer:<\/b> 481 Minuten","<b>Start:<\/b> 2025-02-26 06:42:54<br><b>Ende:<\/b> 2025-02-26 11:14:15<br><b>Dauer:<\/b> 271 Minuten","<b>Start:<\/b> 2025-02-26 12:32:09<br><b>Ende:<\/b> 2025-02-26 18:40:00<br><b>Dauer:<\/b> 368 Minuten","<b>Start:<\/b> 2025-02-26 19:22:51<br><b>Ende:<\/b> 2025-02-27 15:48:23<br><b>Dauer:<\/b> 1226 Minuten","<b>Start:<\/b> 2025-02-27 16:17:09<br><b>Ende:<\/b> 2025-02-27 22:02:39<br><b>Dauer:<\/b> 346 Minuten","<b>Start:<\/b> 2025-02-27 23:14:58<br><b>Ende:<\/b> 2025-02-28 07:26:43<br><b>Dauer:<\/b> 492 Minuten","<b>Start:<\/b> 2025-02-28 08:32:02<br><b>Ende:<\/b> 2025-03-01 12:38:37<br><b>Dauer:<\/b> 1687 Minuten","<b>Start:<\/b> 2025-03-01 13:06:38<br><b>Ende:<\/b> 2025-03-02 09:34:01<br><b>Dauer:<\/b> 1227 Minuten"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["blue"],"labels":["Aufenthalte > 1 Stunde"],"na_color":null,"na_label":"NA","opacity":0.5,"position":"bottomright","type":"unknown","title":"Google Timeline","extra":null,"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[46.4898941,47.3985829],"lng":[8.2526533,9.836219699999999]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>

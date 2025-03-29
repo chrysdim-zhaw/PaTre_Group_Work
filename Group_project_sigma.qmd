@@ -24,6 +24,7 @@ library(sf)
 library(ggplot2)
 library(tmap)
 library(tidyverse)
+library(leaflet)
 ```
 
 # Introduction {#introduction}  
@@ -133,7 +134,7 @@ tm_shape(rawSignals_sf) +
 
 In this Chapter the data from Ramon and Dimitri will be analyzed. It will be analised where Ramon and Dimitri have been. Additionally, the it will be analised if they were at the same place at the same time.
 
-## Localtions of Ramon
+## Locations of Ramon
 
 ```{r}
 file <- "data/Timeline.json"
@@ -152,8 +153,8 @@ str(data_raw)
 visit <- data_raw$semanticSegments$visit
 
 #visits → Liste aller Aufenthaltsorte mit Zeitstempeln
-visits <- data_raw$semanticSegments %>%
-  filter(!is.na(visit$topCandidate$placeLocation$latLng)) %>%
+visits <- data_raw$semanticSegments |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
   mutate(
     place_id = visit$topCandidate$placeId,
     lat_lng = visit$topCandidate$placeLocation$latLng,
@@ -163,11 +164,50 @@ visits <- data_raw$semanticSegments %>%
   ) %>%
   select(start, end, place_id, lat_lng, probability)
 
+# Aufenthaltsorte extrahieren
+visits_2 <- data_raw$semanticSegments  |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng))  |> 
+  mutate(
+    place_id = visit$topCandidate$placeId,
+    lat_lng = visit$topCandidate$placeLocation$latLng,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime),
+    duration_mins = as.numeric(difftime(end, start, units = "mins"))
+  )  |> 
+  separate(lat_lng, into = c("lat", "lng"), sep = ", ") %>%
+  mutate(
+    lat = str_remove(lat, "°") %>% as.numeric(),
+    lng = str_remove(lng, "°") %>% as.numeric()
+  )  |> 
+  filter(duration_mins >= 60) %>%
+  select(start, end, duration_mins, lat, lng, place_id)
+
 head(visits)
 ```
 
 ```{r}
 
+
+leaflet(visits_2)  |> 
+  addTiles() %>%
+  addCircleMarkers(
+    ~lng, ~lat,
+    radius = 6,
+    color = "blue",
+    stroke = FALSE,
+    fillOpacity = 0.7,
+    popup = ~paste0(
+      "<b>Start:</b> ", start, "<br>",
+      "<b>Ende:</b> ", end, "<br>",
+      "<b>Dauer:</b> ", round(duration_mins), " Minuten"
+    )
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    colors = "blue",
+    labels = "VIsit > 1 hour",
+    title = "Google Timeline"
+  )
 
 ```
 
