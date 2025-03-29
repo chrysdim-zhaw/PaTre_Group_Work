@@ -129,3 +129,45 @@ tm_shape(rawSignals_sf) +
 
 ```
 
+# Data Analysis
+
+In this Chapter the data from Ramon and Dimitri will be analyzed. It will be analised where Ramon and Dimitri have been. Additionally, the it will be analised if they were at the same place at the same time.
+
+## Localtions of Ramon
+
+```{r}
+file <- "data/Timeline.json"
+data_raw <- fromJSON(file)
+```
+
+
+```{r}
+# Struktur ansehen
+str(data_raw)
+
+```
+
+```{r}
+# Places extrahieren
+visit <- data_raw$semanticSegments$visit
+
+#visits → Liste aller Aufenthaltsorte mit Zeitstempeln
+visits <- data_raw$semanticSegments %>%
+  filter(!is.na(visit$topCandidate$placeLocation$latLng)) %>%
+  mutate(
+    place_id = visit$topCandidate$placeId,
+    lat_lng = visit$topCandidate$placeLocation$latLng,
+    probability = visit$probability,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime)
+  ) %>%
+  select(start, end, place_id, lat_lng, probability)
+
+head(visits)
+```
+
+```{r}
+
+
+```
+
