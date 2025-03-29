@@ -205,7 +205,7 @@ leaflet(visits_2)  |>
   addLegend(
     position = "bottomright",
     colors = "blue",
-    labels = "VIsit > 1 hour",
+    labels = "Ramon's VIsits > 1 hour",
     title = "Google Timeline"
   )
 
