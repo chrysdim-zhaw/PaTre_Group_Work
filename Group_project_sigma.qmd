@@ -211,3 +211,79 @@ leaflet(visits_2)  |>
 
 ```
 
+## Locations of Dimi
+
+```{r}
+file <- "data/Timeline_dimi.json"
+data_raw <- fromJSON(file)
+```
+
+
+```{r}
+# Struktur ansehen
+str(data_raw)
+
+```
+
+```{r}
+# Places extrahieren
+visit <- data_raw$semanticSegments$visit
+
+#visits → Liste aller Aufenthaltsorte mit Zeitstempeln
+visits <- data_raw$semanticSegments |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
+  mutate(
+    place_id = visit$topCandidate$placeId,
+    lat_lng = visit$topCandidate$placeLocation$latLng,
+    probability = visit$probability,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime)
+  ) %>%
+  select(start, end, place_id, lat_lng, probability)
+
+# Aufenthaltsorte extrahieren
+visits_2 <- data_raw$semanticSegments  |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng))  |> 
+  mutate(
+    place_id = visit$topCandidate$placeId,
+    lat_lng = visit$topCandidate$placeLocation$latLng,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime),
+    duration_mins = as.numeric(difftime(end, start, units = "mins"))
+  )  |> 
+  separate(lat_lng, into = c("lat", "lng"), sep = ", ") %>%
+  mutate(
+    lat = str_remove(lat, "°") %>% as.numeric(),
+    lng = str_remove(lng, "°") %>% as.numeric()
+  )  |> 
+  filter(duration_mins >= 60) %>%
+  select(start, end, duration_mins, lat, lng, place_id)
+
+head(visits)
+```
+
+```{r}
+
+
+leaflet(visits_2)  |> 
+  addTiles() %>%
+  addCircleMarkers(
+    ~lng, ~lat,
+    radius = 6,
+    color = "blue",
+    stroke = FALSE,
+    fillOpacity = 0.7,
+    popup = ~paste0(
+      "<b>Start:</b> ", start, "<br>",
+      "<b>Ende:</b> ", end, "<br>",
+      "<b>Dauer:</b> ", round(duration_mins), " Minuten"
+    )
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    colors = "blue",
+    labels = "Dimi's VIsits > 1 hour",
+    title = "Google Timeline"
+  )
+
+```
