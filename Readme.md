@@ -61,7 +61,7 @@ For this analysis, R will be used for data cleaning, spatial analysis, visualiza
   d. GHG emission calculations: EcoInvent datai for CO₂ footprint calculations.
   e. Time series analysis: lubridate for analyzing movement trends over the one-month period.
 
-Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons.
+Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons. (**Recurse Packages** to evalute most frequent visited locations)
 
 ## Risk analysis
 <!-- (100-150 words) -->
