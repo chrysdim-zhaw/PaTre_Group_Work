@@ -27,6 +27,12 @@ library(tidyverse)
 library(leaflet)
 library(purrr)
 
+
+start_datum <- ymd_hms("2025-02-06 11:40:35")
+end_datum   <- ymd_hms("2025-04-05 23:59:00")
+dauer_gesamt <- as.numeric(difftime(end_datum, start_datum, units = "hours"))
+
+
 ```
 
 # Introduction {#introduction}  
@@ -212,90 +218,325 @@ leaflet(visits_ramon_2) |>
 
 ```
 
+
+
+
 ## Activity
 
-
-
-
-
-
-
-
-
-
-## Locations of Dimi
-
+dimi
 ```{r}
-file <- "data/Timeline_dimi.json"
-data_raw <- fromJSON(file)
+# activity_df_dimi <- data_dimi$semanticSegments$activity %>%
+#   mutate(
+#     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
+#     end_latlng = map_chr(end$latLng, ~ .x %||% NA_character_),
+#     distance = distanceMeters,
+#     activity_probability = probability,
+#     type = topCandidate$type,
+#     type_probability = topCandidate$probability,
+#     parking_latlng = map_chr(parking$location$latLng, ~ .x %||% NA_character_)
+#   ) %>%
+#   select(start_latlng, end_latlng, distance, activity_probability, type, type_probability, parking_latlng)
+# 
+# activity_clean_dimi <- data_dimi$semanticSegments$activity %>%
+#   filter(
+#     !is.na(start$latLng) |
+#     !is.na(end$latLng) |
+#     !is.na(distanceMeters) |
+#     !is.na(topCandidate$type) |
+#     !is.na(topCandidate$probability)
+#   )
+# 
+
 ```
 
 
+
+ramon
 ```{r}
-# Struktur ansehen
-str(data_raw)
+# activity_df_ramon <- data_ramon$semanticSegments$activity %>%
+#   mutate(
+#     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
+#     end_latlng = map_chr(end$latLng, ~ .x %||% NA_character_),
+#     distance = distanceMeters,
+#     activity_probability = probability,
+#     type = topCandidate$type,
+#     type_probability = topCandidate$probability,
+#     parking_latlng = map_chr(parking$location$latLng, ~ .x %||% NA_character_)
+#   ) %>%
+#   select(start_latlng, end_latlng, distance, activity_probability, type, type_probability, parking_latlng)
+# 
+# activity_clean_ramon <- data_ramon$semanticSegments$activity %>%
+#   filter(
+#     !is.na(start$latLng) |
+#     !is.na(end$latLng) |
+#     !is.na(distanceMeters) |
+#     !is.na(topCandidate$type) |
+#     !is.na(topCandidate$probability)
+#   )
+
 
 ```
 
+
+
+## Timeline Path
+
+ramon
 ```{r}
-# Places extrahieren
-visit <- data_raw$semanticSegments$visit
+# # Nur gültige timelinePath-Elemente
+# valid_indices <- which(map_lgl(data_ramon$semanticSegments$timelinePath, ~ is.data.frame(.x)))
+# 
+# # DataFrame mit Start-/Endzeit + Punktdaten
+# paths_df_clean_ramon <- map_dfr(valid_indices, function(i) {
+#   path <- data_ramon$semanticSegments$timelinePath[[i]]
+#   start_time <- data_ramon$semanticSegments$startTime[i]
+#   end_time   <- data_ramon$semanticSegments$endTime[i]
+#   
+#   tibble(
+#     segment_id    = i,
+#     point         = path$point,
+#     time          = ymd_hms(str_sub(path$time, 1, 19)),  # Zeit säubern
+#     segment_start = ymd_hms(start_time),
+#     segment_end   = ymd_hms(end_time)
+#   )
+# }) %>%
+#   separate(point, into = c("lat", "lng"), sep = ", ") %>%
+#   mutate(
+#     lat = str_remove(lat, "°") %>% as.numeric(),
+#     lng = str_remove(lng, "°") %>% as.numeric()
+#   )
 
-#visits → Liste aller Aufenthaltsorte mit Zeitstempeln
-visits <- data_raw$semanticSegments |> 
-  filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
-  mutate(
-    place_id = visit$topCandidate$placeId,
-    lat_lng = visit$topCandidate$placeLocation$latLng,
-    probability = visit$probability,
-    start = ymd_hms(startTime),
-    end = ymd_hms(endTime)
-  ) %>%
-  select(start, end, place_id, lat_lng, probability)
+```
 
-# Aufenthaltsorte extrahieren
-visits_2 <- data_raw$semanticSegments  |> 
-  filter(!is.na(visit$topCandidate$placeLocation$latLng))  |> 
+
+dimi
+```{r}
+# # Nur gültige timelinePath-Elemente
+# valid_indices <- which(map_lgl(data_dimi$semanticSegments$timelinePath, ~ is.data.frame(.x)))
+# 
+# # DataFrame mit Start-/Endzeit + Punktdaten
+# paths_df_clean_dimi <- map_dfr(valid_indices, function(i) {
+#   path <- data_dimi$semanticSegments$timelinePath[[i]]
+#   start_time <- data_dimi$semanticSegments$startTime[i]
+#   end_time   <- data_dimi$semanticSegments$endTime[i]
+#   
+#   tibble(
+#     segment_id    = i,
+#     point         = path$point,
+#     time          = ymd_hms(str_sub(path$time, 1, 19)),  # Zeit säubern
+#     segment_start = ymd_hms(start_time),
+#     segment_end   = ymd_hms(end_time)
+#   )
+# }) %>%
+#   separate(point, into = c("lat", "lng"), sep = ", ") %>%
+#   mutate(
+#     lat = str_remove(lat, "°") %>% as.numeric(),
+#     lng = str_remove(lng, "°") %>% as.numeric()
+#   )
+# 
+
+```
+
+
+
+
+
+
+
+
+## Visits
+
+ramon
+```{r}
+
+# Visits filtern nach Zeitraum
+visits_ramon_filtered <- visits_ramon_2 %>%
+  filter(start >= start_datum & end <= end_datum)
+
+visits_min_ramon <- sum(visits_ramon_filtered$duration_mins)
+
+visits_h_ramon <- visits_min_ramon/60
+```
+
+
+dimi
+```{r}
+# visits
+visits_dimi_filtered <- visits_dimi_2 %>%
+  filter(start >= start_datum & end <= end_datum)
+
+visits_min_dimi <- sum(visits_dimi_filtered$duration_mins)
+
+visits_h_dimi <- visits_min_dimi/60
+```
+
+
+
+
+
+
+## Activity
+
+dimi
+```{r}
+
+segments_dimi <- data_dimi$semanticSegments
+
+# Extrahiere und filtere Dimi's Aktivitätsdaten
+activity_dimi <- segments_dimi |> 
+  filter(!is.na(activity$topCandidate$type)) |> 
   mutate(
-    place_id = visit$topCandidate$placeId,
-    lat_lng = visit$topCandidate$placeLocation$latLng,
+    activity_type = activity$topCandidate$type,
+    probability = activity$topCandidate$probability,
+    distance_km = round(activity$distanceMeters / 1000, 2),
+    start_latlng = activity$start$latLng,
+    end_latlng = activity$end$latLng,
     start = ymd_hms(startTime),
     end = ymd_hms(endTime),
-    duration_mins = as.numeric(difftime(end, start, units = "mins"))
-  )  |> 
-  separate(lat_lng, into = c("lat", "lng"), sep = ", ") %>%
-  mutate(
-    lat = str_remove(lat, "°") %>% as.numeric(),
-    lng = str_remove(lng, "°") %>% as.numeric()
-  )  |> 
-  filter(duration_mins >= 60) %>%
-  select(start, end, duration_mins, lat, lng, place_id)
+    duration_mins = as.numeric(difftime(end, start, units = "mins")),
+    speed_kmh = round((distance_km) / (duration_mins / 60), 2)
+  ) |> 
+  filter(start >= start_datum, end <= end_datum) |> 
+  select(start, end, duration_mins, distance_km, speed_kmh,
+         start_latlng, end_latlng, activity_type, probability)
 
-head(visits)
+
+activity_min_dimi<- sum(activity_dimi$duration_mins)
+
+activity_h_dimi<- activity_min_dimi/60
+
+act_visit_dimi <- activity_h_dimi + visits_h_dimi
+
+
+
+# Dauer berechnen
+dauer_gesamt_dimi <- difftime(end_datum, start_datum, units = "hours")
+dauer_gesamt_dimi
+
+
+nan_h_dimi <- as.numeric(dauer_gesamt_dimi) - (activity_h_dimi + visits_h_dimi)
+
+
+summe_stunden_dimi <- activity_h_dimi + visits_h_dimi + nan_h_dimi
+
 ```
 
+ramon
+```{r}
+
+segments_ramon <- data_ramon$semanticSegments
+
+activity_ramon <- segments_ramon |> 
+  filter(!is.na(activity$topCandidate$type)) |> 
+  mutate(
+    activity_type = activity$topCandidate$type,
+    probability = activity$topCandidate$probability,
+    distance_km = round(activity$distanceMeters / 1000, 2),
+    start_latlng = activity$start$latLng,
+    end_latlng = activity$end$latLng,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime),
+    duration_mins = as.numeric(difftime(end, start, units = "mins")),
+    speed_kmh = round((distance_km) / (duration_mins / 60), 2)
+  ) |> 
+  filter(start >= start_datum, end <= end_datum) |> 
+  select(start, end, duration_mins, distance_km, speed_kmh,
+         start_latlng, end_latlng, activity_type, probability)
+
+activity_min_ramon<- sum(activity_ramon$duration_mins)
+
+activity_h_ramon<- activity_min_ramon/60
+
+act_visit_ramon <- activity_h_ramon + visits_h_ramon 
+
+
+
+# Dauer in Stunden berechnen
+dauer_gesamt_ramon <- difftime(end_datum, start_datum, units = "hours")
+dauer_gesamt_ramon
+
+
+nan_h_ramon <- as.numeric(dauer_gesamt_ramon) - (activity_h_ramon + visits_h_ramon)
+
+
+summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
+```
+
+
+
+
+## Plot Active/Passiv
+
+ramon
 ```{r}
 
 
-leaflet(visits_2)  |> 
-  addTiles() %>%
-  addCircleMarkers(
-    ~lng, ~lat,
-    radius = 6,
-    color = "blue",
-    stroke = FALSE,
-    fillOpacity = 0.7,
-    popup = ~paste0(
-      "<b>Start:</b> ", start, "<br>",
-      "<b>Ende:</b> ", end, "<br>",
-      "<b>Dauer:</b> ", round(duration_mins), " Minuten"
-    )
-  ) %>%
-  addLegend(
-    position = "bottomright",
-    colors = "blue",
-    labels = "Dimi's VIsits > 1 hour",
-    title = "Google Timeline"
+# DataFrame
+bewegung_df_ramon <- tibble(
+  status = c("Bewegung", "Stillstand", "Keine Daten"),
+  stunden = c(activity_h_ramon, visits_h_ramon, nan_h_ramon)
+) %>%
+  mutate(
+    label = paste0(status, "\n", round(stunden), " h"),
+    ypos = cumsum(stunden) - 0.5 * stunden
   )
 
+
+bewegung_df_ramon <- bewegung_df_ramon %>%
+  mutate(status_label = paste0(status, " (", round(stunden), "h)"))
+
+ggplot(bewegung_df_ramon, aes(x = "", y = stunden, fill = status_label)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  labs(
+    title = "Zeitanteil von Ramon (Feb–April)",
+    fill = "Status (Stunden)",
+    y = NULL, x = NULL
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11)
+  )
+
+
 ```
+
+
+dimi
+```{r}
+
+
+# DataFrame
+bewegung_df_dimi <- tibble(
+  status = c("Bewegung", "Stillstand", "Keine Daten"),
+  stunden = c(activity_h_dimi, visits_h_dimi, nan_h_dimi)
+) %>%
+  mutate(
+    label = paste0(status, "\n", round(stunden), " h"),
+    ypos = cumsum(stunden) - 0.5 * stunden
+  )
+
+
+bewegung_df_dimi <- bewegung_df_dimi %>%
+  mutate(status_label = paste0(status, " (", round(stunden), "h)"))
+
+ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  labs(
+    title = "Zeitanteil von Dimi (Feb–April)",
+    fill = "Status (Stunden)",
+    y = NULL, x = NULL
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11)
+  )
+```
+
+
+
