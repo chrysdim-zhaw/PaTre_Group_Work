@@ -25,6 +25,8 @@ library(ggplot2)
 library(tmap)
 library(tidyverse)
 library(leaflet)
+library(purrr)
+
 ```
 
 # Introduction {#introduction}  
@@ -76,84 +78,29 @@ Another issue is the misclassification of transportation modes, where Google Tim
 
 In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.
 
-## Import of Ramon's data 
-
-```{r}
-# Daten importieren und in DataFrame umwandeln
-data_Ramon <- fromJSON("data/Timeline.json", flatten = TRUE, simplifyDataFrame = TRUE)
-```
-
-
-```{r, warning=FALSE, message=FALSE}
-rawSignals <- data_Ramon$rawSignals |> 
-  filter(!is.na(position.LatLng)) |>  # Fehlende GPS-Werte entfernen
-  separate(position.LatLng, into = c("Latitude", "Longitude"), sep = ", ", convert = TRUE) |> 
-  mutate(
-    Latitude = as.numeric(str_replace_all(Latitude, "[^0-9.-]", "")),  # Gradzeichen entfernen
-    Longitude = as.numeric(str_replace_all(Longitude, "[^0-9.-]", "")),
-    position.timestamp = ymd_hms(position.timestamp)  # Timestamp umwandeln
-  ) |> 
-  filter(!is.na(Longitude) & !is.na(Latitude))  # Fehlende GPS-Werte entfernen
-```
-
-```{r, warning=FALSE, message=FALSE}
-# In sf-Objekt mit WGS84 (EPSG:4326) umwandeln
-rawSignals_sf <- rawSignals |> 
-  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) |> 
-  st_transform(crs = 2056)  # In CH1903+ LV95 (EPSG:2056) umwandeln
-
-```
-
-
-```{r, warning=FALSE, message=FALSE}
-
-# Interaktive Karte mit tmap
-tmap_mode("plot")
-tm_shape(rawSignals_sf) + 
-  tm_dots(col = "blue", alpha = 0.5, size = 0.3) +
-  tm_layout(title = "GPS Tracks (CH1903+ LV95)")
-
-
-
-tm_shape(rawSignals_sf) +
-  tm_basemap(server = "OpenStreetMap") +  # Background map
-  tm_dots(col = "blue", alpha = 0.5, size = 0.3) +
-  tm_layout(title = "GPS Tracks (CH1903+ LV95)")
-```
-
-
-## Import of Dimitri's data 
 
 
 ```{r}
-# Daten importieren und in DataFrame umwandeln
+file_dimi <- "data/timeline_dimi.json"
+data_dimi <- fromJSON(file_dimi)
 
-```
-
-# Data Analysis
-
-In this Chapter the data from Ramon and Dimitri will be analyzed. It will be analised where Ramon and Dimitri have been. Additionally, the it will be analised if they were at the same place at the same time.
-
-## Locations of Ramon
-
-```{r}
-file <- "data/Timeline.json"
-data_raw <- fromJSON(file)
+file_ramon <- "data/Timeline_ramon.json"
+data_ramon <- fromJSON(file_ramon)
 ```
 
 
 ```{r}
 # Struktur ansehen
-str(data_raw)
+str(data_dimi)
+str(data_ramon)
+
 
 ```
 
+Dimi
 ```{r}
-# Places extrahieren
-visit <- data_raw$semanticSegments$visit
 
-#visits → Liste aller Aufenthaltsorte mit Zeitstempeln
-visits <- data_raw$semanticSegments |> 
+visits_dimi <- data_dimi$semanticSegments |> 
   filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
   mutate(
     place_id = visit$topCandidate$placeId,
@@ -164,31 +111,28 @@ visits <- data_raw$semanticSegments |>
   ) %>%
   select(start, end, place_id, lat_lng, probability)
 
-# Aufenthaltsorte extrahieren
-visits_2 <- data_raw$semanticSegments  |> 
-  filter(!is.na(visit$topCandidate$placeLocation$latLng))  |> 
+
+
+# Dimi: Filter visits longer than 60 min and split coordinates
+visits_dimi_2 <- data_dimi$semanticSegments |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
   mutate(
     place_id = visit$topCandidate$placeId,
     lat_lng = visit$topCandidate$placeLocation$latLng,
     start = ymd_hms(startTime),
     end = ymd_hms(endTime),
     duration_mins = as.numeric(difftime(end, start, units = "mins"))
-  )  |> 
-  separate(lat_lng, into = c("lat", "lng"), sep = ", ") %>%
+  ) |> 
+  separate(lat_lng, into = c("lat", "lng"), sep = ", ") |> 
   mutate(
     lat = str_remove(lat, "°") %>% as.numeric(),
     lng = str_remove(lng, "°") %>% as.numeric()
-  )  |> 
-  filter(duration_mins >= 60) %>%
+  ) |> 
+  filter(duration_mins >= 60) |> 
   select(start, end, duration_mins, lat, lng, place_id)
 
-head(visits)
-```
-
-```{r}
-
-
-leaflet(visits_2)  |> 
+# Dimi: Leaflet Map
+leaflet(visits_dimi_2) |> 
   addTiles() %>%
   addCircleMarkers(
     ~lng, ~lat,
@@ -205,11 +149,79 @@ leaflet(visits_2)  |>
   addLegend(
     position = "bottomright",
     colors = "blue",
-    labels = "Ramon's VIsits > 1 hour",
+    labels = "Dimi's Visits > 1 hour",
     title = "Google Timeline"
   )
 
 ```
+
+
+
+ramon 
+```{r}
+# Ramon: Alle Aufenthalte extrahieren
+visits_ramon <- data_ramon$semanticSegments |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
+  mutate(
+    place_id = visit$topCandidate$placeId,
+    lat_lng = visit$topCandidate$placeLocation$latLng,
+    probability = visit$probability,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime)
+  ) %>%
+  select(start, end, place_id, lat_lng, probability)
+
+visits_ramon_2 <- data_ramon$semanticSegments |> 
+  filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
+  mutate(
+    place_id = visit$topCandidate$placeId,
+    lat_lng = visit$topCandidate$placeLocation$latLng,
+    start = ymd_hms(startTime),
+    end = ymd_hms(endTime),
+    duration_mins = as.numeric(difftime(end, start, units = "mins"))
+  ) |> 
+  separate(lat_lng, into = c("lat", "lng"), sep = ", ") |> 
+  mutate(
+    lat = str_remove(lat, "°") %>% as.numeric(),
+    lng = str_remove(lng, "°") %>% as.numeric()
+  ) |> 
+  filter(duration_mins >= 60) |> 
+  select(start, end, duration_mins, lat, lng, place_id)
+
+leaflet(visits_ramon_2) |> 
+  addTiles() %>%
+  addCircleMarkers(
+    ~lng, ~lat,
+    radius = 6,
+    color = "red",
+    stroke = FALSE,
+    fillOpacity = 0.7,
+    popup = ~paste0(
+      "<b>Start:</b> ", start, "<br>",
+      "<b>Ende:</b> ", end, "<br>",
+      "<b>Dauer:</b> ", round(duration_mins), " Minuten"
+    )
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    colors = "red",
+    labels = "Ramons Aufenthalte > 1 Stunde",
+    title = "Google Timeline"
+  )
+
+
+```
+
+## Activity
+
+
+
+
+
+
+
+
+
 
 ## Locations of Dimi
 
