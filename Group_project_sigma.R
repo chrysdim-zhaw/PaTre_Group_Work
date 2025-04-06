@@ -10,7 +10,7 @@ library(lubridate)
 
 
 # Daten importieren und in DataFrame umwandeln
-data3 <- fromJSON("data/Timeline.json", flatten = TRUE)
+data3 <- fromJSON("data/Timeline_ramon.json", flatten = TRUE)
 
 #Infos über daten erhalen
 class(data3$semanticSegments)
