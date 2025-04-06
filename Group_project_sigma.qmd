@@ -623,3 +623,31 @@ emissions_summary_full_ramon <- bind_rows(emissions_summary_ramon, emissions_tot
 print(emissions_summary_full_ramon)
 ```
 
+
+```{r}
+# 📦 Add person column to each dataset
+emissions_dimi_labeled <- emissions_summary_full_dimi |> 
+  mutate(person = "Dimi")
+
+emissions_ramon_labeled <- emissions_summary_full_ramon |> 
+  mutate(person = "Ramon")
+
+# 🧱 Combine both
+emissions_combined <- bind_rows(emissions_dimi_labeled, emissions_ramon_labeled)
+
+# 🚫 Remove "TOTAL" row if you only want per activity comparison
+emissions_combined_filtered <- emissions_combined |> 
+  filter(activity_type != "TOTAL")
+
+# 📊 Plot
+ggplot(emissions_combined_filtered, aes(x = activity_type, y = total_emission_kg, fill = person)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Total CO₂ Emissions by Activity Type",
+    x = "Activity Type",
+    y = "Total CO₂ Emissions (kg)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
