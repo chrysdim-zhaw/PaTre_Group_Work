@@ -340,10 +340,6 @@ dimi
 
 
 
-
-
-
-
 ## Visits
 
 ramon
@@ -369,9 +365,6 @@ visits_min_dimi <- sum(visits_dimi_filtered$duration_mins)
 
 visits_h_dimi <- visits_min_dimi/60
 ```
-
-
-
 
 
 
@@ -473,7 +466,7 @@ ramon
 
 # DataFrame
 bewegung_df_ramon <- tibble(
-  status = c("Bewegung", "Stillstand", "Keine Daten"),
+  status = c("Activity", "Visits", "No Data"),
   stunden = c(activity_h_ramon, visits_h_ramon, nan_h_ramon)
 ) %>%
   mutate(
@@ -489,8 +482,8 @@ ggplot(bewegung_df_ramon, aes(x = "", y = stunden, fill = status_label)) +
   geom_col(width = 1) +
   coord_polar(theta = "y") +
   labs(
-    title = "Zeitanteil von Ramon (Feb–April)",
-    fill = "Status (Stunden)",
+    title = "Share of activities, visits and no data (Ramon)",
+    fill = "Status",
     y = NULL, x = NULL
   ) +
   theme_void() +
@@ -510,7 +503,7 @@ dimi
 
 # DataFrame
 bewegung_df_dimi <- tibble(
-  status = c("Bewegung", "Stillstand", "Keine Daten"),
+  status = c("Activity", "Visits", "No Data"),
   stunden = c(activity_h_dimi, visits_h_dimi, nan_h_dimi)
 ) %>%
   mutate(
@@ -526,8 +519,8 @@ ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
   geom_col(width = 1) +
   coord_polar(theta = "y") +
   labs(
-    title = "Zeitanteil von Dimi (Feb–April)",
-    fill = "Status (Stunden)",
+    title = "Share of activities, visits and no data (Dimi)",
+    fill = "Status",
     y = NULL, x = NULL
   ) +
   theme_void() +
@@ -539,4 +532,94 @@ ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
 ```
 
 
+```{r}
+co2_data_dimi <- read_delim("data/transport_co2_factors_dimi.csv")
+
+co2_data_ramon <- read_delim("data/transport_co2_factors_ramon.csv")
+
+
+activity_dimi_co2 <- full_join(activity_dimi, co2_data_dimi, by = "activity_type") |> 
+  mutate(
+    co2_emission_in_kg = round(distance_km * co2_kg_per_km, 2)
+  ) |> 
+  select(
+    start, end, duration_mins, distance_km, speed_kmh,
+    start_latlng, end_latlng, activity_type, probability,
+    co2_kg_per_km, co2_emission_in_kg
+  )
+
+activity_ramon_co2 <- full_join(activity_ramon, co2_data_ramon, by = "activity_type") |> 
+  mutate(
+    co2_emission_in_kg = round(distance_km * co2_kg_per_km, 2)
+  ) |> 
+  select(
+    start, end, duration_mins, distance_km, speed_kmh,
+    start_latlng, end_latlng, activity_type, probability,
+    co2_kg_per_km, co2_emission_in_kg
+  )
+
+str(activity_dimi_co2)
+```
+
+```{r}
+# 📊 Summarize CO₂, distance, time (in hours), speed, and emissions per hour for Dimi
+emissions_summary_dimi <- activity_dimi_co2 |> 
+  group_by(activity_type) |> 
+  summarise(
+    total_distance_km = round(sum(distance_km, na.rm = TRUE), 2),
+    total_duration_hrs = round(sum(duration_mins, na.rm = TRUE) / 60, 2),
+    total_emission_kg = round(sum(co2_emission_in_kg, na.rm = TRUE), 2),
+    average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
+    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2),
+    .groups = "drop"
+  )
+
+# ➕ Add TOTAL row
+emissions_total_dimi <- emissions_summary_dimi |> 
+  summarise(
+    activity_type = "TOTAL",
+    total_distance_km = sum(total_distance_km),
+    total_duration_hrs = sum(total_duration_hrs),
+    total_emission_kg = sum(total_emission_kg),
+    average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
+    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2)
+  )
+
+# 📦 Combine
+emissions_summary_full_dimi <- bind_rows(emissions_summary_dimi, emissions_total_dimi)
+
+# 👀 View result
+print(emissions_summary_full_dimi)
+```
+
+```{r}
+# 📊 Summarize CO₂, distance, time (in hours), speed, and emissions per hour for Ramon
+emissions_summary_ramon <- activity_ramon_co2 |> 
+  group_by(activity_type) |> 
+  summarise(
+    total_distance_km = round(sum(distance_km, na.rm = TRUE), 2),
+    total_duration_hrs = round(sum(duration_mins, na.rm = TRUE) / 60, 2),
+    total_emission_kg = round(sum(co2_emission_in_kg, na.rm = TRUE), 2),
+    average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
+    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2),
+    .groups = "drop"
+  )
+
+# ➕ Add TOTAL row
+emissions_total_ramon <- emissions_summary_ramon |> 
+  summarise(
+    activity_type = "TOTAL",
+    total_distance_km = sum(total_distance_km),
+    total_duration_hrs = sum(total_duration_hrs),
+    total_emission_kg = sum(total_emission_kg),
+    average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
+    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2)
+  )
+
+# 📦 Combine
+emissions_summary_full_ramon <- bind_rows(emissions_summary_ramon, emissions_total_ramon)
+
+# 👀 View result
+print(emissions_summary_full_ramon)
+```
 
