@@ -760,28 +760,6 @@ ggplot(emissions_combined_filtered, aes(x = activity_type, y = total_emission_kg
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-
-
-ggplot(emissions_combined, aes(
-  x = activity_type,
-  y = total_distance_km,
-  size = total_emission_kg,
-  color = person
-)) +
-  geom_point(alpha = 0.8) +
-  labs(
-    title = "Gefahrene Kilometer nach Aktivität und Person",
-    x = "Transportmittel",
-    y = "Gefahrene Kilometer",
-    size = "CO₂ Emissionen (kg)",
-    color = "Person"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(hjust = 0.5)
-  )
-
 ```
 
 
@@ -812,7 +790,7 @@ emissions_combined$activity_label <- factor(
 )
 
 # Plot mit Text-Labels für Emissionen > 75 kg
-ggplot(emissions_combined, aes(
+final_plot <- ggplot(emissions_combined, aes(
   x = activity_label,
   y = total_distance_km,
   size = total_emission_kg,
@@ -844,7 +822,9 @@ ggplot(emissions_combined, aes(
     plot.title = element_text(hjust = 0.5)
   )
 
+final_plot
 
+ggsave("figures/final_plot.png", final_plot, width = 6, height = 6)
 
 ```
 
