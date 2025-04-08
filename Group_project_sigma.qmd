@@ -26,10 +26,15 @@ library(tmap)
 library(tidyverse)
 library(leaflet)
 library(purrr)
+library(webshot2)
+#install.packages("webshot2")
+library(htmlwidgets)
+
+
 
 
 start_datum <- ymd_hms("2025-02-06 11:40:35")
-end_datum   <- ymd_hms("2025-04-05 23:59:00")
+end_datum   <- ymd_hms("2025-04-06 23:59:00")
 dauer_gesamt <- as.numeric(difftime(end_datum, start_datum, units = "hours"))
 
 
@@ -87,10 +92,10 @@ In this Chapter the data from Ramon and Dimitri will be imported, modifed with t
 
 
 ```{r}
-file_dimi <- "data/timeline_dimi.json"
+file_dimi <- "data/timeline_dimi_new.json"
 data_dimi <- fromJSON(file_dimi)
 
-file_ramon <- "data/Timeline_ramon.json"
+file_ramon <- "data/Timeline_ramon_new.json"
 data_ramon <- fromJSON(file_ramon)
 ```
 
@@ -138,11 +143,11 @@ visits_dimi_2 <- data_dimi$semanticSegments |>
   select(start, end, duration_mins, lat, lng, place_id)
 
 # Dimi: Leaflet Map
-leaflet(visits_dimi_2) |> 
+leaflet_map_dimi <- leaflet(visits_dimi_2) |> 
   addTiles() %>%
   addCircleMarkers(
     ~lng, ~lat,
-    radius = 6,
+    radius = 3,
     color = "blue",
     stroke = FALSE,
     fillOpacity = 0.7,
@@ -158,6 +163,14 @@ leaflet(visits_dimi_2) |>
     labels = "Dimi's Visits > 1 hour",
     title = "Google Timeline"
   )
+
+leaflet_map_dimi
+
+# Speichere die HTML-Version
+saveWidget(leaflet_map_dimi, "figures/tmp_map.html", selfcontained = TRUE)
+
+# Screenshot als PNG speichern
+webshot("figures/tmp_map.html", file = "figures/dimi_visits_map.png", vwidth = 800, vheight = 600)
 
 ```
 
@@ -194,11 +207,11 @@ visits_ramon_2 <- data_ramon$semanticSegments |>
   filter(duration_mins >= 60) |> 
   select(start, end, duration_mins, lat, lng, place_id)
 
-leaflet(visits_ramon_2) |> 
+leaflet_map_ramon <- leaflet(visits_ramon_2) |> 
   addTiles() %>%
   addCircleMarkers(
     ~lng, ~lat,
-    radius = 6,
+    radius = 3,
     color = "red",
     stroke = FALSE,
     fillOpacity = 0.7,
@@ -214,6 +227,14 @@ leaflet(visits_ramon_2) |>
     labels = "Ramons Aufenthalte > 1 Stunde",
     title = "Google Timeline"
   )
+
+leaflet_map_ramon
+
+# Speichere die HTML-Version
+saveWidget(leaflet_map_ramon, "figures/tmp_map.html", selfcontained = TRUE)
+
+# Screenshot als PNG speichern
+webshot("figures/tmp_map.html", file = "figures/ramon_visits_map.png", vwidth = 800, vheight = 600)
 
 
 ```
@@ -352,6 +373,9 @@ visits_ramon_filtered <- visits_ramon_2 %>%
 visits_min_ramon <- sum(visits_ramon_filtered$duration_mins)
 
 visits_h_ramon <- visits_min_ramon/60
+
+visits_day_ramon <- visits_h_ramon/24
+
 ```
 
 
@@ -364,6 +388,9 @@ visits_dimi_filtered <- visits_dimi_2 %>%
 visits_min_dimi <- sum(visits_dimi_filtered$duration_mins)
 
 visits_h_dimi <- visits_min_dimi/60
+
+visits_day_dimi <- visits_h_dimi/24
+
 ```
 
 
@@ -400,14 +427,21 @@ activity_h_dimi<- activity_min_dimi/60
 
 act_visit_dimi <- activity_h_dimi + visits_h_dimi
 
+activity_day_dimi <- activity_h_dimi/24
 
 
 # Dauer berechnen
-dauer_gesamt_dimi <- difftime(end_datum, start_datum, units = "hours")
-dauer_gesamt_dimi
+dauer_gesamt_dimi_h <- difftime(end_datum, start_datum, units = "hours")
+dauer_gesamt_dimi_h
+
+dauer_gesamt_dimi_day <- difftime(end_datum, start_datum, units = "day")
+dauer_gesamt_dimi_day
 
 
-nan_h_dimi <- as.numeric(dauer_gesamt_dimi) - (activity_h_dimi + visits_h_dimi)
+nan_h_dimi <- as.numeric(dauer_gesamt_dimi_h) - (activity_h_dimi + visits_h_dimi)
+
+nan_day_dimi <- as.numeric(dauer_gesamt_dimi_day) - (activity_day_dimi + visits_day_dimi)
+
 
 
 summe_stunden_dimi <- activity_h_dimi + visits_h_dimi + nan_h_dimi
@@ -442,15 +476,21 @@ activity_h_ramon<- activity_min_ramon/60
 
 act_visit_ramon <- activity_h_ramon + visits_h_ramon 
 
+activity_day_ramon <- activity_h_ramon/24
+
 
 
 # Dauer in Stunden berechnen
 dauer_gesamt_ramon <- difftime(end_datum, start_datum, units = "hours")
 dauer_gesamt_ramon
 
+dauer_gesamt_ramon_day <- difftime(end_datum, start_datum, units = "day")
+dauer_gesamt_ramon_day
+
 
 nan_h_ramon <- as.numeric(dauer_gesamt_ramon) - (activity_h_ramon + visits_h_ramon)
 
+nan_day_ramon <- as.numeric(dauer_gesamt_ramon_day) - (activity_day_dimi + visits_day_ramon)
 
 summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 ```
@@ -463,6 +503,8 @@ summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 ramon
 ```{r}
 
+round_half <- function(x) round(x * 2) / 2
+
 
 # DataFrame
 bewegung_df_ramon <- tibble(
@@ -474,6 +516,18 @@ bewegung_df_ramon <- tibble(
     ypos = cumsum(stunden) - 0.5 * stunden
   )
 
+#für tage
+bewegung_df_ramon_days <- tibble(
+  status = c("Activity", "Visits", "No Data"),
+  tage = c(activity_h_ramon, visits_h_ramon, nan_h_ramon) / 24
+) %>%
+  mutate(
+    tage = round_half(tage),
+    status_label = paste0(status, " (", tage, "d)")
+  )
+
+
+
 
 bewegung_df_ramon <- bewegung_df_ramon %>%
   mutate(status_label = paste0(status, " (", round(stunden), "h)"))
@@ -482,7 +536,7 @@ ggplot(bewegung_df_ramon, aes(x = "", y = stunden, fill = status_label)) +
   geom_col(width = 1) +
   coord_polar(theta = "y") +
   labs(
-    title = "Share of activities, visits and no data (Ramon)",
+    title = "Share of activities, visits and no data in hours (Ramon)",
     fill = "Status",
     y = NULL, x = NULL
   ) +
@@ -492,6 +546,26 @@ ggplot(bewegung_df_ramon, aes(x = "", y = stunden, fill = status_label)) +
     legend.title = element_text(size = 12),
     legend.text = element_text(size = 11)
   )
+
+# Plot
+pie_plot_ramon_days <- ggplot(bewegung_df_ramon_days, aes(x = "", y = tage, fill = status_label)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  labs(
+    title = "Share of activities, visits and no data in days (Ramon)",
+    fill = "Status",
+    y = NULL, x = NULL
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11)
+  )
+
+pie_plot_ramon_days
+
+ggsave("figures/pie_plot_ramon_days.png", pie_plot_ramon_days, width = 6, height = 6)
 
 
 ```
@@ -511,6 +585,15 @@ bewegung_df_dimi <- tibble(
     ypos = cumsum(stunden) - 0.5 * stunden
   )
 
+bewegung_df_dimi_days <- tibble(
+  status = c("Activity", "Visits", "No Data"),
+  tage = c(activity_h_dimi, visits_h_dimi, nan_h_dimi) / 24
+) %>%
+  mutate(
+    tage = round_half(tage),
+    status_label = paste0(status, " (", tage, "d)")
+  )
+
 
 bewegung_df_dimi <- bewegung_df_dimi %>%
   mutate(status_label = paste0(status, " (", round(stunden), "h)"))
@@ -519,7 +602,7 @@ ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
   geom_col(width = 1) +
   coord_polar(theta = "y") +
   labs(
-    title = "Share of activities, visits and no data (Dimi)",
+    title = "Share of activities, visits and no data in hours (Dimi)",
     fill = "Status",
     y = NULL, x = NULL
   ) +
@@ -529,13 +612,34 @@ ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
     legend.title = element_text(size = 12),
     legend.text = element_text(size = 11)
   )
+
+# Plot tage
+pie_plot_dimi_days <- ggplot(bewegung_df_dimi_days, aes(x = "", y = tage, fill = status_label)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  labs(
+    title = "Share of activities, visits and no data in days (Dimi)",
+    fill = "Status",
+    y = NULL, x = NULL
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11)
+  )
+
+pie_plot_dimi_days
+
+ggsave("figures/pie_plot_dimi_days.png", pie_plot_dimi_days, width = 6, height = 6)
+
 ```
 
 
 ```{r}
-co2_data_dimi <- read_delim("data/transport_co2_factors_dimi.csv")
+co2_data_dimi <- read_delim("data/transport_co2_factors.csv")
 
-co2_data_ramon <- read_delim("data/transport_co2_factors_ramon.csv")
+co2_data_ramon <- read_delim("data/transport_co2_factors.csv")
 
 
 activity_dimi_co2 <- full_join(activity_dimi, co2_data_dimi, by = "activity_type") |> 
@@ -570,7 +674,8 @@ emissions_summary_dimi <- activity_dimi_co2 |>
     total_duration_hrs = round(sum(duration_mins, na.rm = TRUE) / 60, 2),
     total_emission_kg = round(sum(co2_emission_in_kg, na.rm = TRUE), 2),
     average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
-    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2),
+    co2_kg_per_hour = round(total_emission_kg / total_duration_hrs, 2),
+    co2_kg_per_km = round(total_emission_kg / total_distance_km, 2),
     .groups = "drop"
   )
 
@@ -582,7 +687,9 @@ emissions_total_dimi <- emissions_summary_dimi |>
     total_duration_hrs = sum(total_duration_hrs),
     total_emission_kg = sum(total_emission_kg),
     average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
-    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2)
+    co2_kg_per_hour = round(total_emission_kg / total_duration_hrs, 2),
+    co2_kg_per_km = round(total_emission_kg / total_distance_km, 2),
+
   )
 
 # 📦 Combine
@@ -601,7 +708,8 @@ emissions_summary_ramon <- activity_ramon_co2 |>
     total_duration_hrs = round(sum(duration_mins, na.rm = TRUE) / 60, 2),
     total_emission_kg = round(sum(co2_emission_in_kg, na.rm = TRUE), 2),
     average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
-    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2),
+    co2_kg_per_hour = round(total_emission_kg / total_duration_hrs, 2),
+    co2_kg_per_km = round(total_emission_kg / total_distance_km, 2),
     .groups = "drop"
   )
 
@@ -613,7 +721,8 @@ emissions_total_ramon <- emissions_summary_ramon |>
     total_duration_hrs = sum(total_duration_hrs),
     total_emission_kg = sum(total_emission_kg),
     average_speed_kmh = round(total_distance_km / total_duration_hrs, 2),
-    co2_per_hour_kg = round(total_emission_kg / total_duration_hrs, 2)
+    co2_kg_per_hour = round(total_emission_kg / total_duration_hrs, 2),
+    co2_kg_per_km = round(total_emission_kg / total_distance_km, 2)
   )
 
 # 📦 Combine
