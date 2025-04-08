@@ -29,6 +29,8 @@ library(purrr)
 library(webshot2)
 #install.packages("webshot2")
 library(htmlwidgets)
+library(ggrepel)
+
 
 
 
@@ -798,12 +800,18 @@ final_plot <- ggplot(emissions_combined, aes(
 )) +
   geom_point(alpha = 0.8) +
   geom_text(
-    data = emissions_combined %>% filter(total_emission_kg > 50),
-    aes(label = paste0(round(total_emission_kg), " kg")),
-    size = 3.5,
-    vjust = 0,
-    hjust = 1.9
-  ) +
+  data = emissions_combined %>% filter(total_emission_kg > 20),
+  mapping = aes(
+    x = activity_label,
+    y = total_distance_km,
+    label = paste0(round(total_emission_kg), " kg")
+  ),
+  inherit.aes = FALSE,
+  size = 3.5,
+  vjust = 0,
+  hjust = 1.9,
+  show.legend = FALSE
+) +
   scale_size_continuous(
     range = c(4, 20),
     breaks = seq(0, max(emissions_combined$total_emission_kg, na.rm = TRUE), by = 25),
@@ -816,6 +824,10 @@ final_plot <- ggplot(emissions_combined, aes(
     size = expression("CO"[2] * " Emissions (kg)"),
     color = "Person"
   ) +
+  scale_color_manual(
+  values = c("Dimi" = "#FF6F61", "Ramon" = "#00BFC4"),
+  breaks = c("Dimi", "Ramon")
+)+
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
