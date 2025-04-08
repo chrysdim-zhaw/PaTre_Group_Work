@@ -758,5 +758,79 @@ ggplot(emissions_combined_filtered, aes(x = activity_type, y = total_emission_kg
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+
+ggplot(emissions_combined, aes(
+  x = activity_type,
+  y = total_distance_km,
+  size = total_emission_kg,
+  color = person
+)) +
+  geom_point(alpha = 0.8) +
+  labs(
+    title = "Gefahrene Kilometer nach Aktivität und Person",
+    x = "Transportmittel",
+    y = "Gefahrene Kilometer",
+    size = "CO₂ Emissionen (kg)",
+    color = "Person"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+
+```
+
+
+```{r}
+#final plot
+
+label_mapping <- c(
+  "CYCLING" = "Cycling",
+  "IN_BUS" = "Bus",
+  "IN_FERRY" = "Ferry",
+  "IN_PASSENGER_VEHICLE" = "Car",
+  "IN_SUBWAY" = "Subway",
+  "IN_TRAIN" = "Train",
+  "IN_TRAM" = "Tram",
+  "MOTORCYCLING" = "Motorcycle",
+  "SKIING" = "Skiing",
+  "WALKING" = "Walking",
+  "TOTAL" = "Total"
+)
+
+emissions_combined <- emissions_combined %>%
+  mutate(activity_label = recode(activity_type, !!!label_mapping))
+
+emissions_combined$activity_label <- factor(
+  emissions_combined$activity_label,
+  levels = c("Cycling", "Bus", "Ferry", "Car", "Subway", "Train", "Tram", 
+             "Motorcycle", "Skiing", "Walking", "Total")  # Total am Ende
+)
+
+ggplot(emissions_combined, aes(
+  x = activity_label,
+  y = total_distance_km,
+  size = total_emission_kg,
+  color = person
+)) +
+  geom_point(alpha = 0.8) +
+  scale_size_continuous(range = c(4, 20)) +  # grössere Kreise
+  labs(
+    title = "Distance Traveled by Transport Type and Person",
+    x = "Transport Mode",
+    y = "Distance Traveled (km)",
+    size = "CO₂ Emissions (kg)",
+    color = "Person"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+
 ```
 
