@@ -811,6 +811,7 @@ emissions_combined$activity_label <- factor(
              "Motorcycle", "Skiing", "Walking", "Total")  # Total am Ende
 )
 
+# Plot mit Text-Labels für Emissionen > 75 kg
 ggplot(emissions_combined, aes(
   x = activity_label,
   y = total_distance_km,
@@ -818,12 +819,23 @@ ggplot(emissions_combined, aes(
   color = person
 )) +
   geom_point(alpha = 0.8) +
-  scale_size_continuous(range = c(4, 20)) +  # grössere Kreise
+  geom_text(
+    data = emissions_combined %>% filter(total_emission_kg > 50),
+    aes(label = paste0(round(total_emission_kg), " kg")),
+    size = 3.5,
+    vjust = 0,
+    hjust = 1.9
+  ) +
+  scale_size_continuous(
+    range = c(4, 20),
+    breaks = seq(0, max(emissions_combined$total_emission_kg, na.rm = TRUE), by = 25),
+    limits = c(0, max(emissions_combined$total_emission_kg, na.rm = TRUE))
+  ) +
   labs(
-    title = "Distance Traveled by Transport Type and Person",
+    title = expression("CO"[2] * " Emissions by Transport Mode"),
     x = "Transport Mode",
     y = "Distance Traveled (km)",
-    size = "CO₂ Emissions (kg)",
+    size = expression("CO"[2] * " Emissions (kg)"),
     color = "Person"
   ) +
   theme_minimal() +
@@ -831,6 +843,8 @@ ggplot(emissions_combined, aes(
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title = element_text(hjust = 0.5)
   )
+
+
 
 ```
 
