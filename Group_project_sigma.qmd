@@ -58,7 +58,29 @@ dauer_gesamt <- as.numeric(difftime(end_datum, start_datum, units = "hours"))
 
 ```
 
-# Introduction {#introduction}  
+# Introduction
+
+In recent years, the tracking and analysis of human mobility have gained increasing importance—both for understanding movement behavior and for assessing its environmental impact. The growing availability of spatial and temporal data from digital devices presents new opportunities to link individual travel patterns with greenhouse gas (GHG) emissions, thereby contributing to broader climate change research.
+
+Transport plays a key role in global GHG emissions and is one of the fastest-growing sources of climate-relevant emissions. In 2019, the transport sector emitted approximately 8.7 to 8.9 gigatonnes of CO₂-equivalent (GtCO₂-eq), a significant increase from 5.0 to 5.1 GtCO₂-eq in 1990. This growth positions the transport sector as the fourth-largest contributor to global GHG emissions, following the power, industry, and agriculture, forestry and land use (AFOLU) sectors. Transport accounts for around 15% of total global GHG emissions and approximately 23% of energy-related CO₂ emissions. Since 2010, emissions from the sector have grown at an average annual rate of 1.8%, making it the fastest-growing end-use sector [@IPCC_2022_WGIII_Ch_10].
+
+The structure of global transport emissions reveals a sector heavily reliant on fossil fuels, especially for road-based mobility. As of 2019, road transport was by far the largest contributor, responsible for approximately 6.1 GtCO₂-eq, or about 69–70% of total transport emissions. This includes both passenger vehicles and freight transport, such as trucks and vans. The dominance of road transport underscores its central role in global mobility systems and its dependence on internal combustion engine vehicles [@IPCC_2022_WGIII_Ch_10].
+
+International shipping is the second-largest source of transport emissions, contributing around 0.8 GtCO₂-eq (9–11% of the sector’s total). It is vital for global trade, with long-distance shipping routes forming the backbone of international logistics. Close behind is international aviation, which accounted for approximately 0.6 GtCO₂-eq, or 7–12% of transport emissions. The rise in air travel—particularly long-haul international flights—has made aviation one of the fastest-growing sources of emissions. Between 2010 and 2019, emissions from international aviation increased at an average annual rate of 3.4%, driven by expanding global mobility, tourism, and business travel [@IPCC_2022_WGIII_Ch_10].
+
+In contrast, rail transport contributes only about 1% of direct emissions. Rail is typically more energy-efficient and lower in emissions, especially where electrified networks are in use. However, its limited share of global passenger and freight activity means its overall emissions impact remains relatively small. The remaining emissions—around 1.4 GtCO₂-eq or 16% of the sector total—come from various sources including domestic aviation, buses, and other forms of collective or niche transport. While each of these modes contributes less individually, they still offer significant potential for emissions reduction through cleaner fuels, increased efficiency, and modal shifts [@IPCC_2022_WGIII_Ch_10].
+
+Moreover, detailed emission inventories help translate mobility behavior into CO₂ equivalents. In Switzerland, for example, approximately 13 tonnes of CO₂-equivalent are emitted per capita annually, including both domestic and abroad emissions [@bafu2025klima]. Of this total, only around 4 tonnes occur within Switzerland, while the remaining emissions are generated abroad, primarily due to the import of goods and services. About one-third of these emissions stem from mobility, excluding international flights [@bafu2025treibhausgas]. This distinction is important when assessing responsibility and reduction potential, as a significant portion of the environmental impact is embedded in global supply chains and consumption patterns [@bafu2025wirtschaftskonsum]. Given Switzerland’s population of approximately 8.8 million (as of 2023), this amounts to an estimated 114 million tonnes of CO₂-equivalent emissions per year.
+
+@nathani2022umwelt estimate that mobility behavior in Switzerland leads to at least 2.5 tonnes of CO₂e per capita, with over 1.5 tonnes resulting from domestic direct emissions—such as burning fuel in vehicle engines. As such, transport is the sector responsible for the largest share of GHG emissions. The United States presents a similar picture, where transport also ranks as the top emitting sector [@us2019us].
+
+Without significant intervention, transport-related emissions are projected to increase by 16–50% by 2050. However, in scenarios aligned with the 1.5°C climate target, a 59% reduction in transport CO₂ emissions by 2050 (compared to 2020 levels) is required. More ambitious pathways, such as the “1.5°C Low Demand” scenario, envision reductions of up to 90% [@IPCC_2022_WGIII_Ch_10].
+
+This study is grounded in Computational Movement Analysis (CMA), which provides the theoretical and methodological framework. As @laube2014computational explains, CMA integrates geographic information science, computer science, and statistics to analyze movement through space and time. Geographic information science offers spatial modeling and spatio-temporal operations; computer science supports data handling, querying, and analysis via algorithms and simulations; and statistics contribute methods for describing and modeling dynamic movement patterns.
+
+# Research objective
+
+This research investigates the mobility patterns of two students, focusing on how their travel behavior differs in terms of movement, rest, visited locations, and transportation choices. Building on their Google Timeline data, we aim to quantify the environmental footprint of their mobility and compare it to national benchmarks. This analysis not only sheds light on personal movement dynamics but also demonstrates how CMA and lifecycle assessment tools like Simapro and Ecoinvent can be integrated to estimate the GHG impact of individual mobility.
 
 In this work the google mapd data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map.
 Further, the data will be analyzed and the distance between the two persons will be calculated.
@@ -73,10 +95,7 @@ Further, the data will be analyzed and the distance between the two persons will
     
 ## Data Collection
     
-The primary data source will be Google Timeline tracking, which will provide detailed movement patterns, including transportation modes, travel distances, and time spent at different locations. The data collection window will be one month, ensuring both students’ mobility data is aligned for accurate comparison.
-Additionally, GHG emissions data will be obtained from SimaPro, which will help quantify the environmental impact of different transportation choices. This will require contextual data on transport emission factors (e.g., CO2 emissions per km for cars, public transport, cycling, etc.).
-Further contextual data, such as university schedules, or personal habits, may be useful for interpreting movement patterns. 
-At this stage, not all data has been collected, but Google Timeline tracking and SimaPro will serve as key sources for analysis.
+The primary data source for this study was Google Timeline tracking [@google2025timeline], which provided detailed movement patterns, including transportation modes, travel distances, and time spent at different locations. Mobility data was collected over the course of two months, ensuring that both students’ movement patterns were temporally aligned for accurate comparison. GHG emissions were quantified using SimaPro 10.1 [@simapro2025], drawing from the Ecoinvent v3.11 database [@ecoinvent2024], allowing for a precise assessment of the environmental impact associated with different transportation choices. This analysis incorporated contextual data on transport emission factors (e.g., CO₂ emissions per kilometer for cars, public transport, cycling, etc.) to improve accuracy. **Additional contextual information—such as university schedules and personal habits—was also considered to support interpretation of the mobility patterns. With all relevant data collected and processed, Google Timeline and SimaPro served as the foundation for the mobility and emissions analysis.**
 
 ## Methodology
 
@@ -751,14 +770,14 @@ co2_table %>%
   ) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
 
-co2_table %>%
-  gt() %>%
-  tab_header(title = md("**CO₂-Faktoren nach Transportmittel**")) %>%
-  cols_label(
-    activity_label = "Transportmittel",
-    co2_kg_per_km = "CO₂ (kg/km)"
-  ) %>%
-  fmt_number(columns = co2_kg_per_km, decimals = 3)
+#co2_table %>%
+ # gt() %>%
+  #tab_header(title = md("**CO₂-Faktoren nach Transportmittel**")) %>%
+#  cols_label(
+#    activity_label = "Transportmittel",
+#    co2_kg_per_km = "CO₂ (kg/km)"
+#  ) %>%
+#  fmt_number(columns = co2_kg_per_km, decimals = 3)
 
 activity_dimi_co2 <- full_join(activity_dimi, co2_data_dimi, by = "activity_type") |> 
   mutate(
@@ -1059,4 +1078,11 @@ ggsave("figures/final_plot.png", final_plot, width = 6, height = 6)
 
 ```
 
+# Disclaimer
+
+This paper made use of OpenAI's ChatGPT [@openai2024chatgpt] as a supportive tool throughout the research and writing process. ChatGPT was employed to assist in the following areas:
+•	Providing language suggestions for clarity and flow
+•	Assisting with the structuring and wording of academic content
+•	Supporting the formulation and verification of R and Quarto code
+All content generated with the help of ChatGPT was critically reviewed, verified, and edited by the author(s) to ensure accuracy, relevance, and academic integrity.
 
