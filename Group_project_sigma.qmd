@@ -3,13 +3,18 @@ title: "Project Work"
 author: "Ramon und Dimitri"
 format:  
   html:
-    toc: true  # Enable Table of Contents
-    toc-depth: 3  # Optional: Set the depth of ToC (default is 3)
-    number-sections: true  # Number headings in the document
+    toc: true
+    toc-location: left
+    page-layout: full
+    css: style.css
 execute:
-  echo: true  # Prevent code output in the final document
-bibliography: bibliography.bib  # Ensure the file name is correct
+  echo: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 7
+bibliography: bibliography.bib
 ---
+
 
 
 # Abstract {.unnumbered .unlisted}
@@ -29,6 +34,19 @@ library(purrr)
 library(webshot2)
 #install.packages("webshot2")
 library(htmlwidgets)
+library(ggrepel)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(gt)
+#install.packages("kableExtra")
+
+
+
+
+
+
+
 
 
 
@@ -92,6 +110,9 @@ In this Chapter the data from Ramon and Dimitri will be imported, modifed with t
 
 
 ```{r}
+#| label: load-data
+#| cache: true
+
 file_dimi <- "data/timeline_dimi_new.json"
 data_dimi <- fromJSON(file_dimi)
 
@@ -100,16 +121,10 @@ data_ramon <- fromJSON(file_ramon)
 ```
 
 
+## Visits
+### Visited Locations Dimi
 ```{r}
-# Struktur ansehen
-str(data_dimi)
-str(data_ramon)
-
-
-```
-
-Dimi
-```{r}
+#| warning: false
 
 visits_dimi <- data_dimi$semanticSegments |> 
   filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
@@ -165,19 +180,24 @@ leaflet_map_dimi <- leaflet(visits_dimi_2) |>
   )
 
 leaflet_map_dimi
+```
+
+
+```{r}
+#| eval: false
 
 # Speichere die HTML-Version
 saveWidget(leaflet_map_dimi, "figures/tmp_map.html", selfcontained = TRUE)
 
 # Screenshot als PNG speichern
 webshot("figures/tmp_map.html", file = "figures/dimi_visits_map.png", vwidth = 800, vheight = 600)
-
 ```
 
 
-
-ramon 
+### Visited Locations Ramon
 ```{r}
+#| warning: false
+
 # Ramon: Alle Aufenthalte extrahieren
 visits_ramon <- data_ramon$semanticSegments |> 
   filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
@@ -229,23 +249,28 @@ leaflet_map_ramon <- leaflet(visits_ramon_2) |>
   )
 
 leaflet_map_ramon
+```
+
+
+```{r}
+#| eval: false
 
 # Speichere die HTML-Version
 saveWidget(leaflet_map_ramon, "figures/tmp_map.html", selfcontained = TRUE)
 
 # Screenshot als PNG speichern
 webshot("figures/tmp_map.html", file = "figures/ramon_visits_map.png", vwidth = 800, vheight = 600)
-
-
 ```
 
 
 
 
-## Activity
 
-dimi
+
+
 ```{r}
+#| eval: false
+
 # activity_df_dimi <- data_dimi$semanticSegments$activity %>%
 #   mutate(
 #     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
@@ -272,8 +297,10 @@ dimi
 
 
 
-ramon
+
 ```{r}
+#| eval: false
+
 # activity_df_ramon <- data_ramon$semanticSegments$activity %>%
 #   mutate(
 #     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
@@ -300,10 +327,9 @@ ramon
 
 
 
-## Timeline Path
-
-ramon
 ```{r}
+#| eval: false
+
 # # Nur gültige timelinePath-Elemente
 # valid_indices <- which(map_lgl(data_ramon$semanticSegments$timelinePath, ~ is.data.frame(.x)))
 # 
@@ -330,8 +356,10 @@ ramon
 ```
 
 
-dimi
+
 ```{r}
+#| eval: false
+
 # # Nur gültige timelinePath-Elemente
 # valid_indices <- which(map_lgl(data_dimi$semanticSegments$timelinePath, ~ is.data.frame(.x)))
 # 
@@ -361,10 +389,14 @@ dimi
 
 
 
+
+
+```{r}
+#| echo: false
+
 ## Visits
 
-ramon
-```{r}
+#Ramon
 
 # Visits filtern nach Zeitraum
 visits_ramon_filtered <- visits_ramon_2 %>%
@@ -379,8 +411,8 @@ visits_day_ramon <- visits_h_ramon/24
 ```
 
 
-dimi
 ```{r}
+#Dimi
 # visits
 visits_dimi_filtered <- visits_dimi_2 %>%
   filter(start >= start_datum & end <= end_datum)
@@ -395,18 +427,22 @@ visits_day_dimi <- visits_h_dimi/24
 
 
 
+
+
+
+```{r}
+#| echo: false
+
 ## Activity
 
-dimi
-```{r}
-
+#dimi
 segments_dimi <- data_dimi$semanticSegments
 
 # Extrahiere und filtere Dimi's Aktivitätsdaten
 activity_dimi <- segments_dimi |> 
   filter(!is.na(activity$topCandidate$type)) |> 
   mutate(
-    activity_type = activity$topCandidate$type,
+    activity_type = ifelse(activity$topCandidate$type == "IN_FERRY", "SKIING", activity$topCandidate$type),
     probability = activity$topCandidate$probability,
     distance_km = round(activity$distanceMeters / 1000, 2),
     start_latlng = activity$start$latLng,
@@ -432,10 +468,10 @@ activity_day_dimi <- activity_h_dimi/24
 
 # Dauer berechnen
 dauer_gesamt_dimi_h <- difftime(end_datum, start_datum, units = "hours")
-dauer_gesamt_dimi_h
+
 
 dauer_gesamt_dimi_day <- difftime(end_datum, start_datum, units = "day")
-dauer_gesamt_dimi_day
+
 
 
 nan_h_dimi <- as.numeric(dauer_gesamt_dimi_h) - (activity_h_dimi + visits_h_dimi)
@@ -448,15 +484,15 @@ summe_stunden_dimi <- activity_h_dimi + visits_h_dimi + nan_h_dimi
 
 ```
 
-ramon
-```{r}
 
+```{r}
+#dimi
 segments_ramon <- data_ramon$semanticSegments
 
 activity_ramon <- segments_ramon |> 
   filter(!is.na(activity$topCandidate$type)) |> 
   mutate(
-    activity_type = activity$topCandidate$type,
+    activity_type = ifelse(activity$topCandidate$type == "IN_SUBWAY", "IN_TRAIN", activity$topCandidate$type),
     probability = activity$topCandidate$probability,
     distance_km = round(activity$distanceMeters / 1000, 2),
     start_latlng = activity$start$latLng,
@@ -482,15 +518,15 @@ activity_day_ramon <- activity_h_ramon/24
 
 # Dauer in Stunden berechnen
 dauer_gesamt_ramon <- difftime(end_datum, start_datum, units = "hours")
-dauer_gesamt_ramon
+
 
 dauer_gesamt_ramon_day <- difftime(end_datum, start_datum, units = "day")
-dauer_gesamt_ramon_day
+
 
 
 nan_h_ramon <- as.numeric(dauer_gesamt_ramon) - (activity_h_ramon + visits_h_ramon)
 
-nan_day_ramon <- as.numeric(dauer_gesamt_ramon_day) - (activity_day_dimi + visits_day_ramon)
+nan_day_ramon <- as.numeric(dauer_gesamt_ramon_day) - (activity_day_ramon + visits_day_ramon)
 
 summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 ```
@@ -500,9 +536,9 @@ summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 
 ## Plot Active/Passiv
 
-ramon
-```{r}
 
+```{r}
+#ramon
 round_half <- function(x) round(x * 2) / 2
 
 
@@ -531,6 +567,12 @@ bewegung_df_ramon_days <- tibble(
 
 bewegung_df_ramon <- bewegung_df_ramon %>%
   mutate(status_label = paste0(status, " (", round(stunden), "h)"))
+```
+
+
+```{r}
+#| eval: false
+
 
 ggplot(bewegung_df_ramon, aes(x = "", y = stunden, fill = status_label)) +
   geom_col(width = 1) +
@@ -546,6 +588,10 @@ ggplot(bewegung_df_ramon, aes(x = "", y = stunden, fill = status_label)) +
     legend.title = element_text(size = 12),
     legend.text = element_text(size = 11)
   )
+```
+
+
+```{r}
 
 # Plot
 pie_plot_ramon_days <- ggplot(bewegung_df_ramon_days, aes(x = "", y = tage, fill = status_label)) +
@@ -563,7 +609,11 @@ pie_plot_ramon_days <- ggplot(bewegung_df_ramon_days, aes(x = "", y = tage, fill
     legend.text = element_text(size = 11)
   )
 
-pie_plot_ramon_days
+```
+
+
+```{r}
+#| eval: false
 
 ggsave("figures/pie_plot_ramon_days.png", pie_plot_ramon_days, width = 6, height = 6)
 
@@ -571,9 +621,8 @@ ggsave("figures/pie_plot_ramon_days.png", pie_plot_ramon_days, width = 6, height
 ```
 
 
-dimi
-```{r}
 
+```{r}
 
 # DataFrame
 bewegung_df_dimi <- tibble(
@@ -597,6 +646,11 @@ bewegung_df_dimi_days <- tibble(
 
 bewegung_df_dimi <- bewegung_df_dimi %>%
   mutate(status_label = paste0(status, " (", round(stunden), "h)"))
+```
+
+
+```{r}
+#| eval: false
 
 ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
   geom_col(width = 1) +
@@ -612,6 +666,10 @@ ggplot(bewegung_df_dimi, aes(x = "", y = stunden, fill = status_label)) +
     legend.title = element_text(size = 12),
     legend.text = element_text(size = 11)
   )
+```
+
+
+```{r}
 
 # Plot tage
 pie_plot_dimi_days <- ggplot(bewegung_df_dimi_days, aes(x = "", y = tage, fill = status_label)) +
@@ -629,7 +687,12 @@ pie_plot_dimi_days <- ggplot(bewegung_df_dimi_days, aes(x = "", y = tage, fill =
     legend.text = element_text(size = 11)
   )
 
-pie_plot_dimi_days
+
+```
+
+
+```{r}
+#| eval: false
 
 ggsave("figures/pie_plot_dimi_days.png", pie_plot_dimi_days, width = 6, height = 6)
 
@@ -637,10 +700,65 @@ ggsave("figures/pie_plot_dimi_days.png", pie_plot_dimi_days, width = 6, height =
 
 
 ```{r}
+pie_plot_dimi_days + pie_plot_ramon_days
+```
+
+
+```{r}
+#| warning: false
+
+
 co2_data_dimi <- read_delim("data/transport_co2_factors.csv")
 
 co2_data_ramon <- read_delim("data/transport_co2_factors.csv")
 
+co2_table <- tribble(
+  ~activity_type,             ~co2_kg_per_km,
+  "IN_PASSENGER_VEHICLE",     0.111,
+  "WALKING",                  0.000,
+  "IN_BUS",                   0.114,
+  "IN_TRAIN",                 0.011,
+  "IN_TRAM",                  0.016,
+  "CYCLING",                  0.012,
+  "IN_FERRY",                 0.009,
+  "IN_SUBWAY",                0.016,
+  "MOTORCYCLING",             0.121,
+  "SKIING",                   0.000
+) %>%
+  mutate(activity_label = recode(
+    activity_type,
+    "CYCLING" = "Cycling",
+    "IN_BUS" = "Bus",
+    "IN_FERRY" = "Ferry",
+    "IN_PASSENGER_VEHICLE" = "Car",
+    "IN_SUBWAY" = "Subway",
+    "IN_TRAIN" = "Train",
+    "IN_TRAM" = "Tram",
+    "MOTORCYCLING" = "Motorcycle",
+    "SKIING" = "Skiing",
+    "WALKING" = "Walking"
+  )) %>%
+  select(activity_label, co2_kg_per_km)
+
+knitr::kable(co2_table, caption = "CO₂-Faktoren nach Transportmittel")
+
+co2_table %>%
+  kable(
+    caption = "CO₂-Faktoren nach Transportmittel",
+    col.names = c("Transportmittel", "CO₂ (kg/km)"),
+    digits = 3,
+    align = "l"
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
+
+co2_table %>%
+  gt() %>%
+  tab_header(title = md("**CO₂-Faktoren nach Transportmittel**")) %>%
+  cols_label(
+    activity_label = "Transportmittel",
+    co2_kg_per_km = "CO₂ (kg/km)"
+  ) %>%
+  fmt_number(columns = co2_kg_per_km, decimals = 3)
 
 activity_dimi_co2 <- full_join(activity_dimi, co2_data_dimi, by = "activity_type") |> 
   mutate(
@@ -662,7 +780,6 @@ activity_ramon_co2 <- full_join(activity_ramon, co2_data_ramon, by = "activity_t
     co2_kg_per_km, co2_emission_in_kg
   )
 
-str(activity_dimi_co2)
 ```
 
 ```{r}
@@ -695,8 +812,11 @@ emissions_total_dimi <- emissions_summary_dimi |>
 # 📦 Combine
 emissions_summary_full_dimi <- bind_rows(emissions_summary_dimi, emissions_total_dimi)
 
+emissions_summary_full_dimi <- emissions_summary_full_dimi %>%
+  filter(!activity_type %in% c("MOTORCYCLING", "IN_FERRY"))
+
 # 👀 View result
-print(emissions_summary_full_dimi)
+#print(emissions_summary_full_dimi)
 ```
 
 ```{r}
@@ -728,8 +848,11 @@ emissions_total_ramon <- emissions_summary_ramon |>
 # 📦 Combine
 emissions_summary_full_ramon <- bind_rows(emissions_summary_ramon, emissions_total_ramon)
 
+emissions_summary_full_ramon <- emissions_summary_full_ramon %>%
+  filter(!activity_type %in% c("IN_SUBWAY"))
+
 # 👀 View result
-print(emissions_summary_full_ramon)
+#print(emissions_summary_full_ramon)
 ```
 
 
@@ -744,28 +867,14 @@ emissions_ramon_labeled <- emissions_summary_full_ramon |>
 # 🧱 Combine both
 emissions_combined <- bind_rows(emissions_dimi_labeled, emissions_ramon_labeled)
 
-# 🚫 Remove "TOTAL" row if you only want per activity comparison
-emissions_combined_filtered <- emissions_combined |> 
-  filter(activity_type != "TOTAL")
+# 🚶‍♂️ Personen und Transportmodi definieren
+personen <- c("Dimi", "Ramon")
+aktivitaeten <- c(
+  "Subway", "Tram", "Motorcycle", "Walking", "Skiing", "Ferry", 
+  "Cycling", "Bus", "Car", "Train"
+)
 
-# 📊 Plot
-ggplot(emissions_combined_filtered, aes(x = activity_type, y = total_emission_kg, fill = person)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(
-    title = "Total CO₂ Emissions by Activity Type",
-    x = "Activity Type",
-    y = "Total CO₂ Emissions (kg)"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-```
-
-
-```{r}
-#final plot
-
+# 🧼 Label-Mapping anwenden
 label_mapping <- c(
   "CYCLING" = "Cycling",
   "IN_BUS" = "Bus",
@@ -780,16 +889,113 @@ label_mapping <- c(
   "TOTAL" = "Total"
 )
 
+# Nur relevante Aktivitäten und Labels zuweisen
+emissions_combined_filtered <- emissions_combined |> 
+  filter(activity_type != "TOTAL") |> 
+  mutate(activity_label = label_mapping[activity_type])
+
+# 🔄 Alle Kombinationen von Personen und Aktivitäten
+kombis <- expand.grid(
+  person = personen,
+  activity_label = aktivitaeten,
+  stringsAsFactors = FALSE
+)
+kombis$activity_label <- factor(kombis$activity_label, levels = aktivitaeten)
+
+# 🔁 Join mit kombis → fehlende Werte werden ergänzt
+emissions_padded <- kombis |> 
+  left_join(emissions_combined_filtered, by = c("person", "activity_label")) |> 
+  mutate(
+    activity_label = factor(activity_label, levels = aktivitaeten),
+    total_emission_kg = ifelse(total_emission_kg < 1, NA, total_emission_kg)
+  )
+
+# 🔢 Reihenfolge für den x-Achsen-Faktor festlegen
+emissions_padded$activity_label <- factor(
+  emissions_padded$activity_label,
+  levels = c(
+    "Subway", "Tram", "Walking", "Skiing", "Ferry", 
+    "Motorcycle", "Cycling", "Train", "Bus", "Car"
+  )
+)
+
+
+# 📊 Plot 1: Emissionen
+ggplot(emissions_padded, aes(x = activity_label, y = total_emission_kg, fill = person)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9), na.rm = TRUE) +
+  scale_y_log10(
+    limits = c(1, 200),
+    breaks = c(1, 10, 50, 100, 200),
+    labels = scales::label_number(big.mark = "'")
+  ) +
+  labs(
+    title = expression("CO"[2] * " Emissions by Transport Mode"),
+    x = "Transport Mode",
+    y = expression("CO"[2] * " Emissions in kg (log)")
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 13),
+    axis.text.y = element_text(size = 13),
+    axis.title = element_text(size = 14),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 13)
+  )
+
+# 🔢 Reihenfolge für den x-Achsen-Faktor festlegen
+emissions_padded$activity_label <- factor(
+  emissions_padded$activity_label,
+  levels = c(
+    "Subway", "Tram", "Motorcycle", "Walking", "Skiing", "Ferry", 
+  "Cycling", "Bus", "Car", "Train"
+  )
+)
+
+# 📊 Plot 2: Distanz
+ggplot(emissions_padded, aes(x = activity_label, y = total_distance_km, fill = person)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9), na.rm = TRUE) +
+  scale_y_log10(
+    limits = c(1, 10000),
+    breaks = c(1, 10, 100, 1000, 10000),
+    labels = scales::label_number(big.mark = "'")
+  ) +
+  labs(
+    title = "Distance in km by Activity Type",
+    x = "Transport Mode",
+    y = "Distance in km (log)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 13),
+    axis.text.y = element_text(size = 13),
+    axis.title = element_text(size = 14),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 13)
+  )
+
+```
+
+
+```{r}
+#| fig-align: center
+#final plot
+
+
+
 emissions_combined <- emissions_combined %>%
   mutate(activity_label = recode(activity_type, !!!label_mapping))
 
 emissions_combined$activity_label <- factor(
   emissions_combined$activity_label,
-  levels = c("Cycling", "Bus", "Ferry", "Car", "Subway", "Train", "Tram", 
-             "Motorcycle", "Skiing", "Walking", "Total")  # Total am Ende
+  levels = c(
+    "Subway", "Tram", "Motorcycle", "Walking", "Skiing", "Ferry", 
+    "Cycling", "Bus", "Car", "Train", "Total"
+  )
 )
 
-# Plot mit Text-Labels für Emissionen > 75 kg
+
 final_plot <- ggplot(emissions_combined, aes(
   x = activity_label,
   y = total_distance_km,
@@ -797,34 +1003,60 @@ final_plot <- ggplot(emissions_combined, aes(
   color = person
 )) +
   geom_point(alpha = 0.8) +
+  # Beschriftung mit besserer Rundung
   geom_text(
-    data = emissions_combined %>% filter(total_emission_kg > 50),
-    aes(label = paste0(round(total_emission_kg), " kg")),
-    size = 3.5,
-    vjust = 0,
-    hjust = 1.9
-  ) +
+  data = emissions_combined %>% filter(total_emission_kg >= 0),
+  mapping = aes(
+    x = activity_label,
+    y = total_distance_km,
+    label = ifelse(
+      total_emission_kg < 1,
+      paste0(round(total_emission_kg, 1), " kg"),
+      paste0(round(total_emission_kg), " kg")
+    ),
+    vjust = ifelse(total_emission_kg >= 100, -1.2, -0.8),
+    hjust = ifelse(total_emission_kg >= 100, 1.5, 1.4)
+  ),
+  inherit.aes = FALSE,
+  size = 4,
+  show.legend = FALSE
+) +
+scale_y_log10(
+  breaks = c(1, 10, 100, 1000, 10000),
+  labels = scales::label_number(big.mark = "'"), 
+  limits = c(5, 10000)
+) +  
   scale_size_continuous(
     range = c(4, 20),
-    breaks = seq(0, max(emissions_combined$total_emission_kg, na.rm = TRUE), by = 25),
+    breaks = seq(0, max(emissions_combined$total_emission_kg, na.rm = TRUE), by = 50),
     limits = c(0, max(emissions_combined$total_emission_kg, na.rm = TRUE))
   ) +
   labs(
     title = expression("CO"[2] * " Emissions by Transport Mode"),
     x = "Transport Mode",
-    y = "Distance Traveled (km)",
+    y = "Distance Traveled in km (log)",
     size = expression("CO"[2] * " Emissions (kg)"),
     color = "Person"
   ) +
+  scale_color_manual(
+    values = c("Dimi" = "#FF6F61", "Ramon" = "#00BFC4"),
+    breaks = c("Dimi", "Ramon")
+  ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(hjust = 0.5)
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 13),
+    axis.text.y = element_text(size = 13),
+    axis.title = element_text(size = 14),
+    plot.title = element_text(hjust = 0.5, size = 16),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 13)
   )
 
 final_plot
 
+
 ggsave("figures/final_plot.png", final_plot, width = 6, height = 6)
 
 ```
+
 
