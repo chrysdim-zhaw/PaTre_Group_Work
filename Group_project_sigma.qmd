@@ -1,5 +1,5 @@
 ---
-title: "Project Work"
+title: "Patterns & Trends Project Work"
 author: "Ramon und Dimitri"
 format:  
   html:
@@ -7,6 +7,15 @@ format:
     toc-location: left
     page-layout: full
     css: style.css
+    number-sections: true
+    number-tables: true
+    cap-location: top
+
+  pdf:
+    toc: true
+    number-sections: true
+    number-tables: true
+
 execute:
   echo: false
   fig-align: center
@@ -19,7 +28,7 @@ bibliography: bibliography.bib
 
 # Abstract {.unnumbered .unlisted}
 
-This study analyzes the movement patterns of two students using Google Timeline tracking and SimaPro for GHG emissions assessment. By segmenting rest and movement phases, identifying key locations, and comparing transportation modes, the project quantifies mobility behaviors and environmental impact. The findings will be visualized through maps and statistical comparisons, ensuring an insightful sustainability analysis.
+This study analyzes the movement patterns of two students using Google Timeline tracking and SimaPro for GHG emissions assessment. By segmenting rest and movement phases, identifying key locations, and comparing transportation modes, the project quantifies mobility behaviors and environmental impact. The findings will be visualized through maps and statistical comparisons, ensuring an insightful sustainability analysis. <span style="color:red;">Vergleich mit der Schweiz erwähnen</span>
 
 ```{r, warning=FALSE, message=FALSE}
 library(jsonlite)
@@ -83,15 +92,16 @@ This study is grounded in Computational Movement Analysis (CMA), which provides 
 This research investigates the mobility patterns of two students, focusing on how their travel behavior differs in terms of movement, rest, visited locations, and transportation choices. Building on their Google Timeline data, we aim to quantify the environmental footprint of their mobility and compare it to national benchmarks. This analysis not only sheds light on personal movement dynamics but also demonstrates how CMA and lifecycle assessment tools like Simapro and Ecoinvent can be integrated to estimate the GHG impact of individual mobility.
 
 In this work the google mapd data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map.
-Further, the data will be analyzed and the distance between the two persons will be calculated.
+Further, the data will be analyzed and the distance between the two persons will be calculated. <span style="color:red;">Umschreiben</span>
 
 ## Research Questions
 
 1.	How do the movement patterns of the two students differ?
     a.	What is the ratio between rest and movement? (Segmentation) 
-    b.	Which is the most frequently visited location?
+    b.	Which is the most frequently visited location? <span style="color:red;">or which are the most frequently visited locations?</span>
     c.	How does the use of transportation modes differ between the samples over a specific period?
     d.	What impact do the movement patterns have on each student's CO₂ footprint?
+   <span style="color:red;">e. How does the movement patterns of the students differ compared to switzerland's average?</span>
     
 ## Data Collection
     
@@ -114,15 +124,15 @@ For this analysis, R will be used for data cleaning, spatial analysis, visualiza
   d. GHG emission calculations: EcoInvent datai for CO₂ footprint calculations.
   e. Time series analysis: lubridate for analyzing movement trends over the one-month period.
 
-Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons.
+Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons. <span style="color:red;">würde ich mal in klammern setzen</span> 
 
 ## Potential Challenges
 
-A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends.
+A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends. <span style="color:red;">wotsch das würkli no mache?</span> 
 
 Another issue is the misclassification of transportation modes, where Google Timeline may inaccurately categorize movement (e.g., mistaking walking for biking). To improve data reliability, transportation modes will be cross-verified using movement speed, timestamps, and contextual information, allowing for necessary corrections and more accurate mobility analysis.
 
-# Data Import 
+# Results 
 
 In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.
 
@@ -139,11 +149,123 @@ file_ramon <- "data/Timeline_ramon_new.json"
 data_ramon <- fromJSON(file_ramon)
 ```
 
+```{r}
+#| eval: false
 
-## Visits
-### Visited Locations Dimi
+# activity_df_dimi <- data_dimi$semanticSegments$activity %>%
+#   mutate(
+#     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
+#     end_latlng = map_chr(end$latLng, ~ .x %||% NA_character_),
+#     distance = distanceMeters,
+#     activity_probability = probability,
+#     type = topCandidate$type,
+#     type_probability = topCandidate$probability,
+#     parking_latlng = map_chr(parking$location$latLng, ~ .x %||% NA_character_)
+#   ) %>%
+#   select(start_latlng, end_latlng, distance, activity_probability, type, type_probability, parking_latlng)
+# 
+# activity_clean_dimi <- data_dimi$semanticSegments$activity %>%
+#   filter(
+#     !is.na(start$latLng) |
+#     !is.na(end$latLng) |
+#     !is.na(distanceMeters) |
+#     !is.na(topCandidate$type) |
+#     !is.na(topCandidate$probability)
+#   )
+# 
+
+```
+
+```{r}
+#| eval: false
+
+# activity_df_ramon <- data_ramon$semanticSegments$activity %>%
+#   mutate(
+#     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
+#     end_latlng = map_chr(end$latLng, ~ .x %||% NA_character_),
+#     distance = distanceMeters,
+#     activity_probability = probability,
+#     type = topCandidate$type,
+#     type_probability = topCandidate$probability,
+#     parking_latlng = map_chr(parking$location$latLng, ~ .x %||% NA_character_)
+#   ) %>%
+#   select(start_latlng, end_latlng, distance, activity_probability, type, type_probability, parking_latlng)
+# 
+# activity_clean_ramon <- data_ramon$semanticSegments$activity %>%
+#   filter(
+#     !is.na(start$latLng) |
+#     !is.na(end$latLng) |
+#     !is.na(distanceMeters) |
+#     !is.na(topCandidate$type) |
+#     !is.na(topCandidate$probability)
+#   )
+
+
+```
+
+```{r}
+#| eval: false
+
+# # Nur gültige timelinePath-Elemente
+# valid_indices <- which(map_lgl(data_ramon$semanticSegments$timelinePath, ~ is.data.frame(.x)))
+# 
+# # DataFrame mit Start-/Endzeit + Punktdaten
+# paths_df_clean_ramon <- map_dfr(valid_indices, function(i) {
+#   path <- data_ramon$semanticSegments$timelinePath[[i]]
+#   start_time <- data_ramon$semanticSegments$startTime[i]
+#   end_time   <- data_ramon$semanticSegments$endTime[i]
+#   
+#   tibble(
+#     segment_id    = i,
+#     point         = path$point,
+#     time          = ymd_hms(str_sub(path$time, 1, 19)),  # Zeit säubern
+#     segment_start = ymd_hms(start_time),
+#     segment_end   = ymd_hms(end_time)
+#   )
+# }) %>%
+#   separate(point, into = c("lat", "lng"), sep = ", ") %>%
+#   mutate(
+#     lat = str_remove(lat, "°") %>% as.numeric(),
+#     lng = str_remove(lng, "°") %>% as.numeric()
+#   )
+
+```
+
+```{r}
+#| eval: false
+
+# # Nur gültige timelinePath-Elemente
+# valid_indices <- which(map_lgl(data_dimi$semanticSegments$timelinePath, ~ is.data.frame(.x)))
+# 
+# # DataFrame mit Start-/Endzeit + Punktdaten
+# paths_df_clean_dimi <- map_dfr(valid_indices, function(i) {
+#   path <- data_dimi$semanticSegments$timelinePath[[i]]
+#   start_time <- data_dimi$semanticSegments$startTime[i]
+#   end_time   <- data_dimi$semanticSegments$endTime[i]
+#   
+#   tibble(
+#     segment_id    = i,
+#     point         = path$point,
+#     time          = ymd_hms(str_sub(path$time, 1, 19)),  # Zeit säubern
+#     segment_start = ymd_hms(start_time),
+#     segment_end   = ymd_hms(end_time)
+#   )
+# }) %>%
+#   separate(point, into = c("lat", "lng"), sep = ", ") %>%
+#   mutate(
+#     lat = str_remove(lat, "°") %>% as.numeric(),
+#     lng = str_remove(lng, "°") %>% as.numeric()
+#   )
+# 
+
+```
+
+
+
 ```{r}
 #| warning: false
+
+#Start visits
 
 visits_dimi <- data_dimi$semanticSegments |> 
   filter(!is.na(visit$topCandidate$placeLocation$latLng)) |> 
@@ -197,8 +319,6 @@ leaflet_map_dimi <- leaflet(visits_dimi_2) |>
     labels = "Dimi's Visits > 1 hour",
     title = "Google Timeline"
   )
-
-leaflet_map_dimi
 ```
 
 
@@ -213,7 +333,6 @@ webshot("figures/tmp_map.html", file = "figures/dimi_visits_map.png", vwidth = 8
 ```
 
 
-### Visited Locations Ramon
 ```{r}
 #| warning: false
 
@@ -263,11 +382,9 @@ leaflet_map_ramon <- leaflet(visits_ramon_2) |>
   addLegend(
     position = "bottomright",
     colors = "red",
-    labels = "Ramons Aufenthalte > 1 Stunde",
+    labels = "Ramon's visits > 1 Stunde",
     title = "Google Timeline"
   )
-
-leaflet_map_ramon
 ```
 
 
@@ -280,135 +397,6 @@ saveWidget(leaflet_map_ramon, "figures/tmp_map.html", selfcontained = TRUE)
 # Screenshot als PNG speichern
 webshot("figures/tmp_map.html", file = "figures/ramon_visits_map.png", vwidth = 800, vheight = 600)
 ```
-
-
-
-
-
-
-
-```{r}
-#| eval: false
-
-# activity_df_dimi <- data_dimi$semanticSegments$activity %>%
-#   mutate(
-#     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
-#     end_latlng = map_chr(end$latLng, ~ .x %||% NA_character_),
-#     distance = distanceMeters,
-#     activity_probability = probability,
-#     type = topCandidate$type,
-#     type_probability = topCandidate$probability,
-#     parking_latlng = map_chr(parking$location$latLng, ~ .x %||% NA_character_)
-#   ) %>%
-#   select(start_latlng, end_latlng, distance, activity_probability, type, type_probability, parking_latlng)
-# 
-# activity_clean_dimi <- data_dimi$semanticSegments$activity %>%
-#   filter(
-#     !is.na(start$latLng) |
-#     !is.na(end$latLng) |
-#     !is.na(distanceMeters) |
-#     !is.na(topCandidate$type) |
-#     !is.na(topCandidate$probability)
-#   )
-# 
-
-```
-
-
-
-
-```{r}
-#| eval: false
-
-# activity_df_ramon <- data_ramon$semanticSegments$activity %>%
-#   mutate(
-#     start_latlng = map_chr(start$latLng, ~ .x %||% NA_character_),
-#     end_latlng = map_chr(end$latLng, ~ .x %||% NA_character_),
-#     distance = distanceMeters,
-#     activity_probability = probability,
-#     type = topCandidate$type,
-#     type_probability = topCandidate$probability,
-#     parking_latlng = map_chr(parking$location$latLng, ~ .x %||% NA_character_)
-#   ) %>%
-#   select(start_latlng, end_latlng, distance, activity_probability, type, type_probability, parking_latlng)
-# 
-# activity_clean_ramon <- data_ramon$semanticSegments$activity %>%
-#   filter(
-#     !is.na(start$latLng) |
-#     !is.na(end$latLng) |
-#     !is.na(distanceMeters) |
-#     !is.na(topCandidate$type) |
-#     !is.na(topCandidate$probability)
-#   )
-
-
-```
-
-
-
-```{r}
-#| eval: false
-
-# # Nur gültige timelinePath-Elemente
-# valid_indices <- which(map_lgl(data_ramon$semanticSegments$timelinePath, ~ is.data.frame(.x)))
-# 
-# # DataFrame mit Start-/Endzeit + Punktdaten
-# paths_df_clean_ramon <- map_dfr(valid_indices, function(i) {
-#   path <- data_ramon$semanticSegments$timelinePath[[i]]
-#   start_time <- data_ramon$semanticSegments$startTime[i]
-#   end_time   <- data_ramon$semanticSegments$endTime[i]
-#   
-#   tibble(
-#     segment_id    = i,
-#     point         = path$point,
-#     time          = ymd_hms(str_sub(path$time, 1, 19)),  # Zeit säubern
-#     segment_start = ymd_hms(start_time),
-#     segment_end   = ymd_hms(end_time)
-#   )
-# }) %>%
-#   separate(point, into = c("lat", "lng"), sep = ", ") %>%
-#   mutate(
-#     lat = str_remove(lat, "°") %>% as.numeric(),
-#     lng = str_remove(lng, "°") %>% as.numeric()
-#   )
-
-```
-
-
-
-```{r}
-#| eval: false
-
-# # Nur gültige timelinePath-Elemente
-# valid_indices <- which(map_lgl(data_dimi$semanticSegments$timelinePath, ~ is.data.frame(.x)))
-# 
-# # DataFrame mit Start-/Endzeit + Punktdaten
-# paths_df_clean_dimi <- map_dfr(valid_indices, function(i) {
-#   path <- data_dimi$semanticSegments$timelinePath[[i]]
-#   start_time <- data_dimi$semanticSegments$startTime[i]
-#   end_time   <- data_dimi$semanticSegments$endTime[i]
-#   
-#   tibble(
-#     segment_id    = i,
-#     point         = path$point,
-#     time          = ymd_hms(str_sub(path$time, 1, 19)),  # Zeit säubern
-#     segment_start = ymd_hms(start_time),
-#     segment_end   = ymd_hms(end_time)
-#   )
-# }) %>%
-#   separate(point, into = c("lat", "lng"), sep = ", ") %>%
-#   mutate(
-#     lat = str_remove(lat, "°") %>% as.numeric(),
-#     lng = str_remove(lng, "°") %>% as.numeric()
-#   )
-# 
-
-```
-
-
-
-
-
 
 ```{r}
 #| echo: false
@@ -429,7 +417,6 @@ visits_day_ramon <- visits_h_ramon/24
 
 ```
 
-
 ```{r}
 #Dimi
 # visits
@@ -443,11 +430,6 @@ visits_h_dimi <- visits_min_dimi/60
 visits_day_dimi <- visits_h_dimi/24
 
 ```
-
-
-
-
-
 
 ```{r}
 #| echo: false
@@ -505,7 +487,7 @@ summe_stunden_dimi <- activity_h_dimi + visits_h_dimi + nan_h_dimi
 
 
 ```{r}
-#dimi
+#ramon
 segments_ramon <- data_ramon$semanticSegments
 
 activity_ramon <- segments_ramon |> 
@@ -553,9 +535,12 @@ summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 
 
 
-## Plot Active/Passiv
 
 
+
+
+## Distribution between rest and movement {#sec-Distribution}
+As illustrated in @fig-rest-movement, the majority of the Google Timeline data is classified as visits (e.g. staying at home, working), while activities (such as walking, cycling or driving) account for a much smaller share. When aggregating the total recorded time, Dimi’s activities correspond to 6.5 full days, and Ramon’s to 6 days. The remaining recorded time – 51.5 and 52 days respectively – was spent at stationary locations. This highlights that although movement occurred regularly, it made up only a small fraction of the total recorded time.
 ```{r}
 #ramon
 round_half <- function(x) round(x * 2) / 2
@@ -617,7 +602,6 @@ pie_plot_ramon_days <- ggplot(bewegung_df_ramon_days, aes(x = "", y = tage, fill
   geom_col(width = 1) +
   coord_polar(theta = "y") +
   labs(
-    title = "Share of activities, visits and no data in days (Ramon)",
     fill = "Status",
     y = NULL, x = NULL
   ) +
@@ -695,7 +679,6 @@ pie_plot_dimi_days <- ggplot(bewegung_df_dimi_days, aes(x = "", y = tage, fill =
   geom_col(width = 1) +
   coord_polar(theta = "y") +
   labs(
-    title = "Share of activities, visits and no data in days (Dimi)",
     fill = "Status",
     y = NULL, x = NULL
   ) +
@@ -719,10 +702,55 @@ ggsave("figures/pie_plot_dimi_days.png", pie_plot_dimi_days, width = 6, height =
 
 
 ```{r}
-pie_plot_dimi_days + pie_plot_ramon_days
+pie_plot_dimi_days_labeled <- pie_plot_dimi_days +
+  labs(subtitle = "(a) Dimi") +
+  theme(plot.subtitle = element_text(hjust = 0.5, size = 12))
+
+pie_plot_ramon_days_labeled <- pie_plot_ramon_days +
+  labs(subtitle = "(b) Ramon") +
+  theme(plot.subtitle = element_text(hjust = 0.5, size = 12))
+
+
+# Kombinierte Abbildung
+combined_plot <- pie_plot_dimi_days_labeled + pie_plot_ramon_days_labeled +
+  plot_layout(ncol = 2) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14)
+  )
+```
+
+```{r}
+#| label: fig-rest-movement
+#| fig-cap: "Distribution of activities, visits and no data in days"
+
+combined_plot
+
 ```
 
 
+## Visits
+As shown in  @fig-map-dimi, Dimi visited several locations within Switzerland and also spent time in Spain. Notably, visits to Madrid and Barcelona were recorded, both of which were related to work. The spatial distribution is therefore more dispersed, reflecting international travel activity in addition to domestic mobility.
+```{r}
+#| label: fig-map-dimi
+#| fig-cap: "Visited locations of Dimi"
+
+leaflet_map_dimi
+```
+
+<br><br>
+@fig-map-ramon shows that Ramon's mobility was exclusively within Switzerland. The data reveals a dense pattern of visits in central Switzerland and parts of western Switzerland, indicating a regionally focused mobility behaviour. Most of the longer trips were related to ice hockey games that Ramon played during the observed period.
+```{r}
+#| label: fig-map-ramon
+#| fig-cap: "Visited locations of Ramon"
+#| 
+leaflet_map_ramon
+```
+
+
+
+
+
+## Emissions
 ```{r}
 #| warning: false
 
@@ -759,23 +787,38 @@ co2_table <- tribble(
   )) %>%
   select(activity_label, co2_kg_per_km)
 
-knitr::kable(co2_table, caption = "CO₂-Faktoren nach Transportmittel")
+#knitr::kable(co2_table, caption = "CO₂-Faktoren nach Transportmittel")
+```
+
+
+<br><br>
+As shown in @tbl-co2-factors, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂ value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.
+```{r}
+#| label: tbl-co2-factors
+#| tbl-cap: CO₂ eq-factors per transportmode
 
 co2_table %>%
   kable(
-    caption = "CO₂-Faktoren nach Transportmittel",
-    col.names = c("Transportmittel", "CO₂ (kg/km)"),
+    col.names = c("Transportmode", "CO₂eq in kg per passenger kilometer"),
     digits = 3,
     align = "l"
   ) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
+
+```
+
+
+```{r}
 
 #co2_table %>%
  # gt() %>%
-  #tab_header(title = md("**CO₂-Faktoren nach Transportmittel**")) %>%
+  #tab_header(title = md("**CO₂ eq-factors per transportmode**")) %>%
 #  cols_label(
-#    activity_label = "Transportmittel",
-#    co2_kg_per_km = "CO₂ (kg/km)"
+#    activity_label = "Transportmode",
+#    co2_kg_per_km = "CO₂ eq in kg per passenger kilometer"
 #  ) %>%
 #  fmt_number(columns = co2_kg_per_km, decimals = 3)
 
@@ -940,7 +983,7 @@ emissions_padded$activity_label <- factor(
 
 
 # 📊 Plot 1: Emissionen
-ggplot(emissions_padded, aes(x = activity_label, y = total_emission_kg, fill = person)) +
+emissions_plot <- ggplot(emissions_padded, aes(x = activity_label, y = total_emission_kg, fill = person)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9), na.rm = TRUE) +
   scale_y_log10(
     limits = c(1, 200),
@@ -972,7 +1015,7 @@ emissions_padded$activity_label <- factor(
 )
 
 # 📊 Plot 2: Distanz
-ggplot(emissions_padded, aes(x = activity_label, y = total_distance_km, fill = person)) +
+distance_plot <- ggplot(emissions_padded, aes(x = activity_label, y = total_distance_km, fill = person)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9), na.rm = TRUE) +
   scale_y_log10(
     limits = c(1, 10000),
@@ -996,9 +1039,19 @@ ggplot(emissions_padded, aes(x = activity_label, y = total_distance_km, fill = p
 
 ```
 
+<br><br>
+Figure @fig-co2-km-bubble provides a comprehensive overview of both mobility behavior and resulting CO₂ emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂ emissions (in kilograms) for that mode.
+
+This visualisation highlights the differences in transport choices and their environmental impacts. While Dimi travelled further overall – covering around 5,000 km by train and 1,300 km by car – his car-related emissions were still three times higher than those from train travel. This is particularly noteworthy given that approximately 75% of his car travel was done using an electric vehicle. The result underlines the high efficiency of rail transport, even when compared to low-emission vehicle alternatives such as electric cars.
+
+Ramon, on the other hand, showed a more regionally focused travel pattern but still generated substantial emissions from bus usage. The contrast between high distances and small bubbles for train travel, versus relatively large bubbles for car and bus use, clearly illustrates the importance of low-emission transport options in reducing one’s carbon footprint.
+
 
 ```{r}
 #| fig-align: center
+#| label: fig-co2-km-bubble
+#| fig-cap: CO₂ emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
+
 #final plot
 
 
@@ -1022,7 +1075,6 @@ final_plot <- ggplot(emissions_combined, aes(
   color = person
 )) +
   geom_point(alpha = 0.8) +
-  # Beschriftung mit besserer Rundung
   geom_text(
   data = emissions_combined %>% filter(total_emission_kg >= 0),
   mapping = aes(
@@ -1051,7 +1103,7 @@ scale_y_log10(
     limits = c(0, max(emissions_combined$total_emission_kg, na.rm = TRUE))
   ) +
   labs(
-    title = expression("CO"[2] * " Emissions by Transport Mode"),
+    #title = expression("CO"[2] * " Emissions by Transport Mode"),
     x = "Transport Mode",
     y = "Distance Traveled in km (log)",
     size = expression("CO"[2] * " Emissions (kg)"),
@@ -1077,6 +1129,79 @@ final_plot
 ggsave("figures/final_plot.png", final_plot, width = 6, height = 6)
 
 ```
+
+
+```{r}
+#| eval: false
+
+# 1. Emissionen zusammenfassen
+df_emissions <- emissions_combined_filtered %>%
+  group_by(person, activity_label) %>%
+  summarise(value = sum(total_emission_kg), .groups = "drop") %>%
+  mutate(type = "Emissions")
+
+# 2. Distanzen zusammenfassen
+df_distance <- emissions_combined_filtered %>%
+  group_by(person, activity_label) %>%
+  summarise(value = sum(total_distance_km), .groups = "drop") %>%
+  mutate(type = "Distance")
+
+# 3. Kombinieren
+df_combined <- bind_rows(df_emissions, df_distance)
+
+# 4. Totals berechnen für Verhältnis
+totals <- df_combined %>%
+  group_by(person, type) %>%
+  summarise(total = sum(value), .groups = "drop")
+
+em_dimi <- totals %>% filter(person == "Dimi", type == "Emissions") %>% pull(total)
+em_ramon <- totals %>% filter(person == "Ramon", type == "Emissions") %>% pull(total)
+km_dimi <- totals %>% filter(person == "Dimi", type == "Distance") %>% pull(total)
+km_ramon <- totals %>% filter(person == "Ramon", type == "Distance") %>% pull(total)
+
+# Verhältnis (Wurzel für Fläche = visuell sinnvoller)
+em_ratio <- sqrt(em_ramon / em_dimi)
+km_ratio <- sqrt(km_ramon / km_dimi)
+
+# 5. Plotfunktion (beschriftet, keine Legende)
+plot_pie_noleg <- function(pie_data, person_name, value_type, label_threshold = 0.05) {
+  df <- pie_data %>%
+    filter(person == person_name, type == value_type) %>%
+    mutate(
+      share = value / sum(value),
+      label = ifelse(share > label_threshold, activity_label, "")
+    )
+
+  ggplot(df, aes(x = "", y = value, fill = activity_label)) +
+    geom_col(width = 1, color = "white") +
+    coord_polar(theta = "y") +
+    geom_text(aes(label = label), position = position_stack(vjust = 0.5), size = 3) +
+    labs(title = paste(person_name, "-", value_type)) +
+    theme_void() +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 14),
+      legend.position = "none"
+    )
+}
+
+# 6. Plots generieren
+p1 <- plot_pie_noleg(df_combined, "Dimi", "Emissions")
+p2 <- plot_pie_noleg(df_combined, "Ramon", "Emissions")
+p3 <- plot_pie_noleg(df_combined, "Dimi", "Distance")
+p4 <- plot_pie_noleg(df_combined, "Ramon", "Distance")
+
+# 7. In Patchwork-Layout mit relativen Grössen
+# Oben: Emissionen → Breite gemäss em_ratio
+# Unten: Distanzen → Breite gemäss km_ratio
+
+((p1 + p2 + plot_layout(widths = c(1, em_ratio))) /
+ (p3 + p4 + plot_layout(widths = c(1, km_ratio))))
+
+```
+
+# Discussion
+
+
 
 # Disclaimer
 
