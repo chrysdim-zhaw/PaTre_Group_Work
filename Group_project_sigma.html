@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -106,7 +140,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#sec-Distribution" id="toc-sec-Distribution" class="nav-link" data-scroll-target="#sec-Distribution"><span class="header-section-number">3.1</span> Distribution between rest and movement</a></li>
   <li><a href="#visits" id="toc-visits" class="nav-link" data-scroll-target="#visits"><span class="header-section-number">3.2</span> Visits</a></li>
-  <li><a href="#emissions" id="toc-emissions" class="nav-link" data-scroll-target="#emissions"><span class="header-section-number">3.3</span> Emissions</a></li>
+  <li><a href="#activities" id="toc-activities" class="nav-link" data-scroll-target="#activities"><span class="header-section-number">3.3</span> Activities</a></li>
   </ul></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">4</span> Discussion</a></li>
   <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer"><span class="header-section-number">5</span> Disclaimer</a></li>
@@ -192,6 +226,25 @@ div.csl-indent {
 <li>Time series analysis: lubridate for analyzing movement trends over the one-month period.</li>
 </ol>
 <p>Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons. <span style="color:red;">würde ich mal in klammern setzen</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)     <span class="co"># For parsing and generating JSON data.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)        <span class="co"># For data manipulation using a grammar of data transformation.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)        <span class="co"># For tidying and reshaping data into a consistent format.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)           <span class="co"># For handling and analyzing spatial (vector) data using simple features.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)      <span class="co"># For creating static graphics and visualizations using the grammar of graphics.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)         <span class="co"># For creating thematic maps, both static and interactive.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># A collection of R packages for data science, including ggplot2, dplyr, tidyr, etc.</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)      <span class="co"># For creating interactive web maps using the Leaflet JavaScript library.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)        <span class="co"># For functional programming, especially working with lists and iterating functions.</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(webshot2)     <span class="co"># For taking screenshots of web pages or HTML widgets.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmlwidgets)  <span class="co"># For embedding JavaScript widgets (e.g., interactive plots/maps) in R Markdown or Shiny apps.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)      <span class="co"># For improving the readability of ggplot2 text labels by avoiding overlap.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)    <span class="co"># For combining multiple ggplot2 plots into a single layout.</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)        <span class="co"># For dynamic report generation with R Markdown and LaTeX/HTML/Word output.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)   <span class="co"># For enhancing tables created with knitr::kable, especially in HTML/PDF reports.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)           <span class="co"># For creating elegant, customizable tables for reporting.</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer) <span class="co"># For generating color palettes for plots and maps, especially categorical or sequential color scales.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="potential-challenges" class="level2" data-number="2.4">
@@ -252,8 +305,27 @@ Figure&nbsp;3: Visited locations of Ramon
 </div>
 </div>
 </section>
-<section id="emissions" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="emissions"><span class="header-section-number">3.3</span> Emissions</h2>
+<section id="activities" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="activities"><span class="header-section-number">3.3</span> Activities</h2>
+<p><br><br> <a href="#fig-Total-Distance" class="quarto-xref">Figure&nbsp;4</a> displays the total distances in kilometers travelled by Dimi and Ramon, broken down by transport mode. Each bar represents the overall distance per person and is subdivided by transport modes.</p>
+<p>Dimi travelled a total of 6,878 kilometers, more than double Ramon’s total of 2,730 kilometers.</p>
+<p>For Dimi, the dominant transport mode is Train, accounting for approximately 4,938 km, followed by Car with 1,361 km, and Bus with 197 km. Other modes such as Cycling, Walking, Tram, Subway, Skiing, and Ferry contribute smaller portions to the total. A significant portion of Dimi’s train distance — roughly 3,100 km — is due to a single long-distance trip to Spain. Remarkably, this single journey alone exceeds Ramon’s entire travel distance over the two-month period.</p>
+<p>Ramon’s top transport mode is Bus, with 1,188 km, followed by Train (975 km) and Car (305 km). Notably, Motorcycling appears in Ramon’s data (24 km) but is absent for Dimi. In contrast, Ramon has no recorded distance for Skiing or Subway, both of which are present in Dimi’s profile.</p>
+<p>This visualization highlights not only the difference in total mobility between the two individuals but also their distinct preferences in transport modes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-Total-Distance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-Total-Distance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Total Distance travelled by Person and Transport Mode
+</figcaption>
+<div aria-describedby="fig-Total-Distance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group_project_sigma_files/figure-html/fig-Total-Distance-1.png" class="img-fluid figure-img" width="1152">
+</div>
+</figure>
+</div>
+</div>
+</div>
 <p><br><br> As shown in <a href="#tbl-co2-factors" class="quarto-xref">Table&nbsp;1</a>, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂ value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.</p>
 <div class="cell">
 <div id="tbl-co2-factors" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -320,15 +392,15 @@ Table&nbsp;1: CO₂ eq-factors per transportmode
 </figure>
 </div>
 </div>
-<p><br><br> <a href="#fig-co2-km-bubble" class="quarto-xref">Figure&nbsp;4</a> provides a comprehensive overview of both mobility behavior and resulting CO₂ emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂ emissions (in kilograms) for that mode.</p>
-<p>This visualisation highlights the differences in transport choices and their environmental impacts. While Dimi travelled further overall, especially by train and car, his train-related emissions remained relatively low compared to the car. Ramon, on the other hand, showed a more balanced travel pattern but still generated substantial car emissions. The contrast between high distances and small bubbles for train travel, versus relatively large bubbles for car and bus use, clearly illustrates the importance of low-emission transport options in reducing one’s carbon footprint.</p>
-<p>This combined view allows us to distinguish not only how far each participant travelled, but also how impactful these journeys were in terms of greenhouse gas emissions.</p>
+<p><br><br> Figure&nbsp;<a href="#fig-co2-km-bubble" class="quarto-xref">Figure&nbsp;5</a> provides a comprehensive overview of both mobility behavior and resulting CO₂ emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂ emissions (in kilograms) for that mode.</p>
+<p>This visualisation highlights the differences in transport choices and their environmental impacts. While Dimi travelled further overall – covering around 5,000 km by train and 1,300 km by car – his car-related emissions were still three times higher than those from train travel. This is particularly noteworthy given that approximately 75% of his car travel was done using an electric vehicle. The result underlines the high efficiency of rail transport, even when compared to low-emission vehicle alternatives such as electric cars.</p>
+<p>Ramon, on the other hand, showed a more regionally focused travel pattern but still generated substantial emissions from bus usage. The contrast between high distances and small bubbles for train travel, versus relatively large bubbles for car and bus use, clearly illustrates the importance of low-emission transport options in reducing one’s carbon footprint.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-co2-km-bubble" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-co2-km-bubble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: CO₂ emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
+Figure&nbsp;5: CO₂ emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
 </figcaption>
 <div aria-describedby="fig-co2-km-bubble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="Group_project_sigma_files/figure-html/fig-co2-km-bubble-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152">
