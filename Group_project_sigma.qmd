@@ -52,44 +52,34 @@ Without significant intervention, transport-related emissions are projected to i
 
 This study is grounded in Computational Movement Analysis (CMA), which provides the theoretical and methodological framework. As @laube2014computational explains, CMA integrates geographic information science, computer science, and statistics to analyze movement through space and time. Geographic information science offers spatial modeling and spatio-temporal operations; computer science supports data handling, querying, and analysis via algorithms and simulations; and statistics contribute methods for describing and modeling dynamic movement patterns.
 
-# Research objective
+## Research objective
 
 This research investigates the mobility patterns of two students, focusing on how their travel behavior differs in terms of movement, rest, visited locations, and transportation choices. Building on their Google Timeline data, we aim to quantify the environmental footprint of their mobility and compare it to national benchmarks. This analysis not only sheds light on personal movement dynamics but also demonstrates how CMA and lifecycle assessment tools like Simapro and Ecoinvent can be integrated to estimate the GHG impact of individual mobility.
 
-In this work the google mapd data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map.
+In this work the google maps data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map.
 Further, the data will be analyzed and the distance between the two persons will be calculated. <span style="color:red;">Umschreiben</span>
 
 ## Research Questions
 
 1.	How do the movement patterns of the two students differ?
+
     a.	What is the ratio between rest and movement? (Segmentation) 
-    b.	Which is the most frequently visited location? <span style="color:red;">or which are the most frequently visited locations?</span>
+    
+    b.	Which are the most frequently visited locations?
+    
     c.	How does the use of transportation modes differ between the samples over a specific period?
+    
     d.	What impact do the movement patterns have on each student's CO₂ footprint?
-   <span style="color:red;">e. How does the movement patterns of the students differ compared to switzerland's average?</span>
     
-## Data Collection
+    e.  How do the extrapolated emissions of the students perform in comparison of the Swiss average?
     
-The primary data source for this study was Google Timeline tracking [@google2025timeline], which provided detailed movement patterns, including transportation modes, travel distances, and time spent at different locations. Mobility data was collected over the course of two months, ensuring that both students’ movement patterns were temporally aligned for accurate comparison. GHG emissions were quantified using SimaPro 10.1 [@simapro2025], drawing from the Ecoinvent v3.11 database [@ecoinvent2024], allowing for a precise assessment of the environmental impact associated with different transportation choices. This analysis incorporated contextual data on transport emission factors (e.g., CO₂ emissions per kilometer for cars, public transport, cycling, etc.) to improve accuracy. **Additional contextual information—such as university schedules and personal habits—was also considered to support interpretation of the mobility patterns. With all relevant data collected and processed, Google Timeline and SimaPro served as the foundation for the mobility and emissions analysis.**
+# Methodology & Data 
+    
+This chapter outlines the methodological framework and data sources used to analyze individual mobility patterns and their associated greenhouse gas (GHG) emissions. The analysis combines high-resolution spatio-temporal data from Google Timeline with environmental impact modeling using life cycle assessment (LCA) tools. Computational Movement Analysis (CMA) principles serve as the theoretical foundation for structuring and interpreting mobility trajectories. Data preprocessing and spatial analysis were conducted in R, using a suite of packages for JSON parsing, spatial visualization, and statistical modeling. Together, these approaches enable a comprehensive assessment of movement behavior and its environmental implications at both local and international scales.
 
-## Methodology
+## R, Quarto and R packages
 
-Define movement patterns in terms of distance traveled, frequency of trips, and time spent in motion vs. at rest as well as transportation modes and their emission caused. 
-Define "rest" as periods of inactivity (e.g., staying at home, being in one location for extended periods) and "movement" as active transportation or mobility events. 
-Categorize transportation modes (e.g., walking, biking, public transport, car). Collect data on usage frequency, duration, and distance for each mode over a set period (e.g., one week or one month). Compare patterns between the two students.
-Measure GHG emissions based on transportation modes used (e.g., car, bike, public transport) and distances traveled. Use an established GHG emission calculator (i.e., SimaPro or publicly available emission factors) to quantify the footprint. 
-
-### Data Analysis, packages, and tools
-
-For this analysis, R will be used for data cleaning, spatial analysis, visualization, and statistical modeling. Key concepts and packages include:
-
-  a. Data manipulation: dplyr, tidyverse for cleaning and structuring Google Timeline data.
-  b. Spatial analysis: sf, and raster to analyze GPS locations, travel distances, and movement patterns.
-  c. Visualization: ggplot2, tmap, and leaflet for creating maps, route heatmaps, and movement patterns.
-  d. GHG emission calculations: EcoInvent datai for CO₂ footprint calculations.
-  e. Time series analysis: lubridate for analyzing movement trends over the one-month period.
-
-Additional spatial analysis methods may include kernel density estimation (KDE) for hotspot detection and network analysis for transportation mode comparisons. <span style="color:red;">würde ich mal in klammern setzen</span> 
+For this analysis, R [@r2024] was used for data cleaning, spatial analysis, visualization, and statistical modeling. The code was developed and executed using RStudio [@rstudio2024], an integrated development environment that facilitates reproducible research. The report itself was written using Quarto [@quarto2024], an open-source scientific and technical publishing system that supports dynamic documents and integrates seamlessly with R and RStudio.
 
 ```{r, warning=FALSE, message=FALSE, echo=TRUE}
 library(jsonlite)     # For parsing and generating JSON data.
@@ -108,28 +98,114 @@ library(patchwork)    # For combining multiple ggplot2 plots into a single layou
 library(knitr)        # For dynamic report generation with R Markdown and LaTeX/HTML/Word output.
 library(kableExtra)   # For enhancing tables created with knitr::kable, especially in HTML/PDF reports.
 library(gt)           # For creating elegant, customizable tables for reporting.
-library(RColorBrewer) # For generating color palettes for plots and maps, especially categorical or sequential color scales.
+library(RColorBrewer) # For generating color palettes for plots, especially categorical or sequential color scales.
 
 ```
 
+## Google Timeline
+
+Google Timeline data [@google2025timeline] was used as the primary source for capturing individual mobility patterns. This data is collected via Google Location History and is available to users who have enabled location tracking on their mobile devices. It offers high-resolution spatio-temporal data (see @tbl-google-timeline-data).
+
+```{r, echo=FALSE}
+#| label: tbl-google-timeline-data
+#| tbl-cap: Overview of data elements available from Google Timeline exports [@google2025timeline].
+
+timeline_data <- data.frame(
+  `Data Element` = c(
+    "Timestamp (start and end)",
+    "Latitude and longitude",
+    "Place name and address",
+    "Activity type (e.g., visit, travel)",
+    "Transportation mode",
+    "Travel distance",
+    "Dwell time",
+    "Confidence level (Google's certainty rating)",
+    "Device information (optional)",
+    "Semantic place type (e.g., 'restaurant', 'university')"
+  ),
+  `Description` = c(
+    "Time a location was entered and exited",
+    "Precise GPS coordinates of locations and routes",
+    "Named location or address from Google's POI database",
+    "Distinguishes between staying at a place or being in transit",
+    "Inferred travel mode such as walking, driving, cycling, bus, etc.",
+    "Distance travelled per segment (estimated by Google)",
+    "Duration spent at a specific location",
+    "Google's internal confidence in its mode or place inference",
+    "Device type or app used to record location, if available",
+    "High-level category assigned to places visited"
+  )
+)
+
+kable(timeline_data)
+```
+
+
+## Spatial Data analysis (CMA) 
+
+The analysis of spatio-temporal mobility data in this study is grounded in core principles from computational movement analysis. The preprocessing and segmentation of individual movement trajectories was based on the framework described by @laube2014computational, particularly the methods outlined in Chapter 3.2.1: Segmentation and Filtering. Raw data from Google Location Services were organized into structured trajectories by leveraging the temporal and categorical information provided in the JSON files, including timestamps, transport mode labels, and location types.
+
+The movement records were treated as event-based sequences, segmented into daily trip chains using changes in transportation mode and temporal gaps between recorded segments [@laube2014computational]. This segmentation process followed the conceptual structure proposed by @dodge2008taxonomy, who introduced a taxonomy of movement patterns that supports interpretation of temporal regularity and spatial extent—useful for distinguishing between local and long-distance activities.
+
+Moreover, @laube2011cross emphasized the importance of scale when analyzing movement trajectories. Their cross-scale perspective informed the treatment of domestic versus international travel in this study, particularly in identifying transitions between local commuting behavior and more dispersed travel patterns across national borders.
+
+## Life Cycle Data
+
+### SimaPro
+
+SimaPro 10.1 [@simapro2025] was used as the primary life cycle assessment (LCA) software for modeling and calculating greenhouse gas (GHG) emissions associated with transportation activities. It offers a robust platform for quantifying environmental impacts across full life cycles, including direct and indirect emissions related to fuel production, vehicle operation, and infrastructure. The software enables transparent modeling, flexible scenario comparisons, and integration of context-specific activity data, making it well-suited for mobility-related carbon footprint analyses.
+
+### Ecoinvent
+
+The Ecoinvent v3.11 database [@ecoinvent2024] was used as the life cycle inventory (LCI) source within SimaPro. Ecoinvent provides high-quality, peer-reviewed datasets for a wide range of economic activities, including detailed data on transport processes. For this study, specific datasets were selected to model emissions from various transportation modes—such as passenger cars (internal combustion engine and electric), buses, regional trains, trams, bicycles, and freight ferries. These datasets correspond to full process names from the Ecoinvent database, ensuring transparency and reproducibility in the modeling approach (see @tbl-transport-modes). The selection was based on the transport types and distances identified through Google Timeline tracking.
+
+The LCI data include upstream and downstream processes, enabling a comprehensive cradle-to-grave emissions analysis. This approach allows for a detailed estimation of GHG emissions associated with each mode of transportation used during the analyzed period.
+
+```{r, echo=FALSE}
+#| label: tbl-transport-modes
+#| tbl-cap: Ecoinvent transport processes used in the LCA model [@ecoinvent2024].
+
+
+transport_data <- data.frame(
+  `Transport Mode` = c(
+    "Train",
+    "Car (Internal Combustion Engine)",
+    "Car (Electric)",
+    "Motorcycle",
+    "Bicycle",
+    "Bus",
+    "Tram",
+    "Ferry"
+  ),
+  `Ecoinvent Process Name` = c(
+    "Transport, passenger train {CH}| transport, passenger train, regional | Cut-off, U",
+    "Transport, passenger car with internal combustion engine {RER}| transport, passenger car with internal   combustion engine | Cut-off, U",
+    "Transport, passenger car, electric, with Swiss electricity mix {GLO}| transport, passenger car, electric | Cut-off, U",
+    "Transport, passenger, motor scooter {CH}| transport, passenger, motor scooter | Cut-off, U",
+    "Transport, passenger, bicycle {CH}| transport, passenger, bicycle | Cut-off, U",
+    "Transport, regular bus {CH}| transport, regular bus | Cut-off, U",
+    "Transport, tram {CH}| transport, tram | Cut-off, U",
+    "Transport, freight, sea, ferry {GLO}| transport, freight, sea, ferry | Cut-off, U"
+  )
+)
+
+kable(transport_data)
+
+```
+
+### IPCC GWP 100a Impact Assessment Method
+
+To translate life cycle inventory results into climate-relevant metrics, the IPCC 2021 GWP 100a impact assessment method was applied [@ipcc2021gwp100]. This method expresses the global warming potential (GWP) of greenhouse gases in terms of carbon dioxide equivalents (CO₂e) over a 100-year time horizon. It reflects the most recent scientific consensus provided by the Intergovernmental Panel on Climate Change (IPCC) and enables standardized comparison of different emission sources and activities. By applying this method within SimaPro, all modeled greenhouse gas emissions were converted into consistent and comparable CO₂e values, ensuring the results align with international reporting standards and climate targets.
+
+# Results 
+
+In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.
 
 ```{r, warning=FALSE, message=FALSE}
 start_datum <- ymd_hms("2025-02-06 11:40:35")
 end_datum   <- ymd_hms("2025-04-06 23:59:00")
 dauer_gesamt <- as.numeric(difftime(end_datum, start_datum, units = "hours"))
 ```
-
-## Potential Challenges
-
-A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends. <span style="color:red;">wotsch das würkli no mache?</span> 
-
-Another issue is the misclassification of transportation modes, where Google Timeline may inaccurately categorize movement (e.g., mistaking walking for biking). To improve data reliability, transportation modes will be cross-verified using movement speed, timestamps, and contextual information, allowing for necessary corrections and more accurate mobility analysis.
-
-# Results 
-
-In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.
-
-
 
 ```{r}
 #| label: load-data
@@ -722,10 +798,13 @@ combined_plot
 
 
 ## Visits
-As shown in  @fig-map-dimi, Dimi visited several locations within Switzerland and also spent time in Spain. Notably, visits to Madrid and Barcelona were recorded, both of which were related to work. The spatial distribution is therefore more dispersed, reflecting international travel activity in addition to domestic mobility.
+
+As shown in @fig-map-dimi, Dimi visited several locations within Switzerland and also spent time in Spain. Notably, visits to Madrid and Barcelona were recorded, both of which were related to work. The spatial distribution is therefore more dispersed, reflecting international travel activity in addition to domestic mobility. The geographic data were visualized using OpenStreetMap [@openstreetmap2025].
+
+
 ```{r}
 #| label: fig-map-dimi
-#| fig-cap: "Visited locations of Dimi"
+#| fig-cap: "Visited locations of Dimi [@openstreetmap2025]"
 
 leaflet_map_dimi
 ```
@@ -734,15 +813,13 @@ leaflet_map_dimi
 @fig-map-ramon shows that Ramon's mobility was exclusively within Switzerland. The data reveals a dense pattern of visits in central Switzerland and parts of western Switzerland, indicating a regionally focused mobility behaviour. Most of the longer trips were related to ice hockey games that Ramon played during the observed period.
 ```{r}
 #| label: fig-map-ramon
-#| fig-cap: "Visited locations of Ramon"
+#| fig-cap: "Visited locations of Ramon [@openstreetmap2025]"
 #| 
 leaflet_map_ramon
 ```
 
 
 
-
-<br><br>
 ## Activities
 ```{r}
 #| warning: false
@@ -1093,7 +1170,7 @@ ggplot(plot_data, aes(x = person, y = total_km, fill = activity_label)) +
 As shown in @tbl-co2-factors, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂ value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.
 ```{r}
 #| label: tbl-co2-factors
-#| tbl-cap: CO₂ eq-factors per transportmode
+#| tbl-cap: CO₂ eq-factors per transportmode according to @ipcc2021gwp100.
 
 co2_table %>%
   kable(
@@ -1329,9 +1406,15 @@ ggplot(plot_data, aes(x = person, y = total_co2, fill = activity_label)) +
 
 
 <br><br>
+
 # Discussion
 
 
+## Potential Challenges
+
+A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends. <span style="color:red;">wotsch das würkli no mache?</span> 
+
+Another issue is the misclassification of transportation modes, where Google Timeline may inaccurately categorize movement (e.g., mistaking walking for biking). To improve data reliability, transportation modes will be cross-verified using movement speed, timestamps, and contextual information, allowing for necessary corrections and more accurate mobility analysis.
 
 # Disclaimer
 
