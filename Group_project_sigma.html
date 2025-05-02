@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -154,7 +154,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer"><span class="header-section-number">5</span> Disclaimer</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="Group_project_sigma.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
@@ -188,6 +188,7 @@ div.csl-indent {
 <section id="abstract" class="level1 unnumbered unlisted">
 <h1 class="unnumbered unlisted">Abstract</h1>
 <p>This study analyzes the movement patterns of two students using Google Timeline tracking and SimaPro for GHG emissions assessment. By segmenting rest and movement phases, identifying key locations, and comparing transportation modes, the project quantifies mobility behaviors and environmental impact. The findings will be visualized through maps and statistical comparisons, ensuring an insightful sustainability analysis. <span style="color:red;">Vergleich mit der Schweiz erwähnen</span></p>
+<p><br><br></p>
 </section>
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
@@ -197,13 +198,15 @@ div.csl-indent {
 <p>International shipping is the second-largest source of transport emissions, contributing around 0.8 GtCO₂-eq (9–11% of the sector’s total). It is vital for global trade, with long-distance shipping routes forming the backbone of international logistics. Close behind is international aviation, which accounted for approximately 0.6 GtCO₂-eq, or 7–12% of transport emissions. The rise in air travel—particularly long-haul international flights—has made aviation one of the fastest-growing sources of emissions. Between 2010 and 2019, emissions from international aviation increased at an average annual rate of 3.4%, driven by expanding global mobility, tourism, and business travel <span class="citation" data-cites="IPCC_2022_WGIII_Ch_10">(<a href="#ref-IPCC_2022_WGIII_Ch_10" role="doc-biblioref">Jaramillo et al. 2022</a>)</span>.</p>
 <p>In contrast, rail transport contributes only about 1% of direct emissions. Rail is typically more energy-efficient and lower in emissions, especially where electrified networks are in use. However, its limited share of global passenger and freight activity means its overall emissions impact remains relatively small. The remaining emissions—around 1.4 GtCO₂-eq or 16% of the sector total—come from various sources including domestic aviation, buses, and other forms of collective or niche transport. While each of these modes contributes less individually, they still offer significant potential for emissions reduction through cleaner fuels, increased efficiency, and modal shifts <span class="citation" data-cites="IPCC_2022_WGIII_Ch_10">(<a href="#ref-IPCC_2022_WGIII_Ch_10" role="doc-biblioref">Jaramillo et al. 2022</a>)</span>.</p>
 <p>Moreover, detailed emission inventories help translate mobility behavior into CO₂ equivalents. In Switzerland, for example, approximately 13 tonnes of CO₂-equivalent are emitted per capita annually, including both domestic and abroad emissions <span class="citation" data-cites="bafu2025klima">(<a href="#ref-bafu2025klima" role="doc-biblioref">Bundesamt für Umwelt (BAFU) 2025b</a>)</span>. Of this total, only around 4 tonnes occur within Switzerland, while the remaining emissions are generated abroad, primarily due to the import of goods and services. About one-third of these emissions stem from mobility, excluding international flights <span class="citation" data-cites="bafu2025treibhausgas">(<a href="#ref-bafu2025treibhausgas" role="doc-biblioref">Bundesamt für Umwelt (BAFU) 2025c</a>)</span>. This distinction is important when assessing responsibility and reduction potential, as a significant portion of the environmental impact is embedded in global supply chains and consumption patterns <span class="citation" data-cites="bafu2025wirtschaftskonsum">(<a href="#ref-bafu2025wirtschaftskonsum" role="doc-biblioref">Bundesamt für Umwelt (BAFU) 2025a</a>)</span>. Given Switzerland’s population of approximately 8.8 million (as of 2023), this amounts to an estimated 114 million tonnes of CO₂-equivalent emissions per year.</p>
-<p><span class="citation" data-cites="nathani2022umwelt">Nathani et al. (<a href="#ref-nathani2022umwelt" role="doc-biblioref">2022</a>)</span> estimate that mobility behavior in Switzerland leads to at least 2.5 tonnes of CO₂e per capita, with over 1.5 tonnes resulting from domestic direct emissions—such as burning fuel in vehicle engines. As such, transport is the sector responsible for the largest share of GHG emissions. The United States presents a similar picture, where transport also ranks as the top emitting sector <span class="citation" data-cites="us2019us">(<a href="#ref-us2019us" role="doc-biblioref">Administration 2019</a>)</span>.</p>
-<p>Without significant intervention, transport-related emissions are projected to increase by 16–50% by 2050. However, in scenarios aligned with the 1.5°C climate target, a 59% reduction in transport CO₂ emissions by 2050 (compared to 2020 levels) is required. More ambitious pathways, such as the “1.5°C Low Demand” scenario, envision reductions of up to 90% <span class="citation" data-cites="IPCC_2022_WGIII_Ch_10">(<a href="#ref-IPCC_2022_WGIII_Ch_10" role="doc-biblioref">Jaramillo et al. 2022</a>)</span>.</p>
+<p><span class="citation" data-cites="nathani2022umwelt">Nathani et al. (<a href="#ref-nathani2022umwelt" role="doc-biblioref">2022</a>)</span> estimate that mobility behavior in Switzerland leads to at least 2.4 tonnes of CO₂e per capita, with over 1.5 tonnes resulting from domestic direct emissions—such as burning fuel in vehicle engines. As such, transport is the sector responsible for the largest share of GHG emissions. The United States presents a similar picture, where transport also ranks as the top emitting sector <span class="citation" data-cites="us2019us">(<a href="#ref-us2019us" role="doc-biblioref">Administration 2019</a>)</span>.</p>
+<p>Without significant intervention, transport-related emissions are projected to increase by 16–50% by 2050. However, in scenarios aligned with the 1.5°C climate target, a 59% reduction in transport CO₂e emissions by 2050 (compared to 2020 levels) is required. More ambitious pathways, such as the “1.5°C Low Demand” scenario, envision reductions of up to 90% <span class="citation" data-cites="IPCC_2022_WGIII_Ch_10">(<a href="#ref-IPCC_2022_WGIII_Ch_10" role="doc-biblioref">Jaramillo et al. 2022</a>)</span>.</p>
 <p>This study is grounded in Computational Movement Analysis (CMA), which provides the theoretical and methodological framework. As <span class="citation" data-cites="laube2014computational">Laube (<a href="#ref-laube2014computational" role="doc-biblioref">2014</a>)</span> explains, CMA integrates geographic information science, computer science, and statistics to analyze movement through space and time. Geographic information science offers spatial modeling and spatio-temporal operations; computer science supports data handling, querying, and analysis via algorithms and simulations; and statistics contribute methods for describing and modeling dynamic movement patterns.</p>
+<p><br><br></p>
 <section id="research-objective" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="research-objective"><span class="header-section-number">1.1</span> Research objective</h2>
 <p>This research investigates the mobility patterns of two students, focusing on how their travel behavior differs in terms of movement, rest, visited locations, and transportation choices. Building on their Google Timeline data, we aim to quantify the environmental footprint of their mobility and compare it to national benchmarks. This analysis not only sheds light on personal movement dynamics but also demonstrates how CMA and lifecycle assessment tools like Simapro and Ecoinvent can be integrated to estimate the GHG impact of individual mobility.</p>
 <p>In this work the google maps data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map. Further, the data will be analyzed and the distance between the two persons will be calculated. <span style="color:red;">Umschreiben</span></p>
+<p><br><br></p>
 </section>
 <section id="research-questions" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="research-questions"><span class="header-section-number">1.2</span> Research Questions</h2>
@@ -213,15 +216,17 @@ div.csl-indent {
 <li><p>What is the ratio between rest and movement? (Segmentation)</p></li>
 <li><p>Which are the most frequently visited locations?</p></li>
 <li><p>How does the use of transportation modes differ between the samples over a specific period?</p></li>
-<li><p>What impact do the movement patterns have on each student’s CO₂ footprint?</p></li>
+<li><p>What impact do the movement patterns have on each student’s CO₂e footprint?</p></li>
 <li><p>How do the extrapolated emissions of the students perform in comparison of the Swiss average?</p></li>
 </ol></li>
 </ol>
+<p><br><br></p>
 </section>
 </section>
 <section id="methodology-data" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Methodology &amp; Data</h1>
 <p>This chapter outlines the methodological framework and data sources used to analyze individual mobility patterns and their associated greenhouse gas (GHG) emissions. The analysis combines high-resolution spatio-temporal data from Google Timeline with environmental impact modeling using life cycle assessment (LCA) tools. Computational Movement Analysis (CMA) principles serve as the theoretical foundation for structuring and interpreting mobility trajectories. Data preprocessing and spatial analysis were conducted in R, using a suite of packages for JSON parsing, spatial visualization, and statistical modeling. Together, these approaches enable a comprehensive assessment of movement behavior and its environmental implications at both local and international scales.</p>
+<p><br><br></p>
 <section id="r-quarto-and-r-packages" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="r-quarto-and-r-packages"><span class="header-section-number">2.1</span> R, Quarto and R packages</h2>
 <p>For this analysis, R <span class="citation" data-cites="r2024">(<a href="#ref-r2024" role="doc-biblioref">R Core Team 2024</a>)</span> was used for data cleaning, spatial analysis, visualization, and statistical modeling. The code was developed and executed using RStudio <span class="citation" data-cites="rstudio2024">(<a href="#ref-rstudio2024" role="doc-biblioref">RStudio Team 2024</a>)</span>, an integrated development environment that facilitates reproducible research. The report itself was written using Quarto <span class="citation" data-cites="quarto2024">(<a href="#ref-quarto2024" role="doc-biblioref">Posit PBC 2024</a>)</span>, an open-source scientific and technical publishing system that supports dynamic documents and integrates seamlessly with R and RStudio.</p>
@@ -244,12 +249,13 @@ div.csl-indent {
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)           <span class="co"># For creating elegant, customizable tables for reporting.</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer) <span class="co"># For generating color palettes for plots, especially categorical or sequential color scales.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><br><br></p>
 </section>
 <section id="google-timeline" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="google-timeline"><span class="header-section-number">2.2</span> Google Timeline</h2>
 <p>Google Timeline data <span class="citation" data-cites="google2025timeline">(<a href="#ref-google2025timeline" role="doc-biblioref">Google LLC 2025</a>)</span> was used as the primary source for capturing individual mobility patterns. This data is collected via Google Location History and is available to users who have enabled location tracking on their mobile devices. It offers high-resolution spatio-temporal data (see <a href="#tbl-google-timeline-data" class="quarto-xref">Table&nbsp;1</a>).</p>
 <div class="cell">
-<div id="tbl-google-timeline-data" class="cell quarto-float anchored">
+<div id="tbl-google-timeline-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-google-timeline-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1: Overview of data elements available from Google Timeline exports <span class="citation" data-cites="google2025timeline">(<a href="#ref-google2025timeline" role="doc-biblioref">Google LLC 2025</a>)</span>.
@@ -315,25 +321,28 @@ Table&nbsp;1: Overview of data elements available from Google Timeline exports <
 </figure>
 </div>
 </div>
+<p><br><br></p>
 </section>
 <section id="spatial-data-analysis-cma" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="spatial-data-analysis-cma"><span class="header-section-number">2.3</span> Spatial Data analysis (CMA)</h2>
 <p>The analysis of spatio-temporal mobility data in this study is grounded in core principles from computational movement analysis. The preprocessing and segmentation of individual movement trajectories was based on the framework described by <span class="citation" data-cites="laube2014computational">Laube (<a href="#ref-laube2014computational" role="doc-biblioref">2014</a>)</span>, particularly the methods outlined in Chapter 3.2.1: Segmentation and Filtering. Raw data from Google Location Services were organized into structured trajectories by leveraging the temporal and categorical information provided in the JSON files, including timestamps, transport mode labels, and location types.</p>
 <p>The movement records were treated as event-based sequences, segmented into daily trip chains using changes in transportation mode and temporal gaps between recorded segments <span class="citation" data-cites="laube2014computational">(<a href="#ref-laube2014computational" role="doc-biblioref">Laube 2014</a>)</span>. This segmentation process followed the conceptual structure proposed by <span class="citation" data-cites="dodge2008taxonomy">Dodge, Weibel, and Lautenschütz (<a href="#ref-dodge2008taxonomy" role="doc-biblioref">2008</a>)</span>, who introduced a taxonomy of movement patterns that supports interpretation of temporal regularity and spatial extent—useful for distinguishing between local and long-distance activities.</p>
-<p>Moreover, <span class="citation" data-cites="laube2011cross">Laube and Purves (<a href="#ref-laube2011cross" role="doc-biblioref">2011</a>)</span> emphasized the importance of scale when analyzing movement trajectories. Their cross-scale perspective informed the treatment of domestic versus international travel in this study, particularly in identifying transitions between local commuting behavior and more dispersed travel patterns across national borders.</p>
+<p><br><br></p>
 </section>
 <section id="life-cycle-data" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="life-cycle-data"><span class="header-section-number">2.4</span> Life Cycle Data</h2>
+<p><br><br></p>
 <section id="simapro" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="simapro"><span class="header-section-number">2.4.1</span> SimaPro</h3>
 <p>SimaPro 10.1 <span class="citation" data-cites="simapro2025">(<a href="#ref-simapro2025" role="doc-biblioref">PRé Sustainability 2025</a>)</span> was used as the primary life cycle assessment (LCA) software for modeling and calculating greenhouse gas (GHG) emissions associated with transportation activities. It offers a robust platform for quantifying environmental impacts across full life cycles, including direct and indirect emissions related to fuel production, vehicle operation, and infrastructure. The software enables transparent modeling, flexible scenario comparisons, and integration of context-specific activity data, making it well-suited for mobility-related carbon footprint analyses.</p>
+<p><br><br></p>
 </section>
 <section id="ecoinvent" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="ecoinvent"><span class="header-section-number">2.4.2</span> Ecoinvent</h3>
 <p>The Ecoinvent v3.11 database <span class="citation" data-cites="ecoinvent2024">(<a href="#ref-ecoinvent2024" role="doc-biblioref">Ecoinvent Association 2024</a>)</span> was used as the life cycle inventory (LCI) source within SimaPro. Ecoinvent provides high-quality, peer-reviewed datasets for a wide range of economic activities, including detailed data on transport processes. For this study, specific datasets were selected to model emissions from various transportation modes—such as passenger cars (internal combustion engine and electric), buses, regional trains, trams, bicycles, and freight ferries. These datasets correspond to full process names from the Ecoinvent database, ensuring transparency and reproducibility in the modeling approach (see <a href="#tbl-transport-modes" class="quarto-xref">Table&nbsp;2</a>). The selection was based on the transport types and distances identified through Google Timeline tracking.</p>
 <p>The LCI data include upstream and downstream processes, enabling a comprehensive cradle-to-grave emissions analysis. This approach allows for a detailed estimation of GHG emissions associated with each mode of transportation used during the analyzed period.</p>
 <div class="cell">
-<div id="tbl-transport-modes" class="cell quarto-float anchored">
+<div id="tbl-transport-modes" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-transport-modes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2: Ecoinvent transport processes used in the LCA model <span class="citation" data-cites="ecoinvent2024">(<a href="#ref-ecoinvent2024" role="doc-biblioref">Ecoinvent Association 2024</a>)</span>.
@@ -391,22 +400,25 @@ Table&nbsp;2: Ecoinvent transport processes used in the LCA model <span class="c
 </figure>
 </div>
 </div>
+<p><br><br></p>
 </section>
 <section id="ipcc-gwp-100a-impact-assessment-method" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="ipcc-gwp-100a-impact-assessment-method"><span class="header-section-number">2.4.3</span> IPCC GWP 100a Impact Assessment Method</h3>
 <p>To translate life cycle inventory results into climate-relevant metrics, the IPCC 2021 GWP 100a impact assessment method was applied <span class="citation" data-cites="ipcc2021gwp100">(<a href="#ref-ipcc2021gwp100" role="doc-biblioref">Intergovernmental Panel on Climate Change (IPCC) 2021</a>)</span>. This method expresses the global warming potential (GWP) of greenhouse gases in terms of carbon dioxide equivalents (CO₂e) over a 100-year time horizon. It reflects the most recent scientific consensus provided by the Intergovernmental Panel on Climate Change (IPCC) and enables standardized comparison of different emission sources and activities. By applying this method within SimaPro, all modeled greenhouse gas emissions were converted into consistent and comparable CO₂e values, ensuring the results align with international reporting standards and climate targets.</p>
+<p><br><br></p>
 </section>
 </section>
 </section>
 <section id="results" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Results</h1>
-<p>In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.</p>
+<p>This section presents key findings from our two-month mobility analysis. We first examine the distribution between rest and movement, followed by an overview of the most visited locations. We then analyse individual transport activities, including travel distances and CO₂ emissions by mode, and conclude with a comparison to the Swiss average.</p>
+<p><br><br></p>
 <section id="sec-Distribution" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="sec-Distribution"><span class="header-section-number">3.1</span> Distribution between rest and movement</h2>
 <p>As illustrated in <a href="#fig-rest-movement" class="quarto-xref">Figure&nbsp;1</a>, the majority of the Google Timeline data is classified as visits (e.g.&nbsp;staying at home, working), while activities (such as walking, cycling or driving) account for a much smaller share. When aggregating the total recorded time, Dimi’s activities correspond to 6.5 full days, and Ramon’s to 6 days. The remaining recorded time – 51.5 and 52 days respectively – was spent at stationary locations. This highlights that although movement occurred regularly, it made up only a small fraction of the total recorded time.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-rest-movement" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-rest-movement" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-rest-movement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Distribution of activities, visits and no data in days
@@ -418,15 +430,16 @@ Figure&nbsp;1: Distribution of activities, visits and no data in days
 </div>
 </div>
 </div>
+<p><br><br></p>
 </section>
 <section id="visits" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="visits"><span class="header-section-number">3.2</span> Visits</h2>
-<p>As shown in <a href="#fig-map-dimi" class="quarto-xref">Figure&nbsp;2</a>, Dimi visited several locations within Switzerland and also spent time in Spain. Notably, visits to Madrid and Barcelona were recorded, both of which were related to work. The spatial distribution is therefore more dispersed, reflecting international travel activity in addition to domestic mobility. The geographic data were visualized using OpenStreetMap <span class="citation" data-cites="openstreetmap2025">(<a href="#ref-openstreetmap2025" role="doc-biblioref">OpenStreetMap contributors 2025</a>)</span>.</p>
+<p>As shown in <a href="#fig-map-dimi" class="quarto-xref">Figure&nbsp;2</a>, Dimi visited several locations within Switzerland and also spent time in Spain. Notably, visits to Madrid and Barcelona were recorded, both of which were related to work. The spatial distribution is therefore more dispersed, reflecting international travel activity in addition to domestic mobility. The geographic data were visualized using OpenStreetMap <span class="citation" data-cites="openstreetmap2025">(<a href="#ref-openstreetmap2025" role="doc-biblioref">OpenStreetMap 2025</a>)</span>.</p>
 <div class="cell">
-<div id="fig-map-dimi" class="cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-map-dimi" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-map-dimi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Visited locations of Dimi <span class="citation" data-cites="openstreetmap2025">(<a href="#ref-openstreetmap2025" role="doc-biblioref">OpenStreetMap contributors 2025</a>)</span>
+Figure&nbsp;2: Visited locations of Dimi <span class="citation" data-cites="openstreetmap2025">(<a href="#ref-openstreetmap2025" role="doc-biblioref">OpenStreetMap 2025</a>)</span>
 </figcaption>
 <div aria-describedby="fig-map-dimi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="leaflet html-widget html-fill-item" id="htmlwidget-31cb95ec78ef346406ad" style="width:100%;height:379px;"></div>
@@ -435,12 +448,13 @@ Figure&nbsp;2: Visited locations of Dimi <span class="citation" data-cites="open
 </figure>
 </div>
 </div>
-<p><br><br> <a href="#fig-map-ramon" class="quarto-xref">Figure&nbsp;3</a> shows that Ramon’s mobility was exclusively within Switzerland. The data reveals a dense pattern of visits in central Switzerland and parts of western Switzerland, indicating a regionally focused mobility behaviour. Most of the longer trips were related to ice hockey games that Ramon played during the observed period.</p>
+<p><br><br></p>
+<p><a href="#fig-map-ramon" class="quarto-xref">Figure&nbsp;3</a> shows that Ramon’s mobility was exclusively within Switzerland. The data reveals a dense pattern of visits in central Switzerland and parts of western Switzerland, indicating a regionally focused mobility behaviour. Most of the longer trips were related to ice hockey games that Ramon played during the observed period.</p>
 <div class="cell">
-<div id="fig-map-ramon" class="cell-output-display quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-map-ramon" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-map-ramon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Visited locations of Ramon <span class="citation" data-cites="openstreetmap2025">(<a href="#ref-openstreetmap2025" role="doc-biblioref">OpenStreetMap contributors 2025</a>)</span>
+Figure&nbsp;3: Visited locations of Ramon <span class="citation" data-cites="openstreetmap2025">(<a href="#ref-openstreetmap2025" role="doc-biblioref">OpenStreetMap 2025</a>)</span>
 </figcaption>
 <div aria-describedby="fig-map-ramon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="leaflet html-widget html-fill-item" id="htmlwidget-1b84238ee1c89e08ef01" style="width:100%;height:379px;"></div>
@@ -449,6 +463,7 @@ Figure&nbsp;3: Visited locations of Ramon <span class="citation" data-cites="ope
 </figure>
 </div>
 </div>
+<p><br><br></p>
 </section>
 <section id="activities" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="activities"><span class="header-section-number">3.3</span> Activities</h2>
@@ -459,7 +474,7 @@ Figure&nbsp;3: Visited locations of Ramon <span class="citation" data-cites="ope
 <p>This visualization highlights not only the difference in total mobility between the two individuals but also their distinct preferences in transport modes.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-Total-Distance" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-Total-Distance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-Total-Distance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Total Distance travelled by Person and Transport Mode
@@ -471,9 +486,12 @@ Figure&nbsp;4: Total Distance travelled by Person and Transport Mode
 </div>
 </div>
 </div>
-<p><br><br> As shown in <a href="#tbl-co2-factors" class="quarto-xref">Table&nbsp;3</a>, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂ value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.</p>
+<p><br><br></p>
+<p>As shown in <a href="#tbl-co2-factors" class="quarto-xref">Table&nbsp;3</a>, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂e value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.</p>
+<p>For the ferry trip, we considered that only Ramon used this mode of transport. Although it was a freight ferry, we estimated the emissions based on Ramon’s body weight to approximate a fair share of per-person emissions in the absence of more granular data.</p>
+<p>In the case of car travel, we assumed an average occupancy of 1.5 persons per vehicle, consistent with standard assumptions in emission modelling. Furthermore, we estimated that 75% of the distance travelled by car was covered using an electric vehicle (EV), while the remaining 25% was driven with a conventional internal combustion engine (ICE) vehicle. Accordingly, the total car emissions were calculated as a weighted average: 75% from EV emission factors and 25% from conventional vehicle factors.</p>
 <div class="cell">
-<div id="tbl-co2-factors" class="cell quarto-float anchored">
+<div id="tbl-co2-factors" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-co2-factors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3: CO₂ eq-factors per transportmode according to <span class="citation" data-cites="ipcc2021gwp100">Intergovernmental Panel on Climate Change (IPCC) (<a href="#ref-ipcc2021gwp100" role="doc-biblioref">2021</a>)</span>.
@@ -537,15 +555,16 @@ Table&nbsp;3: CO₂ eq-factors per transportmode according to <span class="citat
 </figure>
 </div>
 </div>
-<p><br><br> Figure&nbsp;<a href="#fig-co2-km-bubble" class="quarto-xref">Figure&nbsp;5</a> provides a comprehensive overview of both mobility behavior and resulting CO₂ emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂ emissions (in kilograms) for that mode.</p>
+<p><br><br></p>
+<p><a href="#fig-co2-km-bubble" class="quarto-xref">Figure&nbsp;5</a> provides a comprehensive overview of both mobility behavior and resulting CO₂e emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂e emissions (in kilograms) for that mode.</p>
 <p>This visualisation highlights the differences in transport choices and their environmental impacts. While Dimi travelled further overall – covering around 5,000 km by train and 1,300 km by car – his car-related emissions were still three times higher than those from train travel. This is particularly noteworthy given that approximately 75% of his car travel was done using an electric vehicle. The result underlines the high efficiency of rail transport, even when compared to low-emission vehicle alternatives such as electric cars.</p>
 <p>Ramon, on the other hand, showed a more regionally focused travel pattern but still generated substantial emissions from bus usage. The contrast between high distances and small bubbles for train travel, versus relatively large bubbles for car and bus use, clearly illustrates the importance of low-emission transport options in reducing one’s carbon footprint.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-co2-km-bubble" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<div id="fig-co2-km-bubble" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-co2-km-bubble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: CO₂ emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
+Figure&nbsp;5: CO₂e emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
 </figcaption>
 <div aria-describedby="fig-co2-km-bubble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="Group_project_sigma_files/figure-html/fig-co2-km-bubble-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152">
@@ -555,11 +574,109 @@ Figure&nbsp;5: CO₂ emissions (bubble size) and distance travelled (log-scale) 
 </div>
 </div>
 <p><br><br></p>
+<p><a href="#fig-co2-by-Transportmode" class="quarto-xref">Figure&nbsp;6</a> illustrates the transport-related CO₂e emissions (in kg) ofDimi and Ramon over a two-month observation period. Each bar is subdivided by transport mode. A third bar represents the Swiss per capita average, also scaled to two months for comparability.</p>
+<p>Over this period, Dimi travelled a total of 6,878 km, resulting in 230 kg CO₂e emissions, while Ramon travelled 2,730 km, causing 185 kg CO₂e emissions. Although Dimi covered more than twice the distance, his emissions were only moderately higher – reflecting differences in transport mode choices.</p>
+<p><br><br></p>
+<p>For Dimi, the top three CO₂e sources were car, train, and bus travel. As shown in <a href="#tbl-dimi-co2" class="quarto-xref">Table&nbsp;4</a>, he travelled 1,361 km by car, causing 151 kg CO₂e, followed by 4,938 km by train resulting in 54 kg CO₂e, and 197 km by bus leading to 23 kg CO₂e. These three modes account for over 97% of his emissions. The relatively high value for train travel is largely explained by a long-distance journey to Spain (~3,100 km).</p>
+<div class="cell">
+<div id="tbl-dimi-co2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dimi-co2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: CO₂ emissions by transport mode for Dimi over the two-month period.
+</figcaption>
+<div aria-describedby="tbl-dimi-co2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed do-not-create-environment cell caption-top table-sm small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Transport Mode</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Distance (km)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CO₂e Emissions (kg)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Car</td>
+<td style="text-align: right;">1361</td>
+<td style="text-align: right;">151</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Train</td>
+<td style="text-align: right;">4938</td>
+<td style="text-align: right;">54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bus</td>
+<td style="text-align: right;">197</td>
+<td style="text-align: right;">23</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><br><br></p>
+<p>For Ramon, the largest contributors were bus, car, and train. As shown in <a href="#tbl-ramon-co2" class="quarto-xref">Table&nbsp;5</a>, he travelled 1,188 km by bus, which caused 135 kg CO₂e, followed by 305 km by car (34 kg CO₂e) and 975 km by train (11 kg CO₂e).</p>
+<div class="cell">
+<div id="tbl-ramon-co2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ramon-co2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: CO₂ emissions by transport mode for Ramon over the two-month period.
+</figcaption>
+<div aria-describedby="tbl-ramon-co2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed do-not-create-environment cell caption-top table-sm small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Transport Mode</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Distance (km)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CO₂e Emissions (kg)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bus</td>
+<td style="text-align: right;">1188</td>
+<td style="text-align: right;">135</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Car</td>
+<td style="text-align: right;">305</td>
+<td style="text-align: right;">34</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Train</td>
+<td style="text-align: right;">975</td>
+<td style="text-align: right;">11</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><br><br></p>
+<p>This shows that Ramon’s emissions are strongly shaped by his reliance on buses, while train and car played a secondary role.</p>
+<p>The bar labelled Swiss Average corresponds to a reported annual mobility footprint of 2.4 tonnes CO₂e per person in Switzerland <span class="citation" data-cites="nathani2022umwelt">(<a href="#ref-nathani2022umwelt" role="doc-biblioref">Nathani et al. 2022</a>)</span>, scaled down to 400 kg CO₂e for a two-month period.</p>
+<p>The dashed black line marks the 1.5°C-compatible emissions threshold, calculated at 164 kg CO₂e per person over two months. This value is derived by first converting the estimated Swiss annual mobility footprint of 2.4 tonnes CO₂e per capita <span class="citation" data-cites="nathani2022umwelt">(<a href="#ref-nathani2022umwelt" role="doc-biblioref">Nathani et al. 2022</a>)</span> into a two-month equivalent (400 kg CO₂e), and then applying the 59% reduction required in 1.5°C-aligned scenarios, as reported by the IPCC <span class="citation" data-cites="IPCC_2022_WGIII_Ch_10">(<a href="#ref-IPCC_2022_WGIII_Ch_10" role="doc-biblioref">Jaramillo et al. 2022</a>)</span>. The resulting value reflects the emissions ceiling for transport per person during a two-month period, if Switzerland were to follow a trajectory consistent with limiting global warming to 1.5°C.</p>
+<p>As shown in the graphic, both individuals slightly exceed this threshold – Dimi with 230 kg CO₂e and Ramon with 185 kg CO₂e – but remain significantly below the current national average of 400 kg CO₂e. A more detailed assessment of this benchmark and its implications will be addressed in the discussion section.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Group_project_sigma_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="1152"></p>
+<div id="fig-co2-by-Transportmode" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-co2-by-Transportmode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: CO₂e Emissions by Transport Mode
+</figcaption>
+<div aria-describedby="fig-co2-by-Transportmode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Group_project_sigma_files/figure-html/fig-co2-by-Transportmode-1.png" class="img-fluid figure-img" width="1152">
+</div>
 </figure>
 </div>
 </div>
@@ -569,15 +686,18 @@ Figure&nbsp;5: CO₂ emissions (bubble size) and distance travelled (log-scale) 
 </section>
 <section id="discussion" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Discussion</h1>
+<p><br><br></p>
 <section id="potential-challenges" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="potential-challenges"><span class="header-section-number">4.1</span> Potential Challenges</h2>
 <p>A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends. <span style="color:red;">wotsch das würkli no mache?</span></p>
 <p>Another issue is the misclassification of transportation modes, where Google Timeline may inaccurately categorize movement (e.g., mistaking walking for biking). To improve data reliability, transportation modes will be cross-verified using movement speed, timestamps, and contextual information, allowing for necessary corrections and more accurate mobility analysis.</p>
+<p><br><br></p>
 </section>
 </section>
 <section id="disclaimer" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Disclaimer</h1>
 <p>This paper made use of OpenAI’s ChatGPT <span class="citation" data-cites="openai2024chatgpt">(<a href="#ref-openai2024chatgpt" role="doc-biblioref">OpenAI 2024</a>)</span> as a supportive tool throughout the research and writing process. ChatGPT was employed to assist in the following areas: • Providing language suggestions for clarity and flow • Assisting with the structuring and wording of academic content • Supporting the formulation and verification of R and Quarto code All content generated with the help of ChatGPT was critically reviewed, verified, and edited by the author(s) to ensure accuracy, relevance, and academic integrity.</p>
+<p><br><br></p>
 
 </section>
 
@@ -612,9 +732,6 @@ Jaramillo, Paulina, Suzana Kahn Ribeiro, Peter Newman, Subash Dhar, Ogheneruona 
 <div id="ref-laube2014computational" class="csl-entry" role="listitem">
 Laube, Patrick. 2014. <em>Computational Movement Analysis</em>. SpringerBriefs in Computer Science. Cham, Switzerland: Springer. <a href="https://doi.org/10.1007/978-3-319-10268-9">https://doi.org/10.1007/978-3-319-10268-9</a>.
 </div>
-<div id="ref-laube2011cross" class="csl-entry" role="listitem">
-Laube, Patrick, and Ross S. Purves. 2011. <span>“How Fast Is a Cow? Cross-Scale Analysis of Movement Data.”</span> <em>Transactions in GIS</em> 15 (3): 401–18. <a href="https://doi.org/10.1111/j.1467-9671.2011.01256.x">https://doi.org/10.1111/j.1467-9671.2011.01256.x</a>.
-</div>
 <div id="ref-nathani2022umwelt" class="csl-entry" role="listitem">
 Nathani, Carsten, Isabel O’Connor, Rolf Frischknecht, Tonio Schwehr, Joséphine Zumwald, and Julie Peyronne. 2022. <span>“Umwelt-Fussabdrücke Der Schweiz: Entwicklung Zwischen 2000 Und 2018.”</span> Bern, Switzerland: Bundesamt für Umwelt (BAFU). <a href="https://www.newsd.admin.ch/newsd/message/attachments/73484.pdf">https://www.newsd.admin.ch/newsd/message/attachments/73484.pdf</a>.
 </div>
@@ -622,7 +739,7 @@ Nathani, Carsten, Isabel O’Connor, Rolf Frischknecht, Tonio Schwehr, Joséphin
 OpenAI. 2024. <span>“ChatGPT (GPT-4).”</span> <a href="https://chat.openai.com" class="uri">https://chat.openai.com</a>.
 </div>
 <div id="ref-openstreetmap2025" class="csl-entry" role="listitem">
-OpenStreetMap contributors. 2025. <span>“OpenStreetMap.”</span> <a href="https://www.openstreetmap.org" class="uri">https://www.openstreetmap.org</a>.
+OpenStreetMap. 2025. <span>“OpenStreetMap.”</span> <a href="https://www.openstreetmap.org" class="uri">https://www.openstreetmap.org</a>.
 </div>
 <div id="ref-quarto2024" class="csl-entry" role="listitem">
 Posit PBC. 2024. <em>Quarto: Scientific and Technical Publishing</em>. <a href="https://quarto.org">https://quarto.org</a>.
@@ -673,18 +790,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -716,7 +822,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -724,7 +852,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

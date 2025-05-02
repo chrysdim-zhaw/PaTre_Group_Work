@@ -11,11 +11,6 @@ format:
     number-tables: true
     cap-location: top
 
-  pdf:
-    toc: true
-    number-sections: true
-    number-tables: true
-
 execute:
   echo: false
   fig-align: center
@@ -30,7 +25,7 @@ bibliography: bibliography.bib
 
 This study analyzes the movement patterns of two students using Google Timeline tracking and SimaPro for GHG emissions assessment. By segmenting rest and movement phases, identifying key locations, and comparing transportation modes, the project quantifies mobility behaviors and environmental impact. The findings will be visualized through maps and statistical comparisons, ensuring an insightful sustainability analysis. <span style="color:red;">Vergleich mit der Schweiz erwähnen</span>
 
-
+<br><br>
 
 # Introduction
 
@@ -46,11 +41,13 @@ In contrast, rail transport contributes only about 1% of direct emissions. Rail 
 
 Moreover, detailed emission inventories help translate mobility behavior into CO₂ equivalents. In Switzerland, for example, approximately 13 tonnes of CO₂-equivalent are emitted per capita annually, including both domestic and abroad emissions [@bafu2025klima]. Of this total, only around 4 tonnes occur within Switzerland, while the remaining emissions are generated abroad, primarily due to the import of goods and services. About one-third of these emissions stem from mobility, excluding international flights [@bafu2025treibhausgas]. This distinction is important when assessing responsibility and reduction potential, as a significant portion of the environmental impact is embedded in global supply chains and consumption patterns [@bafu2025wirtschaftskonsum]. Given Switzerland’s population of approximately 8.8 million (as of 2023), this amounts to an estimated 114 million tonnes of CO₂-equivalent emissions per year.
 
-@nathani2022umwelt estimate that mobility behavior in Switzerland leads to at least 2.5 tonnes of CO₂e per capita, with over 1.5 tonnes resulting from domestic direct emissions—such as burning fuel in vehicle engines. As such, transport is the sector responsible for the largest share of GHG emissions. The United States presents a similar picture, where transport also ranks as the top emitting sector [@us2019us].
+@nathani2022umwelt estimate that mobility behavior in Switzerland leads to at least 2.4 tonnes of CO₂e per capita, with over 1.5 tonnes resulting from domestic direct emissions—such as burning fuel in vehicle engines. As such, transport is the sector responsible for the largest share of GHG emissions. The United States presents a similar picture, where transport also ranks as the top emitting sector [@us2019us].
 
-Without significant intervention, transport-related emissions are projected to increase by 16–50% by 2050. However, in scenarios aligned with the 1.5°C climate target, a 59% reduction in transport CO₂ emissions by 2050 (compared to 2020 levels) is required. More ambitious pathways, such as the “1.5°C Low Demand” scenario, envision reductions of up to 90% [@IPCC_2022_WGIII_Ch_10].
+Without significant intervention, transport-related emissions are projected to increase by 16–50% by 2050. However, in scenarios aligned with the 1.5°C climate target, a 59% reduction in transport CO₂e emissions by 2050 (compared to 2020 levels) is required. More ambitious pathways, such as the “1.5°C Low Demand” scenario, envision reductions of up to 90% [@IPCC_2022_WGIII_Ch_10].
 
 This study is grounded in Computational Movement Analysis (CMA), which provides the theoretical and methodological framework. As @laube2014computational explains, CMA integrates geographic information science, computer science, and statistics to analyze movement through space and time. Geographic information science offers spatial modeling and spatio-temporal operations; computer science supports data handling, querying, and analysis via algorithms and simulations; and statistics contribute methods for describing and modeling dynamic movement patterns.
+
+<br><br>
 
 ## Research objective
 
@@ -58,6 +55,8 @@ This research investigates the mobility patterns of two students, focusing on ho
 
 In this work the google maps data from Ramon and Dimitri will be analyzed. The data is stored in a json file. The data contains the GPS coordinates of the two persons. The data will be visualized on a map.
 Further, the data will be analyzed and the distance between the two persons will be calculated. <span style="color:red;">Umschreiben</span>
+
+<br><br>
 
 ## Research Questions
 
@@ -69,13 +68,17 @@ Further, the data will be analyzed and the distance between the two persons will
     
     c.	How does the use of transportation modes differ between the samples over a specific period?
     
-    d.	What impact do the movement patterns have on each student's CO₂ footprint?
+    d.	What impact do the movement patterns have on each student's CO₂e footprint?
     
     e.  How do the extrapolated emissions of the students perform in comparison of the Swiss average?
-    
+
+<br><br>
+
 # Methodology & Data 
     
 This chapter outlines the methodological framework and data sources used to analyze individual mobility patterns and their associated greenhouse gas (GHG) emissions. The analysis combines high-resolution spatio-temporal data from Google Timeline with environmental impact modeling using life cycle assessment (LCA) tools. Computational Movement Analysis (CMA) principles serve as the theoretical foundation for structuring and interpreting mobility trajectories. Data preprocessing and spatial analysis were conducted in R, using a suite of packages for JSON parsing, spatial visualization, and statistical modeling. Together, these approaches enable a comprehensive assessment of movement behavior and its environmental implications at both local and international scales.
+
+<br><br>
 
 ## R, Quarto and R packages
 
@@ -101,6 +104,8 @@ library(gt)           # For creating elegant, customizable tables for reporting.
 library(RColorBrewer) # For generating color palettes for plots, especially categorical or sequential color scales.
 
 ```
+
+<br><br>
 
 ## Google Timeline
 
@@ -140,6 +145,7 @@ timeline_data <- data.frame(
 kable(timeline_data)
 ```
 
+<br><br>
 
 ## Spatial Data analysis (CMA) 
 
@@ -147,13 +153,17 @@ The analysis of spatio-temporal mobility data in this study is grounded in core 
 
 The movement records were treated as event-based sequences, segmented into daily trip chains using changes in transportation mode and temporal gaps between recorded segments [@laube2014computational]. This segmentation process followed the conceptual structure proposed by @dodge2008taxonomy, who introduced a taxonomy of movement patterns that supports interpretation of temporal regularity and spatial extent—useful for distinguishing between local and long-distance activities.
 
-Moreover, @laube2011cross emphasized the importance of scale when analyzing movement trajectories. Their cross-scale perspective informed the treatment of domestic versus international travel in this study, particularly in identifying transitions between local commuting behavior and more dispersed travel patterns across national borders.
+<br><br>
 
 ## Life Cycle Data
+
+<br><br>
 
 ### SimaPro
 
 SimaPro 10.1 [@simapro2025] was used as the primary life cycle assessment (LCA) software for modeling and calculating greenhouse gas (GHG) emissions associated with transportation activities. It offers a robust platform for quantifying environmental impacts across full life cycles, including direct and indirect emissions related to fuel production, vehicle operation, and infrastructure. The software enables transparent modeling, flexible scenario comparisons, and integration of context-specific activity data, making it well-suited for mobility-related carbon footprint analyses.
+
+<br><br>
 
 ### Ecoinvent
 
@@ -193,13 +203,17 @@ kable(transport_data)
 
 ```
 
+<br><br>
+
 ### IPCC GWP 100a Impact Assessment Method
 
 To translate life cycle inventory results into climate-relevant metrics, the IPCC 2021 GWP 100a impact assessment method was applied [@ipcc2021gwp100]. This method expresses the global warming potential (GWP) of greenhouse gases in terms of carbon dioxide equivalents (CO₂e) over a 100-year time horizon. It reflects the most recent scientific consensus provided by the Intergovernmental Panel on Climate Change (IPCC) and enables standardized comparison of different emission sources and activities. By applying this method within SimaPro, all modeled greenhouse gas emissions were converted into consistent and comparable CO₂e values, ensuring the results align with international reporting standards and climate targets.
 
+<br><br>
+
 # Results 
 
-In this Chapter the data from Ramon and Dimitri will be imported, modifed with the sf_packages (Source) and visualized on a map.
+This section presents key findings from our two-month mobility analysis. We first examine the distribution between rest and movement, followed by an overview of the most visited locations. We then analyse individual transport activities, including travel distances and CO₂ emissions by mode, and conclude with a comparison to the Swiss average.
 
 ```{r, warning=FALSE, message=FALSE}
 start_datum <- ymd_hms("2025-02-06 11:40:35")
@@ -601,12 +615,7 @@ nan_day_ramon <- as.numeric(dauer_gesamt_ramon_day) - (activity_day_ramon + visi
 summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 ```
 
-
-
-
-
-
-
+<br><br>
 
 ## Distribution between rest and movement {#sec-Distribution}
 As illustrated in @fig-rest-movement, the majority of the Google Timeline data is classified as visits (e.g. staying at home, working), while activities (such as walking, cycling or driving) account for a much smaller share. When aggregating the total recorded time, Dimi’s activities correspond to 6.5 full days, and Ramon’s to 6 days. The remaining recorded time – 51.5 and 52 days respectively – was spent at stationary locations. This highlights that although movement occurred regularly, it made up only a small fraction of the total recorded time.
@@ -796,6 +805,7 @@ combined_plot
 
 ```
 
+<br><br>
 
 ## Visits
 
@@ -810,6 +820,7 @@ leaflet_map_dimi
 ```
 
 <br><br>
+
 @fig-map-ramon shows that Ramon's mobility was exclusively within Switzerland. The data reveals a dense pattern of visits in central Switzerland and parts of western Switzerland, indicating a regionally focused mobility behaviour. Most of the longer trips were related to ice hockey games that Ramon played during the observed period.
 ```{r}
 #| label: fig-map-ramon
@@ -818,7 +829,7 @@ leaflet_map_dimi
 leaflet_map_ramon
 ```
 
-
+<br><br>
 
 ## Activities
 ```{r}
@@ -1091,6 +1102,7 @@ distance_plot <- ggplot(emissions_padded, aes(x = activity_label, y = total_dist
 
 ```
 
+
 @fig-Total-Distance displays the total distances in kilometers travelled by Dimi and Ramon, broken down by transport mode. Each bar represents the overall distance per person and is subdivided by transport modes.
 
 Dimi travelled a total of 6,878 kilometers, more than double Ramon's total of 2,730 kilometers.
@@ -1107,40 +1119,47 @@ This visualization highlights not only the difference in total mobility between 
 #| label: fig-Total-Distance
 #| fig-cap: Total Distance travelled by Person and Transport Mode
 
-# Alle Transportmittel erfassen
-all_labels <- unique(emissions_combined_filtered$activity_label)
 
-# Transportmittel nach Dimis Gesamtdistanz sortieren
-dimi_sorted <- emissions_combined_filtered %>%
-  filter(person == "Dimi") %>%
+set.seed(123)  # für reproduzierbare Farben
+
+# 1. Alle Labels erfassen
+all_modes <- sort(unique(emissions_combined_filtered$activity_label))
+n_modes <- length(all_modes)
+
+# 2. Farben generieren (zufällig aus Set3 + zusätzlichen Farben)
+base_colors <- c(brewer.pal(12, "Set3"),
+                 "#999999", "#CCCCCC", "#666666", "#FFB6C1", "#87CEFA", "#8dd3c7", "#fb8072")
+
+# 3. Farben mischen und zuweisen
+shuffled_colors <- sample(base_colors, size = n_modes)
+transport_colors <- setNames(shuffled_colors, all_modes)
+
+# Reihenfolge der Transportmittel (optional visuell)
+dimi_sorted_km <- emissions_combined_filtered %>%
   group_by(activity_label) %>%
-  summarise(total_km = sum(total_distance_km, na.rm = TRUE), .groups = "drop") %>%
-  right_join(tibble(activity_label = all_labels), by = "activity_label") %>%
-  mutate(total_km = replace_na(total_km, 0)) %>%
+  summarise(total_km = sum(total_distance_km), .groups = "drop") %>%
   arrange(total_km) %>%
   pull(activity_label)
 
 # Daten vorbereiten
-plot_data <- emissions_combined_filtered %>%
+plot_data_km <- emissions_combined_filtered %>%
   group_by(person, activity_label) %>%
-  summarise(total_km = sum(total_distance_km, na.rm = TRUE), .groups = "drop") %>%
-  mutate(activity_label = factor(activity_label, levels = dimi_sorted))
+  summarise(total_km = sum(total_distance_km), .groups = "drop") %>%
+  mutate(activity_label = factor(activity_label, levels = dimi_sorted_km))
 
-# Gesamtsummen berechnen
-totals <- plot_data %>%
+# Totalsummen
+totals_km <- plot_data_km %>%
   group_by(person) %>%
-  summarise(total = sum(total_km, na.rm = TRUE))
+  summarise(total = sum(total_km))
 
-# Dynamischer Abstand für Text
-max_total <- max(totals$total)
-text_offset <- 0.05 * max_total
+text_offset_km <- 0.05 * max(totals_km$total)
 
-# Diagramm
-ggplot(plot_data, aes(x = person, y = total_km, fill = activity_label)) +
+# Plot
+ggplot(plot_data_km, aes(x = person, y = total_km, fill = activity_label)) +
   geom_bar(stat = "identity") +
   geom_text(
-    data = totals,
-    aes(x = person, y = total + text_offset, label = paste0(round(total), " km")),
+    data = totals_km,
+    aes(x = person, y = total + text_offset_km, label = paste0(round(total), " km")),
     inherit.aes = FALSE,
     size = 5
   ) +
@@ -1149,7 +1168,7 @@ ggplot(plot_data, aes(x = person, y = total_km, fill = activity_label)) +
     y = "Distance (km)",
     fill = "Transport Mode"
   ) +
-  scale_fill_brewer(palette = "Set3", na.translate = FALSE) +
+  scale_fill_manual(values = transport_colors, na.translate = FALSE) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 13),
@@ -1160,14 +1179,15 @@ ggplot(plot_data, aes(x = person, y = total_km, fill = activity_label)) +
     legend.text = element_text(size = 13)
   )
 
-
 ```
 
-
-
-
 <br><br>
-As shown in @tbl-co2-factors, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂ value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.
+
+As shown in @tbl-co2-factors, different transport modes vary significantly in their CO₂ equivalent emissions per passenger kilometer. Surprisingly, cycling does not have a CO₂e value of zero. This is because the value accounts for life-cycle emissions, including those from the production and maintenance of the bicycle. Since these emissions are allocated per passenger kilometer, cycling ends up having a slightly higher emission factor than train travel. For skiing, no specific CO₂ equivalent emission factor could be identified, so we assumed it to be zero.
+
+For the ferry trip, we considered that only Ramon used this mode of transport. Although it was a freight ferry, we estimated the emissions based on Ramon’s body weight to approximate a fair share of per-person emissions in the absence of more granular data.
+
+In the case of car travel, we assumed an average occupancy of 1.5 persons per vehicle, consistent with standard assumptions in emission modelling. Furthermore, we estimated that 75% of the distance travelled by car was covered using an electric vehicle (EV), while the remaining 25% was driven with a conventional internal combustion engine (ICE) vehicle. Accordingly, the total car emissions were calculated as a weighted average: 75% from EV emission factors and 25% from conventional vehicle factors. 
 ```{r}
 #| label: tbl-co2-factors
 #| tbl-cap: CO₂ eq-factors per transportmode according to @ipcc2021gwp100.
@@ -1185,9 +1205,9 @@ co2_table %>%
 
 ```
 
-
 <br><br>
-Figure @fig-co2-km-bubble provides a comprehensive overview of both mobility behavior and resulting CO₂ emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂ emissions (in kilograms) for that mode.
+
+@fig-co2-km-bubble provides a comprehensive overview of both mobility behavior and resulting CO₂e emissions for Dimi and Ramon across various transport modes. The y-axis represents the total distance travelled (log scale), while the size of each bubble corresponds to the total CO₂e emissions (in kilograms) for that mode.
 
 This visualisation highlights the differences in transport choices and their environmental impacts. While Dimi travelled further overall – covering around 5,000 km by train and 1,300 km by car – his car-related emissions were still three times higher than those from train travel. This is particularly noteworthy given that approximately 75% of his car travel was done using an electric vehicle. The result underlines the high efficiency of rail transport, even when compared to low-emission vehicle alternatives such as electric cars.
 
@@ -1197,7 +1217,7 @@ Ramon, on the other hand, showed a more regionally focused travel pattern but st
 ```{r}
 #| fig-align: center
 #| label: fig-co2-km-bubble
-#| fig-cap: CO₂ emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
+#| fig-cap: CO₂e emissions (bubble size) and distance travelled (log-scale) per transport mode for Dimi and Ramon
 
 #final plot
 
@@ -1348,51 +1368,133 @@ p4 <- plot_pie_noleg(df_combined, "Ramon", "Distance")
 
 <br><br>
 
-```{r}
-# 1. Alle Transportmittel extrahieren
-all_labels <- unique(emissions_combined_filtered$activity_label)
+@fig-co2-by-Transportmode illustrates the transport-related CO₂e emissions (in kg) ofDimi and Ramon over a two-month observation period. Each bar is subdivided by transport mode. A third bar represents the Swiss per capita average, also scaled to two months for comparability.
 
-# 2. Sortierung nach Dimis totalen CO₂-Emissionen pro Transportmittel
-dimi_sorted <- emissions_combined_filtered %>%
+Over this period, Dimi travelled a total of 6,878 km, resulting in 230 kg CO₂e emissions, while Ramon travelled 2,730 km, causing 185 kg CO₂e emissions. Although Dimi covered more than twice the distance, his emissions were only moderately higher – reflecting differences in transport mode choices.
+
+For Dimi, the top three CO₂e sources were car, train, and bus travel. As shown in @tbl-dimi-co2,
+he travelled 1,361 km by car, causing 151 kg CO₂e, followed by 4,938 km by train resulting in 54 kg CO₂e, and 197 km by bus leading to 23 kg CO₂e.
+These three modes account for over 97% of his emissions. The relatively high value for train travel is largely explained by a long-distance journey to Spain (~3,100 km).
+
+```{r}
+#| label: tbl-dimi-co2
+#| tbl-cap: CO₂ emissions by transport mode for Dimi over the two-month period.
+
+tibble::tibble(
+  `Transport Mode` = c("Car", "Train", "Bus"),
+  `Distance (km)` = c(1361, 4938, 197),
+  `CO₂ Emissions (kg)` = c(151, 54, 23)
+) %>%
+  kable(
+    col.names = c("Transport Mode", "Distance (km)", "CO₂e Emissions (kg)"),
+    align = "lrr"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
+
+```
+
+<br><br>
+
+For Ramon, the largest contributors were bus, car, and train. As shown in @tbl-ramon-co2,
+he travelled 1,188 km by bus, which caused 135 kg CO₂e, followed by 305 km by car (34 kg CO₂e) and 975 km by train (11 kg CO₂e).
+
+```{r}
+#| label: tbl-ramon-co2
+#| tbl-cap: CO₂ emissions by transport mode for Ramon over the two-month period.
+
+tibble::tibble(
+  `Transport Mode` = c("Bus", "Car", "Train"),
+  `Distance (km)` = c(1188, 305, 975),
+  `CO₂ Emissions (kg)` = c(135, 34, 11)
+) %>%
+  kable(
+    col.names = c("Transport Mode", "Distance (km)", "CO₂e Emissions (kg)"),
+    align = "lrr"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
+
+```
+
+<br><br>
+
+This shows that Ramon’s emissions are strongly shaped by his reliance on buses, while train and car played a secondary role.
+
+The bar labelled Swiss Average corresponds to a reported annual mobility footprint of 2.4 tonnes CO₂e per person in Switzerland [@nathani2022umwelt], scaled down to 400 kg CO₂e for a two-month period.
+
+The dashed black line marks the 1.5°C-compatible emissions threshold, calculated at 164 kg CO₂e per person over two months. This value is derived by first converting the estimated Swiss annual mobility footprint of 2.4 tonnes CO₂e per capita [@nathani2022umwelt] into a two-month equivalent (400 kg CO₂e), and then applying the 59% reduction required in 1.5°C-aligned scenarios, as reported by the IPCC [@IPCC_2022_WGIII_Ch_10]. The resulting value reflects the emissions ceiling for transport per person during a two-month period, if Switzerland were to follow a trajectory consistent with limiting global warming to 1.5°C.
+
+As shown in the graphic, both individuals slightly exceed this threshold – Dimi with 230 kg CO₂e and Ramon with 185 kg CO₂e – but remain significantly below the current national average of 400 kg CO₂e. A more detailed assessment of this benchmark and its implications will be addressed in the discussion section.
+
+```{r}
+#| label: fig-co2-by-Transportmode
+#| fig-cap: "CO₂e Emissions by Transport Mode"
+
+# 1. Alle Transportmittel erfassen
+all_labels <- sort(unique(emissions_combined_filtered$activity_label))
+
+# 2. Dimis CO₂-Werte sortieren (auch 0-Werte einbeziehen)
+dimi_sorted_co2 <- emissions_combined_filtered %>%
   filter(person == "Dimi") %>%
   group_by(activity_label) %>%
-  summarise(total_co2 = sum(total_emission_kg, na.rm = TRUE), .groups = "drop") %>%
+  summarise(total_co2 = sum(total_emission_kg), .groups = "drop") %>%
   right_join(tibble(activity_label = all_labels), by = "activity_label") %>%
   mutate(total_co2 = replace_na(total_co2, 0)) %>%
   arrange(total_co2) %>%
   pull(activity_label)
 
-# 3. Plot-Daten aggregieren mit der gleichen Reihenfolge
-plot_data <- emissions_combined_filtered %>%
+# 3. CO₂-Daten aggregieren
+plot_data_co2 <- emissions_combined_filtered %>%
   group_by(person, activity_label) %>%
-  summarise(total_co2 = sum(total_emission_kg, na.rm = TRUE), .groups = "drop") %>%
-  mutate(activity_label = factor(activity_label, levels = dimi_sorted))
+  summarise(total_co2 = sum(total_emission_kg), .groups = "drop") %>%
+  mutate(activity_label = factor(activity_label, levels = dimi_sorted_co2))
 
-# 4. Totale Emissionen pro Person (für Textanzeige)
-totals <- plot_data %>%
+# 4. Farben (zufällig aber stabil)
+set.seed(123)
+base_colors <- c(brewer.pal(12, "Set3"),
+                 "#999999", "#CCCCCC", "#666666", "#FFB6C1", "#87CEFA")
+transport_colors <- setNames(sample(base_colors, length(all_labels)), all_labels)
+
+# 5. Swiss Average hinzufügen
+dimi_sorted_co2_extended <- c(dimi_sorted_co2, "Swiss Average")
+swiss_row <- tibble(person = "Swiss Average", activity_label = "Swiss Average", total_co2 = 400)
+
+plot_data_extended <- bind_rows(plot_data_co2, swiss_row) %>%
+  mutate(activity_label = factor(activity_label, levels = dimi_sorted_co2_extended))
+
+# 6. Farben ergänzen
+transport_colors_extended <- transport_colors
+transport_colors_extended["Swiss Average"] <- "#d60000"
+
+# 7. Summen & Plot
+totals_extended <- plot_data_extended %>%
   group_by(person) %>%
-  summarise(total = sum(total_co2, na.rm = TRUE))
+  summarise(total = sum(total_co2)) %>%
+  mutate(label = paste0(round(total), " ~kg~CO[2]"))
 
-# 5. Dynamischer Abstand für Text
-max_total <- max(totals$total)
-text_offset <- 0.05 * max_total
+text_offset_extended <- 0.05 * max(totals_extended$total)
 
-# 6. Diagramm zeichnen
-ggplot(plot_data, aes(x = person, y = total_co2, fill = activity_label)) +
+ggplot(plot_data_extended, aes(x = person, y = total_co2, fill = activity_label)) +
   geom_bar(stat = "identity") +
   geom_text(
-    data = totals,
-    aes(x = person, y = total + text_offset, label = paste0(round(total), " kg CO₂")),
+    data = totals_extended,
+    aes(x = person, y = total + text_offset_extended, label = label),
     inherit.aes = FALSE,
-    size = 5
+    size = 5,
+    parse = TRUE
   ) +
+  geom_hline(yintercept = 164, linetype = "dashed", color = "black", linewidth = 1) +
   labs(
-    title = "Total CO₂ Emissions by Person and Transport Mode",
     x = "Person",
-    y = "CO₂ Emissions (kg)",
+    y = expression("CO"[2] * " Emissions (kg)"),
     fill = "Transport Mode"
   ) +
-  scale_fill_brewer(palette = "Set3", na.translate = FALSE) +
+  scale_fill_manual(values = transport_colors_extended, na.translate = FALSE, drop = FALSE) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 13),
@@ -1402,19 +1504,22 @@ ggplot(plot_data, aes(x = person, y = total_co2, fill = activity_label)) +
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 13)
   )
-```
 
+```
 
 <br><br>
 
 # Discussion
 
+<br><br>
 
 ## Potential Challenges
 
 A potential challenge in this study is missing or incomplete GPS data from Google Timeline. These gaps may arise due to GPS inaccuracies, device settings, or network issues, leading to incomplete movement records. To address this, missing data will be extrapolated using interpolation techniques, such as linear interpolation or time-weighted averages, ensuring continuity in movement trends. <span style="color:red;">wotsch das würkli no mache?</span> 
 
 Another issue is the misclassification of transportation modes, where Google Timeline may inaccurately categorize movement (e.g., mistaking walking for biking). To improve data reliability, transportation modes will be cross-verified using movement speed, timestamps, and contextual information, allowing for necessary corrections and more accurate mobility analysis.
+
+<br><br>
 
 # Disclaimer
 
@@ -1423,4 +1528,7 @@ This paper made use of OpenAI's ChatGPT [@openai2024chatgpt] as a supportive too
 •	Assisting with the structuring and wording of academic content
 •	Supporting the formulation and verification of R and Quarto code
 All content generated with the help of ChatGPT was critically reviewed, verified, and edited by the author(s) to ensure accuracy, relevance, and academic integrity.
+
+<br><br>
+
 
