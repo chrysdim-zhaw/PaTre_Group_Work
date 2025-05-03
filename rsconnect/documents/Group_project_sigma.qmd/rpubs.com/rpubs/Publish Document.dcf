@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/1305498/7d8d10beb30143e9af95e03134518d96
+bundleId: https://api.rpubs.com/api/v1/document/1305498/7d8d10beb30143e9af95e03134518d96
+url: http://rpubs.com/chrysdim-zhaw/1305498
+version: 1
