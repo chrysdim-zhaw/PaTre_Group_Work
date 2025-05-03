@@ -622,7 +622,7 @@ summe_stunden_ramon <- activity_h_ramon + visits_h_ramon + nan_h_ramon
 
 <br><br>
 
-## Distribution between rest and movement {#sec-Distribution}
+## Distribution between Rest and Movement {#sec-Distribution}
 As illustrated in @fig-rest-movement, the majority of the Google Timeline data is classified as visits (e.g. staying at home, working), while activities (such as walking, cycling or driving) account for a much smaller share. When aggregating the total recorded time, Dimitri’s activities correspond to 6.5 full days, and Ramon’s to 6 days. The remaining recorded time – 51.5 and 52 days respectively – was spent at stationary locations. This highlights that although movement occurred regularly, it made up only a small fraction of the total recorded time.
 ```{r}
 #ramon
